@@ -523,7 +523,7 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay, duration: 0.5 }}
-            className="perspective-1000 w-full h-[380px]"
+            className="perspective-1000 w-full max-w-[380px] mx-auto h-[380px]"
             onMouseEnter={() => setIsFlipped(true)}
             onMouseLeave={() => setIsFlipped(false)}
         >
@@ -819,7 +819,7 @@ const TechEcosystemDiagram = memo(() => {
     ];
 
     return (
-        <div className="relative w-80 h-80 mx-auto">
+        <div className="relative w-full max-w-[320px] aspect-square mx-auto">
             {/* Orbiting Rings */}
             <motion.div
                 className="absolute inset-8 border-2 border-dashed border-gray-200 rounded-full"
@@ -1033,7 +1033,7 @@ const About = () => {
             <CuteBackground />
 
             {/* ===== HERO ===== */}
-            <motion.section style={{ y: bgY, opacity }} className="relative min-h-[85vh] flex items-center py-20 pt-32">
+            <motion.section style={{ y: bgY, opacity }} className="relative min-h-[50vh] md:min-h-[85vh] flex items-center py-10 md:py-20 pt-20 md:pt-32">
                 <div className="container mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
@@ -1042,7 +1042,7 @@ const About = () => {
                         className="max-w-4xl mx-auto text-center"
                     >
                         <motion.h1
-                            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 leading-tight"
+                            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 text-gray-900 leading-tight"
                         >
                             Revolutionizing AI Solutions with{' '}
                             <span className="text-teal-500 relative inline-block">
@@ -1093,14 +1093,14 @@ const About = () => {
             </section>
 
             {/* ===== STATS ===== */}
-            <section id="stats" className="py-20">
+            <section id="stats" className="py-12 md:py-20">
                 <div className="container mx-auto px-4">
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
                         <motion.p variants={fadeUp} className="text-center text-gray-600 mb-12 text-lg">
                             Building AI systems that transform how organizations operate.
                         </motion.p>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
                             {[
                                 { value: 5000, suffix: '+', label: 'Training Sessions' },
                                 { value: 200, suffix: '+', label: 'AI Specialists' },
@@ -1124,7 +1124,7 @@ const About = () => {
             </section>
 
             {/* ===== PURPOSE / GROWTH SECTION ===== */}
-            <section className="py-24 overflow-hidden">
+            <section className="py-16 md:py-24 overflow-hidden">
                 <div className="container mx-auto px-4">
                     <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
                         {/* Left Content */}
@@ -1228,7 +1228,7 @@ const About = () => {
             </section>
 
             {/* ===== TIMELINE SECTION ===== */}
-            <section className="py-24 relative overflow-hidden">
+            <section className="py-16 md:py-24 relative overflow-hidden">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-20">
                         <motion.h2
@@ -1333,7 +1333,7 @@ const About = () => {
             </section>
 
             {/* ===== INNOVATION ENGINE ===== */}
-            <section className="py-24 bg-gradient-to-b from-slate-50/50 to-white">
+            <section className="py-16 md:py-24 bg-gradient-to-b from-slate-50/50 to-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <motion.span
@@ -1375,7 +1375,7 @@ const About = () => {
             </section>
 
             {/* ===== TEAM / LEADERSHIP ===== */}
-            <section className="py-24 bg-gradient-to-b from-white via-slate-50/50 to-white">
+            <section className="py-16 md:py-24 bg-gradient-to-b from-white via-slate-50/50 to-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <motion.span
@@ -1414,14 +1414,14 @@ const About = () => {
             </section>
 
             {/* ===== CORE VALUES ===== */}
-            <section className="py-20">
+            <section className="py-12 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Core Values</h2>
                         <p className="text-gray-600">The principles that guide us</p>
                     </div>
 
-                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
                         {values.map((v, i) => (
                             <motion.div key={i} variants={fadeUp}>
                                 <TiltCard color={v.color}>
@@ -1443,14 +1443,14 @@ const About = () => {
             </section>
 
             {/* ===== WHY CHOOSE ===== */}
-            <section className="py-20">
+            <section className="py-12 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Why Frostrek?</h2>
                         <p className="text-gray-600">Experience the difference</p>
                     </div>
 
-                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                         {features.map((f, i) => (
                             <motion.div key={i} variants={fadeUp}>
                                 <TiltCard color={i % 2 === 0 ? 'teal' : 'cyan'}>
@@ -1475,7 +1475,7 @@ const About = () => {
             </section>
 
             {/* ===== GLOBAL PRESENCE ===== */}
-            <section className="py-20 bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50">
+            <section className="py-12 md:py-20 bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Global Presence</h2>
@@ -1523,7 +1523,7 @@ const About = () => {
                             {/* Center - Landmark Image */}
                             <div className="lg:col-span-5">
                                 <motion.div
-                                    className="relative h-[480px] rounded-2xl overflow-hidden shadow-2xl"
+                                    className="relative h-64 md:h-[480px] rounded-2xl overflow-hidden shadow-2xl"
                                     key={activeOffice}
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
