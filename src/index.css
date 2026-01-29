@@ -1,0 +1,139 @@
+/* Fonts are loaded via index.html with display=swap for better LCP */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-primary font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-sans;
+  }
+}
+
+@layer components {
+
+  /* Custom scrollbar for white theme */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F8F9FA;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #14B8A6 0%, #0F766E 100%);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #0F766E 0%, #0F5953 100%);
+  }
+}
+
+@layer utilities {
+
+  /* Readable green gradient text */
+  .text-gradient-green {
+    @apply bg-gradient-to-r from-brand-green-700 to-brand-green-600 bg-clip-text text-transparent;
+  }
+
+  /* Primary green button with good contrast */
+  .btn-primary-green {
+    @apply bg-gradient-to-r from-brand-green-600 to-brand-green-500 text-white;
+    @apply hover:from-brand-green-700 hover:to-brand-green-600;
+    @apply shadow-lg shadow-brand-green-500/30;
+  }
+
+  /* Smooth animations */
+  .animate-gradient-x {
+    background-size: 200% 100%;
+    animation: gradient-x 3s ease infinite;
+  }
+
+  @keyframes gradient-x {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* Green glow effect */
+  .glow-green {
+    box-shadow: 0 0 20px rgba(15, 118, 110, 0.3);
+  }
+
+  .glow-green-strong {
+    box-shadow: 0 0 30px rgba(15, 118, 110, 0.5);
+  }
+
+  @keyframes pulse-subtle {
+
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 2s infinite ease-in-out;
+  }
+
+  /* AI Solutions Showcase Demo Animations */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in-up 0.4s ease-out forwards;
+  }
+
+  @keyframes voice-wave {
+    0%, 100% {
+      transform: scaleY(0.5);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+
+  .animate-voice-wave {
+    animation: voice-wave 0.6s ease-in-out infinite;
+  }
+
+  @keyframes grow-bar {
+    from {
+      height: 0;
+    }
+  }
+
+  .animate-grow {
+    animation: grow-bar 0.6s ease-out forwards;
+  }
+}

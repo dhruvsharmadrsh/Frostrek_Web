@@ -1,0 +1,1647 @@
+import { motion, useScroll, useTransform, useMotionValue, AnimatePresence } from 'framer-motion';
+import { Target, Award, Zap, Shield, Globe, MapPin, Phone, ExternalLink, ArrowRight, Users, Building2, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, MousePointer2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, Server, Workflow, Network, Bot, BarChart3, FileCode, GitBranch, Container, Boxes, ChevronDown, ChevronUp } from 'lucide-react';
+import CuteBackground from '../components/ui/CuteBackground';
+import { useRef, useState, useEffect, useMemo, memo } from 'react';
+import { TIMELINE_DATA } from '../utils/aboutData';
+import InnovationProcess from '../components/about/InnovationProcess';
+// Extracted constant for optimization
+const HEADLINE_WORDS = ['Accelerate', 'growth', 'at', 'the', 'new', 'speed', 'of', 'business'];
+
+// ============ TEAM DATA ============
+const TEAM_DATA = [
+    {
+        name: 'Dr. Sarah Chen',
+        role: 'CEO & Co-Founder',
+        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face',
+        bio: 'Former Google AI researcher with 15+ years in machine learning. PhD from Stanford in Computer Science. Passionate about making AI accessible to enterprises worldwide.',
+        linkedin: '#',
+        twitter: '#',
+    },
+    {
+        name: 'Marcus Rodriguez',
+        role: 'CTO',
+        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+        bio: 'Ex-Meta engineering lead. Built distributed systems serving billions of users. Expert in scalable AI infrastructure and real-time processing systems.',
+        linkedin: '#',
+        twitter: '#',
+        github: '#',
+    },
+    {
+        name: 'Emily Watson',
+        role: 'VP of Product',
+        image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face',
+        bio: 'Product visionary with experience at Salesforce and Microsoft. Specializes in enterprise SaaS products and AI-driven solutions that users love.',
+        linkedin: '#',
+        twitter: '#',
+    },
+    {
+        name: 'David Kim',
+        role: 'Head of AI Research',
+        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+        bio: 'Published 50+ papers in top AI conferences. Former DeepMind researcher. Leading our efforts in autonomous agent development and LLM optimization.',
+        linkedin: '#',
+        github: '#',
+    },
+    {
+        name: 'Priya Sharma',
+        role: 'VP of Engineering',
+        image: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&h=400&fit=crop&crop=face',
+        bio: 'Engineering leader with 12+ years at Amazon and Netflix. Expert in building high-performance, fault-tolerant systems at scale.',
+        linkedin: '#',
+        twitter: '#',
+    },
+    {
+        name: 'James Mitchell',
+        role: 'Chief Security Officer',
+        image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face',
+        bio: 'Former NSA cybersecurity expert. Led security at Fortune 100 companies. Ensures Frostrek meets the highest security standards globally.',
+        linkedin: '#',
+    },
+];
+
+// ============ CERTIFICATIONS DATA ============
+const CERTIFICATIONS_DATA = [
+    {
+        name: 'ISO 27001',
+        icon: ShieldCheck,
+        description: 'International standard for information security management systems (ISMS)',
+        color: 'from-blue-500 to-blue-600',
+    },
+    {
+        name: 'SOC 2 Type II',
+        icon: Lock,
+        description: 'Audited security, availability, and confidentiality controls',
+        color: 'from-purple-500 to-purple-600',
+    },
+    {
+        name: 'GDPR Compliant',
+        icon: Shield,
+        description: 'Full compliance with EU General Data Protection Regulation',
+        color: 'from-green-500 to-green-600',
+    },
+    {
+        name: 'HIPAA Ready',
+        icon: BadgeCheck,
+        description: 'Healthcare data protection and privacy standards',
+        color: 'from-red-500 to-red-600',
+    },
+];
+
+// ============ AWARDS DATA ============
+const AWARDS_DATA = [
+    {
+        title: 'Best AI Platform',
+        issuer: 'TechCrunch Disrupt',
+        year: '2024',
+        icon: Trophy,
+        color: 'from-amber-400 to-amber-600',
+    },
+    {
+        title: 'Innovation Leader',
+        issuer: 'Gartner Magic Quadrant',
+        year: '2024',
+        icon: Star,
+        color: 'from-teal-400 to-teal-600',
+    },
+    {
+        title: 'Top 50 AI Startups',
+        issuer: 'Forbes',
+        year: '2023',
+        icon: Award,
+        color: 'from-rose-400 to-rose-600',
+    },
+    {
+        title: 'Enterprise Excellence',
+        issuer: 'Enterprise Tech Awards',
+        year: '2023',
+        icon: Trophy,
+        color: 'from-indigo-400 to-indigo-600',
+    },
+];
+
+// ============ TECH STACK DATA ============
+const TECH_CATEGORIES = [
+    {
+        name: 'AI & Machine Learning',
+        icon: Brain,
+        color: 'from-purple-500 to-violet-600',
+        technologies: [
+            { name: 'PyTorch', desc: 'Deep learning framework for research and production' },
+            { name: 'TensorFlow', desc: 'End-to-end ML platform for scalable deployments' },
+            { name: 'LangChain', desc: 'LLM orchestration and agent development' },
+            { name: 'Transformers', desc: 'State-of-the-art NLP models and fine-tuning' },
+        ],
+    },
+    {
+        name: 'Infrastructure',
+        icon: Cloud,
+        color: 'from-cyan-500 to-blue-600',
+        technologies: [
+            { name: 'Kubernetes', desc: 'Container orchestration at enterprise scale' },
+            { name: 'AWS/GCP/Azure', desc: 'Multi-cloud deployment flexibility' },
+            { name: 'Terraform', desc: 'Infrastructure as code automation' },
+            { name: 'Redis', desc: 'High-performance caching and real-time data' },
+        ],
+    },
+    {
+        name: 'Security',
+        icon: ShieldCheck,
+        color: 'from-green-500 to-emerald-600',
+        technologies: [
+            { name: 'Zero Trust', desc: 'Never trust, always verify architecture' },
+            { name: 'E2E Encryption', desc: 'AES-256 encryption for data at rest and transit' },
+            { name: 'OAuth 2.0/OIDC', desc: 'Enterprise SSO and identity management' },
+            { name: 'Vault', desc: 'Secrets management and data protection' },
+        ],
+    },
+    {
+        name: 'Development',
+        icon: Code,
+        color: 'from-orange-500 to-red-600',
+        technologies: [
+            { name: 'TypeScript', desc: 'Type-safe development for robust applications' },
+            { name: 'Python', desc: 'Core language for AI/ML development' },
+            { name: 'Go', desc: 'High-performance microservices' },
+            { name: 'GraphQL', desc: 'Flexible API layer for data access' },
+        ],
+    },
+];
+
+// ============ STUNNING TYPEWRITER ============
+const TypewriterText = memo(({ texts }: { texts: string[] }) => {
+    const [index, setIndex] = useState(0);
+    const [text, setText] = useState(texts[0]);
+    const [phase, setPhase] = useState<'show' | 'delete' | 'type'>('show');
+
+    useEffect(() => {
+        if (phase === 'show') {
+            const t = setTimeout(() => setPhase('delete'), 2500);
+            return () => clearTimeout(t);
+        }
+        if (phase === 'delete') {
+            if (text.length > 0) {
+                const t = setTimeout(() => setText(text.slice(0, -1)), 30);
+                return () => clearTimeout(t);
+            }
+            setIndex(i => (i + 1) % texts.length);
+            setPhase('type');
+        }
+        if (phase === 'type') {
+            const target = texts[index];
+            if (text.length < target.length) {
+                const t = setTimeout(() => setText(target.slice(0, text.length + 1)), 50);
+                return () => clearTimeout(t);
+            }
+            setPhase('show');
+        }
+    }, [text, phase, index, texts]);
+
+    return (
+        <span className="relative">
+            {text}
+            <motion.span
+                className="inline-block w-[3px] h-[0.85em] bg-teal-400 ml-1 align-middle rounded-full"
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity }}
+            />
+        </span>
+    );
+});
+
+// ============ MAGNETIC INTERACTIVE BUTTON ============
+const MagneticButton = memo(({ children, className, onClick, variant = 'primary' }: {
+    children: React.ReactNode;
+    className?: string;
+    onClick?: () => void;
+    variant?: 'primary' | 'secondary' | 'cta'
+}) => {
+    const ref = useRef<HTMLButtonElement>(null);
+    const [hover, setHover] = useState(false);
+    const [press, setPress] = useState(false);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const handleMouse = (e: React.MouseEvent) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        x.set((e.clientX - rect.left - rect.width / 2) * 0.15);
+        y.set((e.clientY - rect.top - rect.height / 2) * 0.15);
+    };
+
+    const reset = () => { x.set(0); y.set(0); setHover(false); };
+
+    const baseStyles = variant === 'primary'
+        ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25'
+        : variant === 'cta'
+            ? 'bg-white text-teal-600 shadow-xl'
+            : 'bg-white/90 border-2 border-teal-500/40 text-teal-600';
+
+    return (
+        <motion.button
+            ref={ref}
+            style={{ x, y }}
+            onMouseMove={handleMouse}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={reset}
+            onMouseDown={() => setPress(true)}
+            onMouseUp={() => setPress(false)}
+            onClick={onClick}
+            className={`relative overflow-hidden rounded-xl font-semibold transition-all ${baseStyles} ${className}`}
+            animate={{ scale: press ? 0.97 : hover ? 1.03 : 1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+        >
+            {/* Shine effect */}
+            <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                initial={{ x: '-100%' }}
+                animate={hover ? { x: '100%' } : { x: '-100%' }}
+                transition={{ duration: 0.5 }}
+            />
+            <span className="relative z-10">{children}</span>
+        </motion.button>
+    );
+});
+
+// ============ 3D TILT CARD ============
+const TiltCard = memo(({ children, className, color = 'teal' }: {
+    children: React.ReactNode;
+    className?: string;
+    color?: 'teal' | 'cyan'
+}) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const [hover, setHover] = useState(false);
+    const rotateX = useMotionValue(0);
+    const rotateY = useMotionValue(0);
+
+    const handleMouse = (e: React.MouseEvent) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        rotateX.set((e.clientY - centerY) / 15);
+        rotateY.set((centerX - e.clientX) / 15);
+    };
+
+    const reset = () => { rotateX.set(0); rotateY.set(0); setHover(false); };
+
+    const borderColor = color === 'teal' ? 'border-teal-500' : 'border-cyan-500';
+    const glowColor = color === 'teal' ? 'shadow-teal-500/20' : 'shadow-cyan-500/20';
+
+    return (
+        <motion.div
+            ref={ref}
+            onMouseMove={handleMouse}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={reset}
+            style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+            className={`relative cursor-pointer ${className}`}
+            animate={{
+                y: hover ? -8 : 0,
+                boxShadow: hover ? `0 20px 40px -15px ${color === 'teal' ? 'rgba(20,184,166,0.3)' : 'rgba(6,182,212,0.3)'}` : '0 4px 20px -5px rgba(0,0,0,0.1)'
+            }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        >
+            {/* Gradient border on hover */}
+            <motion.div
+                className={`absolute -inset-[2px] rounded-2xl bg-gradient-to-r ${color === 'teal' ? 'from-teal-400 via-cyan-400 to-teal-400' : 'from-cyan-400 via-teal-400 to-cyan-400'}`}
+                animate={{ opacity: hover ? 1 : 0 }}
+                transition={{ duration: 0.2 }}
+            />
+            <div className="relative bg-white rounded-2xl h-full" style={{ transform: 'translateZ(20px)' }}>
+                {children}
+            </div>
+        </motion.div>
+    );
+});
+
+// ============ ANIMATED COUNTER ============
+const Counter = memo(({ value, suffix = '' }: { value: number; suffix?: string }) => {
+    const [count, setCount] = useState(0);
+    const [started, setStarted] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const obs = new IntersectionObserver(([e]) => {
+            if (e.isIntersecting && !started) {
+                setStarted(true);
+                let n = 0;
+                const step = value / 40;
+                const loop = () => {
+                    n += step;
+                    if (n >= value) setCount(value);
+                    else { setCount(Math.floor(n)); requestAnimationFrame(loop); }
+                };
+                requestAnimationFrame(loop);
+            }
+        }, { threshold: 0.5 });
+        if (ref.current) obs.observe(ref.current);
+        return () => obs.disconnect();
+    }, [value, started]);
+
+    return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+});
+
+// ============ FLOATING ICON ============
+const FloatingIcon = memo(({ icon: Icon, delay, x, y }: { icon: React.ElementType; delay: number; x: string; y: string }) => (
+    <motion.div
+        className="absolute w-10 h-10 bg-white/80 backdrop-blur rounded-xl shadow-lg flex items-center justify-center border border-teal-500/20"
+        style={{ left: x, top: y }}
+        animate={{ y: [0, -12, 0], rotate: [0, 5, -5, 0] }}
+        transition={{ duration: 4, delay, repeat: Infinity, ease: 'easeInOut' }}
+    >
+        <Icon className="w-5 h-5 text-teal-600" />
+    </motion.div>
+));
+
+// ============ INTERACTIVE GLOBE ============
+const InteractiveGlobe = memo(() => {
+    const [hoveredCity, setHoveredCity] = useState<number | null>(null);
+    const [isGlobeHovered, setIsGlobeHovered] = useState(false);
+
+    const cities = useMemo(() => [
+        { x: '18%', y: '28%', name: 'San Francisco', flag: '🇺🇸' },
+        { x: '70%', y: '22%', name: 'London', flag: '🇬🇧' },
+        { x: '82%', y: '55%', name: 'Singapore', flag: '🇸🇬' },
+        { x: '15%', y: '62%', name: 'Dubai', flag: '🇦🇪' },
+        { x: '52%', y: '12%', name: 'Berlin', flag: '🇩🇪' },
+        { x: '75%', y: '42%', name: 'Bangalore', flag: '🇮🇳' },
+    ], []);
+
+    return (
+        <div className="relative w-full h-80 flex items-center justify-center">
+            {/* Animated rings */}
+            <motion.div
+                className="absolute w-56 h-56 border-2 border-dashed border-teal-500/20 rounded-full"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+            />
+            <motion.div
+                className="absolute w-44 h-44 border-2 border-dashed border-cyan-500/20 rounded-full"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+            />
+
+            {/* Globe center */}
+            <motion.div
+                className="relative w-24 h-24 bg-gradient-to-br from-teal-400 via-teal-500 to-cyan-600 rounded-full flex items-center justify-center shadow-2xl cursor-pointer z-10"
+                onMouseEnter={() => setIsGlobeHovered(true)}
+                onMouseLeave={() => setIsGlobeHovered(false)}
+                animate={{
+                    scale: isGlobeHovered ? 1.1 : 1,
+                    boxShadow: isGlobeHovered
+                        ? '0 0 60px 10px rgba(20,184,166,0.4)'
+                        : '0 20px 50px -10px rgba(20,184,166,0.4)'
+                }}
+                transition={{ type: 'spring', stiffness: 300 }}
+            >
+                <Globe className="w-12 h-12 text-white" />
+                {/* Pulse rings */}
+                <motion.div
+                    className="absolute inset-0 rounded-full border-2 border-teal-300"
+                    animate={{ scale: [1, 1.8], opacity: [0.6, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                />
+            </motion.div>
+
+            {/* City dots with tooltips */}
+            {cities.map((city, i) => (
+                <motion.div
+                    key={i}
+                    className="absolute z-20"
+                    style={{ left: city.x, top: city.y }}
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.5 + i * 0.1, type: 'spring' }}
+                    onMouseEnter={() => setHoveredCity(i)}
+                    onMouseLeave={() => setHoveredCity(null)}
+                >
+                    <motion.div
+                        className="relative cursor-pointer"
+                        animate={{ scale: hoveredCity === i ? 1.5 : 1 }}
+                    >
+                        <div className="w-4 h-4 bg-teal-500 rounded-full shadow-lg" />
+                        <motion.div
+                            className="absolute inset-0 rounded-full bg-teal-400"
+                            animate={{ scale: [1, 2.5], opacity: [0.5, 0] }}
+                            transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }}
+                        />
+                    </motion.div>
+                    <AnimatePresence>
+                        {hoveredCity === i && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                                className="absolute top-6 left-1/2 -translate-x-1/2 px-3 py-2 bg-gray-900/95 backdrop-blur rounded-xl text-white text-xs whitespace-nowrap shadow-xl z-30"
+                            >
+                                <span className="text-base mr-1">{city.flag}</span>
+                                <span className="font-medium">{city.name}</span>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.div>
+            ))}
+        </div>
+    );
+});
+
+// ============ CHECK ITEM WITH ANIMATION ============
+const CheckItem = memo(({ text, delay }: { text: string; delay: number }) => (
+    <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay, duration: 0.4 }}
+        className="flex items-center gap-3 group"
+    >
+        <motion.div
+            className="w-6 h-6 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center"
+            whileHover={{ scale: 1.2, rotate: 10 }}
+        >
+            <CheckCircle2 className="w-4 h-4 text-white" />
+        </motion.div>
+        <span className="text-gray-600 group-hover:text-gray-900 transition-colors">{text}</span>
+    </motion.div>
+));
+
+// ============ TECH STACK ICON ============
+const TechIcon = memo(({ icon: Icon, label, delay }: { icon: React.ElementType; label: string; delay: number }) => {
+    const [hover, setHover] = useState(false);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay, duration: 0.4 }}
+            className="relative flex flex-col items-center"
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+        >
+            <motion.div
+                className="w-16 h-16 bg-white rounded-2xl border-2 border-teal-500/20 flex items-center justify-center shadow-lg cursor-pointer"
+                animate={{
+                    y: hover ? -8 : 0,
+                    borderColor: hover ? 'rgb(20 184 166)' : 'rgba(20 184 166 / 0.2)',
+                    boxShadow: hover ? '0 15px 30px -10px rgba(20,184,166,0.3)' : '0 4px 15px -5px rgba(0,0,0,0.1)'
+                }}
+                transition={{ type: 'spring', stiffness: 300 }}
+            >
+                <Icon className="w-8 h-8 text-teal-600" />
+            </motion.div>
+            <AnimatePresence>
+                {hover && (
+                    <motion.span
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        className="absolute -bottom-6 text-xs font-medium text-teal-600 whitespace-nowrap"
+                    >
+                        {label}
+                    </motion.span>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+});
+
+// ============ SCROLL INDICATOR ============
+const ScrollIndicator = memo(() => (
+    <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}
+    >
+        <MousePointer2 className="w-5 h-5 text-teal-500" />
+    </motion.div>
+));
+
+// ============ TEAM FLIP CARD ============
+const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; delay: number }) => {
+    const [isFlipped, setIsFlipped] = useState(false);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay, duration: 0.5 }}
+            className="perspective-1000 w-full h-[380px]"
+            onMouseEnter={() => setIsFlipped(true)}
+            onMouseLeave={() => setIsFlipped(false)}
+        >
+            <motion.div
+                className="relative w-full h-full preserve-3d cursor-pointer"
+                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                transition={{ duration: 0.5, type: 'spring', stiffness: 80, damping: 12 }}
+                style={{ transformStyle: 'preserve-3d' }}
+            >
+                {/* Front Face */}
+                <div
+                    className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden shadow-xl"
+                    style={{ backfaceVisibility: 'hidden' }}
+                >
+                    <div className="relative w-full h-full">
+                        <img
+                            src={member.image}
+                            alt={member.name}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                        />
+                        {/* Glassmorphism Overlay */}
+                        <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+                            <div className="backdrop-blur-sm bg-white/10 rounded-xl p-4 border border-white/20">
+                                <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
+                                <p className="text-teal-300 font-medium">{member.role}</p>
+                            </div>
+                        </div>
+                        {/* Hover Hint */}
+                        <motion.div
+                            className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 text-xs text-white border border-white/30"
+                            animate={{ opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        >
+                            Hover for bio
+                        </motion.div>
+                    </div>
+                </div>
+
+                {/* Back Face */}
+                <div
+                    className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden shadow-xl"
+                    style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                >
+                    <div className="w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 flex flex-col">
+                        {/* Glassmorphism Card */}
+                        <div className="flex-1 backdrop-blur-xl bg-white/5 rounded-xl p-5 border border-white/10 flex flex-col">
+                            <div className="flex items-center gap-4 mb-4">
+                                <img
+                                    src={member.image}
+                                    alt={member.name}
+                                    className="w-16 h-16 rounded-xl object-cover border-2 border-teal-500/50"
+                                />
+                                <div>
+                                    <h3 className="text-lg font-bold text-white">{member.name}</h3>
+                                    <p className="text-teal-400 text-sm font-medium">{member.role}</p>
+                                </div>
+                            </div>
+
+                            <p className="text-gray-300 text-sm leading-relaxed flex-1">{member.bio}</p>
+
+                            {/* Social Links */}
+                            <div className="flex gap-3 mt-4 pt-4 border-t border-white/10">
+                                {member.linkedin && (
+                                    <motion.a
+                                        href={member.linkedin}
+                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-teal-500/50 transition-colors"
+                                        whileHover={{ scale: 1.1, y: -2 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        <Linkedin className="w-5 h-5" />
+                                    </motion.a>
+                                )}
+                                {member.twitter && (
+                                    <motion.a
+                                        href={member.twitter}
+                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-teal-500/50 transition-colors"
+                                        whileHover={{ scale: 1.1, y: -2 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        <Twitter className="w-5 h-5" />
+                                    </motion.a>
+                                )}
+                                {member.github && (
+                                    <motion.a
+                                        href={member.github}
+                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-teal-500/50 transition-colors"
+                                        whileHover={{ scale: 1.1, y: -2 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        <Github className="w-5 h-5" />
+                                    </motion.a>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+});
+
+// ============ CERTIFICATION BADGE ============
+const CertificationBadge = memo(({ cert, delay }: { cert: typeof CERTIFICATIONS_DATA[0]; delay: number }) => {
+    const [showTooltip, setShowTooltip] = useState(false);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay, type: 'spring', stiffness: 200 }}
+            className="relative"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+        >
+            <motion.div
+                className={`relative px-6 py-4 rounded-2xl bg-gradient-to-br ${cert.color} cursor-pointer overflow-hidden`}
+                whileHover={{ scale: 1.05, y: -5 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+            >
+                {/* Glow effect */}
+                <motion.div
+                    className="absolute inset-0 bg-white/20"
+                    animate={{ opacity: [0, 0.3, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                />
+
+                <div className="relative flex items-center gap-3">
+                    <cert.icon className="w-6 h-6 text-white" />
+                    <span className="text-white font-bold text-sm">{cert.name}</span>
+                </div>
+            </motion.div>
+
+            {/* Tooltip - positioned ABOVE the badge */}
+            <AnimatePresence>
+                {showTooltip && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-3 bg-gray-900 text-white text-xs rounded-xl shadow-xl z-50 w-56 text-center"
+                    >
+                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-gray-900 rotate-45" />
+                        <p className="relative z-10">{cert.description}</p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+});
+
+// ============ AWARD CARD ============
+const AwardCard = memo(({ award, delay }: { award: typeof AWARDS_DATA[0]; delay: number }) => {
+    const [hover, setHover] = useState(false);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay, duration: 0.5 }}
+            className="relative"
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+        >
+            <motion.div
+                className="relative bg-white rounded-2xl p-6 border-2 border-gray-100 shadow-lg overflow-hidden cursor-pointer h-full min-h-[200px]"
+                animate={{
+                    y: hover ? -8 : 0,
+                    borderColor: hover ? 'rgba(20, 184, 166, 0.5)' : 'rgb(243, 244, 246)',
+                    boxShadow: hover ? '0 20px 40px -15px rgba(20,184,166,0.3)' : '0 4px 20px -5px rgba(0,0,0,0.1)',
+                }}
+                transition={{ type: 'spring', stiffness: 300 }}
+            >
+                {/* Background Glow */}
+                <motion.div
+                    className={`absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${award.color} opacity-20 blur-2xl`}
+                    animate={{ scale: hover ? 1.5 : 1 }}
+                />
+
+                <div className="relative">
+                    {/* Icon */}
+                    <motion.div
+                        className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${award.color} flex items-center justify-center mb-4 shadow-lg`}
+                        animate={{ rotate: hover ? [0, -10, 10, 0] : 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <award.icon className="w-7 h-7 text-white" />
+                    </motion.div>
+
+                    {/* Content */}
+                    <h3 className="text-base font-bold text-gray-900 mb-1 line-clamp-2">{award.title}</h3>
+                    <p className="text-gray-500 text-sm mb-2 line-clamp-1">{award.issuer}</p>
+                    <span className="inline-block px-3 py-1 bg-gray-100 rounded-full text-xs font-semibold text-gray-600">
+                        {award.year}
+                    </span>
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+});
+
+// ============ EXPANDABLE TECH CATEGORY ============
+const ExpandableTechCategory = memo(({ category, delay }: { category: typeof TECH_CATEGORIES[0]; delay: number }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay, duration: 0.5 }}
+            className="relative"
+        >
+            <motion.div
+                className="bg-white rounded-2xl border-2 border-gray-100 shadow-lg overflow-hidden cursor-pointer"
+                animate={{
+                    borderColor: isExpanded ? 'rgba(20, 184, 166, 0.5)' : 'rgb(243, 244, 246)',
+                }}
+            >
+                {/* Header */}
+                <motion.div
+                    className="p-6 flex items-center justify-between"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    whileHover={{ backgroundColor: 'rgba(20, 184, 166, 0.05)' }}
+                >
+                    <div className="flex items-center gap-4">
+                        <motion.div
+                            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center shadow-lg`}
+                            animate={{ rotate: isExpanded ? 360 : 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <category.icon className="w-6 h-6 text-white" />
+                        </motion.div>
+                        <div>
+                            <h3 className="text-lg font-bold text-gray-900">{category.name}</h3>
+                            <p className="text-sm text-gray-500">{category.technologies.length} technologies</p>
+                        </div>
+                    </div>
+                    <motion.div
+                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <ChevronDown className="w-6 h-6 text-gray-400" />
+                    </motion.div>
+                </motion.div>
+
+                {/* Expandable Content */}
+                <AnimatePresence>
+                    {isExpanded && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="px-6 pb-6 space-y-3">
+                                {category.technologies.map((tech, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: i * 0.05 }}
+                                        className="flex items-start gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                                    >
+                                        <div className={`w-2 h-2 rounded-full bg-gradient-to-br ${category.color} mt-2 flex-shrink-0`} />
+                                        <div>
+                                            <h4 className="font-semibold text-gray-900 text-sm">{tech.name}</h4>
+                                            <p className="text-gray-500 text-xs">{tech.desc}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+        </motion.div>
+    );
+});
+
+// ============ TECH ECOSYSTEM DIAGRAM ============
+const TechEcosystemDiagram = memo(() => {
+    const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
+
+    const categories = [
+        { icon: Brain, label: 'AI/ML', angle: 0, color: '#8B5CF6' },
+        { icon: Cloud, label: 'Cloud', angle: 90, color: '#06B6D4' },
+        { icon: ShieldCheck, label: 'Security', angle: 180, color: '#10B981' },
+        { icon: Code, label: 'Dev', angle: 270, color: '#F97316' },
+    ];
+
+    return (
+        <div className="relative w-80 h-80 mx-auto">
+            {/* Orbiting Rings */}
+            <motion.div
+                className="absolute inset-8 border-2 border-dashed border-gray-200 rounded-full"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+            />
+            <motion.div
+                className="absolute inset-16 border-2 border-dashed border-gray-200 rounded-full"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+            />
+
+            {/* Center Logo */}
+            <motion.div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-2xl z-10"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
+            >
+                <span className="text-white font-bold text-lg">F</span>
+            </motion.div>
+
+            {/* Orbiting Icons */}
+            {categories.map((cat, i) => {
+                const radius = 110;
+                const x = Math.cos((cat.angle * Math.PI) / 180) * radius;
+                const y = Math.sin((cat.angle * Math.PI) / 180) * radius;
+
+                return (
+                    <motion.div
+                        key={i}
+                        className="absolute left-1/2 top-1/2 z-20"
+                        style={{
+                            x: x - 24,
+                            y: y - 24,
+                        }}
+                        onMouseEnter={() => setHoveredCategory(i)}
+                        onMouseLeave={() => setHoveredCategory(null)}
+                    >
+                        <motion.div
+                            className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg cursor-pointer"
+                            style={{ backgroundColor: cat.color }}
+                            animate={{
+                                scale: hoveredCategory === i ? 1.2 : 1,
+                                boxShadow: hoveredCategory === i ? `0 10px 30px ${cat.color}50` : '0 4px 15px rgba(0,0,0,0.1)',
+                            }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                        >
+                            <cat.icon className="w-6 h-6 text-white" />
+                        </motion.div>
+                        <AnimatePresence>
+                            {hoveredCategory === i && (
+                                <motion.span
+                                    initial={{ opacity: 0, y: 5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 5 }}
+                                    className="absolute top-14 left-1/2 -translate-x-1/2 text-xs font-semibold text-gray-700 whitespace-nowrap"
+                                >
+                                    {cat.label}
+                                </motion.span>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Connection Line */}
+                        <svg
+                            className="absolute left-6 top-6 pointer-events-none"
+                            width="100"
+                            height="100"
+                            style={{ overflow: 'visible' }}
+                        >
+                            <motion.line
+                                x1="0"
+                                y1="0"
+                                x2={-x + 24}
+                                y2={-y + 24}
+                                stroke={cat.color}
+                                strokeWidth="2"
+                                strokeDasharray="4 4"
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: 1 }}
+                                transition={{ duration: 1, delay: i * 0.2 }}
+                            />
+                        </svg>
+                    </motion.div>
+                );
+            })}
+        </div>
+    );
+});
+
+// ============ STAGGER ANIMATIONS ============
+const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
+const fadeUp = { hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
+
+// ============ MAIN COMPONENT ============
+const About = () => {
+    const ref = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({ target: ref });
+    const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
+    const opacity = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
+
+    const [activeOffice, setActiveOffice] = useState<number>(0);
+    const [hoveredTimeline, setHoveredTimeline] = useState<number | null>(null);
+
+    const texts = useMemo(() => ['Intelligent Systems', 'Agentic AI', 'Machine Learning', 'Neural Networks'], []);
+
+    const values = useMemo(() => [
+        { icon: Zap, title: 'Innovation', desc: 'Cutting-edge AI solutions', color: 'teal' as const },
+        { icon: Award, title: 'Excellence', desc: 'ISO certified quality', color: 'cyan' as const },
+        { icon: Shield, title: 'Trust', desc: 'Enterprise security', color: 'teal' as const },
+        { icon: Target, title: 'Collaboration', desc: 'Partnership focused', color: 'cyan' as const },
+    ], []);
+
+    const features = useMemo(() => [
+        { num: '01', title: 'Trusted Expertise', desc: 'World-class AI research team', stat: '5000+ Sessions' },
+        { num: '02', title: 'Innovation-Driven', desc: 'Pushing technology boundaries', stat: 'Cutting-Edge' },
+        { num: '03', title: 'Client-Centered', desc: 'Your success is our priority', stat: 'Tailored' },
+        { num: '04', title: 'Production-Ready', desc: 'Scale without limits', stat: 'Enterprise' },
+    ], []);
+
+    const offices = useMemo(() => [
+        {
+            name: 'UK',
+            city: 'London',
+            country: 'United Kingdom (UK)',
+            flagImg: 'https://flagcdn.com/w40/gb.png',
+            image: 'https://images.unsplash.com/photo-1529655683826-aba9b3e77383?w=800&h=600&fit=crop',
+            companyName: 'Frostrek UK Ltd.',
+            address: '2 Minister Court London EC3R 7BB, UK',
+            phone: '+44 208 0575675',
+            mapUrl: 'https://maps.google.com/?q=London+UK'
+        },
+        {
+            name: 'Korea',
+            city: 'Seoul',
+            country: 'Korea',
+            flagImg: 'https://flagcdn.com/w40/kr.png',
+            image: 'https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=800&h=600&fit=crop',
+            companyName: 'Frostrek Korea Inc.',
+            address: '123 Gangnam-daero, Gangnam-gu, Seoul',
+            phone: '+82 2 1234 5678',
+            mapUrl: 'https://maps.google.com/?q=Seoul+Korea'
+        },
+        {
+            name: 'India',
+            city: 'Hyderabad',
+            country: 'India',
+            flagImg: 'https://flagcdn.com/w40/in.png',
+            image: 'https://images.unsplash.com/photo-1572204097183-e1ab140342ed?w=800&h=600&fit=crop',
+            companyName: 'Frostrek India Pvt. Ltd.',
+            address: 'Hi-Tech City, Hyderabad 500081, India',
+            phone: '+91 40 1234 5678',
+            mapUrl: 'https://maps.google.com/?q=Hyderabad+India'
+        },
+        {
+            name: 'Japan',
+            city: 'Tokyo',
+            country: 'Japan',
+            flagImg: 'https://flagcdn.com/w40/jp.png',
+            image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&h=600&fit=crop',
+            companyName: 'Frostrek Japan K.K.',
+            address: 'Shibuya-ku, Tokyo 150-0002, Japan',
+            phone: '+81 3 1234 5678',
+            mapUrl: 'https://maps.google.com/?q=Tokyo+Japan'
+        },
+        {
+            name: 'Germany',
+            city: 'Frankfurt',
+            country: 'Germany',
+            flagImg: 'https://flagcdn.com/w40/de.png',
+            image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&h=600&fit=crop',
+            companyName: 'Frostrek GmbH',
+            address: 'Frankfurt am Main, 60311, Germany',
+            phone: '+49 69 1234 5678',
+            mapUrl: 'https://maps.google.com/?q=Frankfurt+Germany'
+        },
+        {
+            name: 'USA',
+            city: 'Orlando',
+            country: 'USA',
+            flagImg: 'https://flagcdn.com/w40/us.png',
+            image: 'https://images.unsplash.com/photo-1575089776834-8be34c8a652e?w=800&h=600&fit=crop',
+            companyName: 'Frostrek Inc.',
+            address: '123 Innovation Drive, Orlando, FL 32801',
+            phone: '+1 407 123 4567',
+            mapUrl: 'https://maps.google.com/?q=Orlando+Florida+USA'
+        },
+        {
+            name: 'UAE',
+            city: 'Dubai',
+            country: 'UAE',
+            flagImg: 'https://flagcdn.com/w40/ae.png',
+            image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop',
+            companyName: 'Frostrek DMCC',
+            address: 'DMCC Business Centre, Dubai, UAE',
+            phone: '+971 4 123 4567',
+            mapUrl: 'https://maps.google.com/?q=Dubai+UAE'
+        },
+    ], []);
+
+    const tech = useMemo(() => [
+        { icon: Brain, label: 'AI/ML' },
+        { icon: Code, label: 'Development' },
+        { icon: Cpu, label: 'Processing' },
+        { icon: Database, label: 'Big Data' },
+        { icon: Layers, label: 'Architecture' },
+        { icon: Sparkles, label: 'Innovation' },
+    ], []);
+
+    return (
+        <div ref={ref} className="min-h-screen relative overflow-hidden">
+            <CuteBackground />
+
+            {/* ===== HERO ===== */}
+            <motion.section style={{ y: bgY, opacity }} className="relative min-h-[85vh] flex items-center py-20 pt-32">
+                <div className="container mx-auto px-4">
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.7 }}
+                        className="max-w-4xl mx-auto text-center"
+                    >
+                        <motion.h1
+                            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 leading-tight"
+                        >
+                            Revolutionizing AI Solutions with{' '}
+                            <span className="text-teal-500 relative inline-block">
+                                <TypewriterText texts={texts} />
+                                <motion.span
+                                    className="absolute -bottom-2 left-0 h-1.5 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-full"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: '100%' }}
+                                    transition={{ delay: 0.5, duration: 0.8 }}
+                                />
+                            </span>
+                        </motion.h1>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto"
+                        >
+                            We specialize in AI model training, agentic AI systems, and end-to-end software development that transforms businesses.
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                            className="flex flex-wrap gap-4 justify-center"
+                        >
+                            <MagneticButton variant="primary" className="px-8 py-4" onClick={() => document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })}>
+                                <span className="flex items-center gap-2">Get Started <ArrowRight className="w-5 h-5" /></span>
+                            </MagneticButton>
+                            <MagneticButton variant="secondary" className="px-8 py-4" onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}>
+                                Learn More
+                            </MagneticButton>
+                        </motion.div>
+                    </motion.div>
+                </div>
+                <ScrollIndicator />
+            </motion.section>
+
+            {/* ===== TECH STACK ===== */}
+            <section className="py-12">
+                <div className="container mx-auto px-4">
+                    <div className="flex flex-wrap justify-center gap-8">
+                        {tech.map((t, i) => <TechIcon key={i} icon={t.icon} label={t.label} delay={i * 0.1} />)}
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== STATS ===== */}
+            <section id="stats" className="py-20">
+                <div className="container mx-auto px-4">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
+                        <motion.p variants={fadeUp} className="text-center text-gray-600 mb-12 text-lg">
+                            Building AI systems that transform how organizations operate.
+                        </motion.p>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                            {[
+                                { value: 5000, suffix: '+', label: 'Training Sessions' },
+                                { value: 200, suffix: '+', label: 'AI Specialists' },
+                                { value: 99, suffix: '%', label: 'Accuracy Rate' },
+                                { value: 50, suffix: '+', label: 'Enterprise Clients' },
+                            ].map((s, i) => (
+                                <motion.div key={i} variants={fadeUp}>
+                                    <TiltCard color={i % 2 === 0 ? 'teal' : 'cyan'}>
+                                        <div className="p-6 text-center">
+                                            <div className="text-3xl md:text-4xl font-bold text-teal-600 mb-1">
+                                                <Counter value={s.value} suffix={s.suffix} />
+                                            </div>
+                                            <div className="text-sm text-gray-500">{s.label}</div>
+                                        </div>
+                                    </TiltCard>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ===== PURPOSE / GROWTH SECTION ===== */}
+            <section className="py-24 overflow-hidden">
+                <div className="container mx-auto px-4">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+                        {/* Left Content */}
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-100px" }}
+                            variants={{
+                                hidden: { opacity: 0 },
+                                visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                            }}
+                        >
+                            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-gray-900 leading-[1.1] mb-8">
+                                {HEADLINE_WORDS.map((word, i) => (
+                                    <span key={i} className="inline-block whitespace-pre">
+                                        <motion.span
+                                            className="inline-block"
+                                            variants={{
+                                                hidden: { opacity: 0, y: 20 },
+                                                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+                                            }}
+                                        >
+                                            {word}
+                                        </motion.span>
+                                        {' '}
+                                    </span>
+                                ))}
+                            </h2>
+
+                            <motion.p
+                                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                                className="text-xl text-slate-700 mb-8 leading-relaxed font-medium"
+                            >
+                                We work with enterprises to reimagine business with our AI Agent Platform, AI Solutions for Work, Service and Process, and Agent Marketplace.
+                            </motion.p>
+
+                            <motion.p
+                                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                                className="text-lg text-gray-500 mb-12 leading-relaxed"
+                            >
+                                With Frostrek, customers get a standardized approach to developing, deploying, and orchestrating AI agents across the enterprise with speed, control, and flexibility. We help you keep up with the rapid pace of the AI industry.
+                            </motion.p>
+
+                            <motion.div
+                                variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+                                className="relative pl-8 border-l border-dotted border-gray-300"
+                            >
+                                <div className="absolute top-0 left-[-1px] w-[1px] h-8 bg-black"></div>
+                                <div className="absolute bottom-0 left-[-1px] w-[1px] h-8 bg-black"></div>
+
+                                <div className="flex flex-wrap gap-4">
+                                    <MagneticButton variant="primary" className="!bg-gray-950 !text-white hover:!bg-teal-600 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase">
+                                        <span className="flex items-center gap-2">VIEW OUR AGENT PLATFORM <span className="text-teal-400">•</span></span>
+                                    </MagneticButton>
+
+                                    <MagneticButton variant="secondary" className="!bg-transparent !border-gray-900 !text-gray-900 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase hover:!bg-gray-50">
+                                        CONTACT US
+                                    </MagneticButton>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+
+                        {/* Right Image */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="relative"
+                        >
+                            <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square lg:aspect-[4/3]">
+                                <img
+                                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop"
+                                    alt="Frostrek Team"
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+
+                                {/* Floating Logo Overlay */}
+                                <motion.div
+                                    className="absolute bottom-8 right-8"
+                                    initial={{ y: 20, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.4 }}
+                                >
+                                    <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50">
+                                        <div className="text-2xl font-bold tracking-tight text-gray-900">
+                                            Frostrek<span className="text-teal-500">.ai</span>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </div>
+
+                            {/* Subtle Decorative Elements */}
+                            <div className="absolute -top-12 -right-12 w-64 h-64 bg-teal-50/30 rounded-full blur-3xl -z-10"></div>
+                            <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-blue-50/30 rounded-full blur-3xl -z-10"></div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== TIMELINE SECTION ===== */}
+            <section className="py-24 relative overflow-hidden">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-20">
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
+                        >
+                            Our Journey
+                        </motion.h2>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="text-xl text-gray-600 max-w-2xl mx-auto"
+                        >
+                            From a bold idea to a global leader in Agentic AI.
+                        </motion.p>
+                    </div>
+
+                    <div className="relative max-w-5xl mx-auto">
+                        {/* Vertical Line */}
+                        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-500/0 via-teal-500/50 to-teal-500/0 md:-translate-x-1/2"></div>
+
+                        {TIMELINE_DATA.map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-50px" }}
+                                transition={{ delay: i * 0.1, duration: 0.5 }}
+                                className={`relative flex items-center gap-8 mb-16 last:mb-0 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                            >
+                                {/* Timeline Dot (Center) */}
+                                <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-teal-500 shadow-[0_0_0_4px_rgba(20,184,166,0.2)] z-10 md:-translate-x-1/2 translate-x-[-7px] md:translate-x-[-8px]">
+                                    <div className="absolute inset-0 bg-teal-400 animate-ping rounded-full opacity-75"></div>
+                                </div>
+
+                                {/* Content Card */}
+                                <div
+                                    className={`ml-12 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pr-16 text-left md:text-right' : 'md:pl-16 text-left'}`}
+                                    onMouseEnter={() => setHoveredTimeline(i)}
+                                    onMouseLeave={() => setHoveredTimeline(null)}
+                                >
+                                    <motion.div
+                                        className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 cursor-pointer"
+                                        whileHover={{
+                                            y: -4,
+                                            borderColor: item.color.border,
+                                            boxShadow: `0 10px 30px -10px ${item.color.shadow}`
+                                        }}
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        <div className={`flex flex-col gap-3 ${i % 2 === 0 ? 'md:items-end' : 'md:items-start'}`}>
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <span className={`px-3 py-1 ${item.color.bg} ${item.color.text} rounded-full text-sm font-bold shadow-sm`}>
+                                                    {item.year}
+                                                </span>
+                                                <item.icon className={`w-5 h-5 ${item.color.iconColor} ${i % 2 === 0 ? 'md:order-first' : ''}`} />
+                                            </div>
+                                            <h3 className="text-2xl font-bold text-gray-900">{item.title}</h3>
+                                            <p className="text-gray-600 leading-relaxed font-medium">
+                                                {item.description}
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                </div>
+
+                                {/* Image display area - shows on hover */}
+                                <div className={`hidden md:flex md:w-1/2 items-center ${i % 2 === 0 ? 'md:pl-16 justify-start' : 'md:pr-16 justify-end'}`}>
+                                    <AnimatePresence>
+                                        {hoveredTimeline === i && (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                                                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                                                className="relative overflow-hidden rounded-2xl shadow-2xl"
+                                                style={{ boxShadow: `0 25px 50px -12px ${item.color.shadow}` }}
+                                            >
+                                                <img
+                                                    src={item.image}
+                                                    alt={item.title}
+                                                    className="w-[300px] h-[200px] object-cover"
+                                                    loading="lazy"
+                                                />
+                                                <div
+                                                    className="absolute inset-0 pointer-events-none"
+                                                    style={{
+                                                        background: `linear-gradient(135deg, ${item.color.border}20 0%, transparent 50%)`
+                                                    }}
+                                                />
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== INNOVATION ENGINE ===== */}
+            <section className="py-24 bg-gradient-to-b from-slate-50/50 to-white">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-16">
+                        <motion.span
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-teal-100 to-cyan-100 text-teal-700 rounded-full text-sm font-semibold mb-4"
+                        >
+                            How We Work
+                        </motion.span>
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+                        >
+                            Our Innovation Engine
+                        </motion.h2>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="text-xl text-gray-600 max-w-2xl mx-auto"
+                        >
+                            A proven methodology that transforms ideas into enterprise-grade AI solutions.
+                        </motion.p>
+                    </div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <InnovationProcess />
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ===== TEAM / LEADERSHIP ===== */}
+            <section className="py-24 bg-gradient-to-b from-white via-slate-50/50 to-white">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-16">
+                        <motion.span
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="inline-block px-4 py-2 bg-teal-100 text-teal-700 rounded-full text-sm font-semibold mb-4"
+                        >
+                            Meet the Team
+                        </motion.span>
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+                        >
+                            Leadership That Drives Innovation
+                        </motion.h2>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="text-xl text-gray-600 max-w-2xl mx-auto"
+                        >
+                            World-class experts united by a mission to make AI accessible and impactful.
+                        </motion.p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        {TEAM_DATA.map((member, i) => (
+                            <TeamFlipCard key={i} member={member} delay={i * 0.1} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== CORE VALUES ===== */}
+            <section className="py-20">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Core Values</h2>
+                        <p className="text-gray-600">The principles that guide us</p>
+                    </div>
+
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+                        {values.map((v, i) => (
+                            <motion.div key={i} variants={fadeUp}>
+                                <TiltCard color={v.color}>
+                                    <div className="p-6 text-center">
+                                        <motion.div
+                                            className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 ${v.color === 'teal' ? 'bg-gradient-to-br from-teal-400 to-teal-600' : 'bg-gradient-to-br from-cyan-400 to-cyan-600'}`}
+                                            whileHover={{ rotate: 10, scale: 1.1 }}
+                                        >
+                                            <v.icon className="w-7 h-7 text-white" />
+                                        </motion.div>
+                                        <h3 className="font-bold text-gray-900 mb-1">{v.title}</h3>
+                                        <p className="text-gray-600 text-sm">{v.desc}</p>
+                                    </div>
+                                </TiltCard>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ===== WHY CHOOSE ===== */}
+            <section className="py-20">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Why Frostrek?</h2>
+                        <p className="text-gray-600">Experience the difference</p>
+                    </div>
+
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                        {features.map((f, i) => (
+                            <motion.div key={i} variants={fadeUp}>
+                                <TiltCard color={i % 2 === 0 ? 'teal' : 'cyan'}>
+                                    <div className="p-6 flex gap-5">
+                                        <motion.span
+                                            className={`text-4xl font-bold ${i % 2 === 0 ? 'text-teal-500' : 'text-cyan-500'}`}
+                                            whileHover={{ scale: 1.2, rotate: -5 }}
+                                        >
+                                            {f.num}
+                                        </motion.span>
+                                        <div>
+                                            <h3 className="font-bold text-gray-900 mb-1">{f.title}</h3>
+                                            <p className="text-gray-600 text-sm mb-2">{f.desc}</p>
+                                            <span className={`text-xs font-semibold ${i % 2 === 0 ? 'text-teal-600' : 'text-cyan-600'}`}>{f.stat} →</span>
+                                        </div>
+                                    </div>
+                                </TiltCard>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ===== GLOBAL PRESENCE ===== */}
+            <section className="py-20 bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Global Presence</h2>
+                        <p className="text-gray-600">Worldwide enterprise support across 6 continents</p>
+                    </div>
+
+                    <div className="max-w-6xl mx-auto">
+                        <div className="grid lg:grid-cols-12 gap-6 items-stretch">
+                            {/* Left - Location Tabs */}
+                            <div className="lg:col-span-3 space-y-2">
+                                {offices.map((o, i) => (
+                                    <motion.div
+                                        key={i}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-300 ${activeOffice === i
+                                            ? 'bg-white shadow-lg border-l-4 border-teal-500'
+                                            : 'bg-white/60 hover:bg-white hover:shadow-md border-l-4 border-transparent'
+                                            }`}
+                                        onClick={() => setActiveOffice(i)}
+                                        whileHover={{ x: 4 }}
+                                        whileTap={{ scale: 0.98 }}
+                                    >
+                                        <img
+                                            src={o.flagImg}
+                                            alt={`${o.country} flag`}
+                                            className="w-8 h-6 object-cover rounded shadow-sm"
+                                        />
+                                        <div>
+                                            <div className={`font-semibold transition-colors ${activeOffice === i ? 'text-teal-600' : 'text-gray-900'}`}>
+                                                {o.city}
+                                            </div>
+                                            <div className="text-xs text-gray-500">{o.country}</div>
+                                        </div>
+                                        {activeOffice === i && (
+                                            <motion.div
+                                                className="ml-auto w-2 h-2 rounded-full bg-teal-500"
+                                                layoutId="activeIndicator"
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                            />
+                                        )}
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            {/* Center - Landmark Image */}
+                            <div className="lg:col-span-5">
+                                <motion.div
+                                    className="relative h-[480px] rounded-2xl overflow-hidden shadow-2xl"
+                                    key={activeOffice}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.4 }}
+                                >
+                                    <img
+                                        src={offices[activeOffice].image}
+                                        alt={offices[activeOffice].city}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                                </motion.div>
+                            </div>
+
+                            {/* Right - Office Info Card */}
+                            <div className="lg:col-span-4">
+                                <motion.div
+                                    className="bg-white rounded-2xl p-6 shadow-xl h-full flex flex-col"
+                                    key={`info-${activeOffice}`}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.4, delay: 0.1 }}
+                                >
+                                    <h3 className="text-xl font-bold text-gray-900 mb-8">
+                                        {offices[activeOffice].companyName}
+                                    </h3>
+
+                                    <div className="space-y-4 flex-1">
+                                        {/* Address Card */}
+                                        <div className="p-4 border border-gray-200 rounded-xl hover:border-teal-200 hover:shadow-sm transition-all">
+                                            <div className="flex gap-4">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-50 to-cyan-50 flex items-center justify-center flex-shrink-0 border border-teal-100">
+                                                    <MapPin className="w-5 h-5 text-teal-600" />
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-teal-600 font-semibold mb-1 uppercase tracking-wide">Address</div>
+                                                    <div className="text-sm text-gray-700 leading-relaxed">
+                                                        {offices[activeOffice].address}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Contact Card */}
+                                        <div className="p-4 border border-gray-200 rounded-xl hover:border-teal-200 hover:shadow-sm transition-all">
+                                            <div className="flex gap-4">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-50 to-cyan-50 flex items-center justify-center flex-shrink-0 border border-teal-100">
+                                                    <Phone className="w-5 h-5 text-teal-600" />
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-teal-600 font-semibold mb-1 uppercase tracking-wide">Contact</div>
+                                                    <div className="text-sm text-gray-700">
+                                                        {offices[activeOffice].phone}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Get Directions Button */}
+                                    <motion.a
+                                        href={offices[activeOffice].mapUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-6 w-full py-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all uppercase tracking-wider text-sm"
+                                        whileHover={{ scale: 1.02, y: -2 }}
+                                        whileTap={{ scale: 0.98 }}
+                                    >
+                                        GET DIRECTIONS
+                                        <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse" />
+                                    </motion.a>
+                                </motion.div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== CTA ===== */}
+            <section id="cta" className="py-24">
+                <div className="container mx-auto px-4">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="relative bg-gradient-to-br from-teal-500 via-teal-600 to-cyan-600 rounded-3xl p-12 md:p-16 text-center max-w-4xl mx-auto overflow-hidden"
+                    >
+                        {/* Animated background */}
+                        <motion.div
+                            className="absolute inset-0 opacity-30"
+                            style={{ background: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)' }}
+                            animate={{ x: [0, 100, 0], y: [0, -50, 0] }}
+                            transition={{ duration: 10, repeat: Infinity }}
+                        />
+
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 relative z-10">
+                            Ready to Transform Your Business?
+                        </h2>
+                        <p className="text-teal-100 text-lg mb-10 relative z-10">
+                            Let's build the future of AI together.
+                        </p>
+
+                        <div className="flex flex-wrap gap-4 justify-center relative z-10">
+                            <MagneticButton variant="cta" className="px-8 py-4">
+                                <span className="flex items-center gap-2">Book a Demo <ArrowRight className="w-5 h-5" /></span>
+                            </MagneticButton>
+                            <MagneticButton variant="secondary" className="px-8 py-4 !bg-transparent !border-white/50 !text-white hover:!bg-white/10">
+                                Contact Sales
+                            </MagneticButton>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default About;
