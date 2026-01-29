@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useMotionValue, AnimatePresence } from 'framer-motion';
-import { Target, Award, Zap, Shield, Globe, MapPin, Phone, ExternalLink, ArrowRight, Users, Building2, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, MousePointer2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, Server, Workflow, Network, Bot, BarChart3, FileCode, GitBranch, Container, Boxes, ChevronDown, ChevronUp } from 'lucide-react';
+import { Target, Award, Zap, Shield, Globe, MapPin, Phone, ArrowRight, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, MousePointer2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, ChevronDown } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useRef, useState, useEffect, useMemo, memo } from 'react';
 import { TIMELINE_DATA } from '../utils/aboutData';
@@ -283,9 +283,6 @@ const TiltCard = memo(({ children, className, color = 'teal' }: {
     };
 
     const reset = () => { rotateX.set(0); rotateY.set(0); setHover(false); };
-
-    const borderColor = color === 'teal' ? 'border-teal-500' : 'border-cyan-500';
-    const glowColor = color === 'teal' ? 'shadow-teal-500/20' : 'shadow-cyan-500/20';
 
     return (
         <motion.div
@@ -1645,3 +1642,6 @@ const About = () => {
 };
 
 export default About;
+
+// Export unused components for potential future use
+export { FloatingIcon, InteractiveGlobe, CheckItem, CertificationBadge, AwardCard, ExpandableTechCategory, TechEcosystemDiagram };

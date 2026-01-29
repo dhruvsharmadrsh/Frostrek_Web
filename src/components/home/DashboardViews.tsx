@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
     ArrowUpRight,
-    MoreHorizontal,
     Search,
     Bell,
     CheckCircle2,
@@ -12,8 +11,7 @@ import {
     Wifi,
     RefreshCw,
     Send,
-    Bot,
-    User
+    Bot
 } from "lucide-react";
 
 // --- ANALYTICS VIEW (Colorful & Interactive) ---
@@ -163,7 +161,7 @@ export const MessagesView = () => {
     const [activeId, setActiveId] = useState(0);
     const [inputText, setInputText] = useState("");
     const [showMobileChat, setShowMobileChat] = useState(false); // Mobile Master-Detail State
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+
     const containerRef = useRef<HTMLDivElement>(null);
 
     const [conversations, setConversations] = useState([
@@ -352,7 +350,7 @@ export const MessagesView = () => {
 
                 {/* Messages List - Optimized Rendering */}
                 <div ref={containerRef} className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6 scroll-smooth">
-                    {activeChat.messages.map((msg, idx) => {
+                    {activeChat.messages.map((msg) => {
                         const isMe = msg.sender === 'me';
                         return (
                             <motion.div

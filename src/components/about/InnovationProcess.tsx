@@ -67,7 +67,7 @@ const InnovationProcess = () => {
     const [floatingNodes, setFloatingNodes] = useState<Set<string>>(new Set());
     const [isAnimated, setIsAnimated] = useState(false);
     const dragStartRef = useRef<{ x: number; y: number; nodeX: number; nodeY: number } | null>(null);
-    const resetTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Calculate target positions
     const getTargetPositions = useCallback(() => {

@@ -25,8 +25,8 @@ const Header = () => {
         <header className={cn(
             "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
             isScrolled
-                ? "bg-[#106e66]/90 backdrop-blur-xl shadow-lg border-b border-white/10 h-16"
-                : "bg-transparent border-b border-transparent h-20"
+                ? "bg-[#1e736c]/90 backdrop-blur-xl shadow-lg border-b border-white/10 h-16"
+                : "bg-[#1e736c] border-b border-transparent h-20"
         )}>
             <div className="container mx-auto px-4 md:px-6 h-full flex items-center justify-between">
                 {/* Logo */}
@@ -97,7 +97,7 @@ const Header = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="lg:hidden absolute top-full left-0 w-full bg-[#106e66] border-b border-white/10 shadow-xl z-50"
+                        className="lg:hidden absolute top-full left-0 w-full bg-[#1e736c] border-b border-white/10 shadow-xl z-50"
                     >
                         <div className="container mx-auto px-6 py-8 flex flex-col gap-6 max-h-[85vh] overflow-y-auto">
                             {NAV_ITEMS.map((item) => (

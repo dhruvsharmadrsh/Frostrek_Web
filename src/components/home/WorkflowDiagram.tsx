@@ -8,8 +8,6 @@ import {
     Settings,
     Database,
     Headphones,
-    Zap,
-    ShoppingCart,
     type LucideIcon,
 } from "lucide-react";
 
