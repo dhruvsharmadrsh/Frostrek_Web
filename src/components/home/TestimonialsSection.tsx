@@ -37,7 +37,7 @@ const TESTIMONIALS = [
     }
 ];
 
-const ROTATION_INTERVAL = 4000; // 4 seconds per testimonial
+const ROTATION_INTERVAL = 4000; // 4.5 seconds per testimonial
 
 const TestimonialsSection = () => {
     const sectionRef = useRef<HTMLElement>(null);
