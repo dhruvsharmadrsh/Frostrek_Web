@@ -2,64 +2,69 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Sparkles, Mic, Square, Loader2, Paperclip } from 'lucide-react';
 
-
 // Webhook URL
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
+
+// Color Scheme - AI Copilot Theme
+const COLORS = {
+    primary: '#A67C52', // Brown/Tan
+    primaryDark: '#8B6741',
+    primaryLight: '#C9987A',
+    accent: '#A67C52', // Teal/Cyan
+    accentLight: '#A67C52',
+    background: '#F8F6F0', // Light beige
+    text: '#1a1a1a',
+    textLight: '#666666',
+    white: '#FFFFFF',
+};
 
 const Chatbot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string, image?: string }>>([
-        { type: 'bot', content: "Hello! 👋 I'm your AI assistant from Frostrek.\nHow can I help you innovate today?" }
+    const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string }>>([
+        { type: 'bot', content: "Hello! 👋 I'm Frostry.\nHow can I help you today?" }
     ]);
     const [isLoading, setIsLoading] = useState(false);
-
-    // Image Upload State
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     // Audio Recording State
     const [isRecording, setIsRecording] = useState(false);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     // Session ID Management
     const [sessionId] = useState(() => {
         const stored = localStorage.getItem('chatSessionId');
         if (stored) return stored;
-        // Simple random ID generator if crypto.randomUUID isn't available, though it usually is in modern browsers
         const newId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
         localStorage.setItem('chatSessionId', newId);
         return newId;
     });
 
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
-        setTimeout(() => {
-            scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-        }, 100);
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages, isOpen, previewUrl]);
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-
-        // Cleanup on unmount
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [isOpen]);
-
+    }, [messages]);
 
     const toggleChat = () => setIsOpen(!isOpen);
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+            setMessages(prev => [
+                ...prev,
+                { type: 'user', content: `📎 File selected: ${file.name}` }
+            ]);
+        }
+    };
 
     const startRecording = async () => {
         try {
@@ -77,10 +82,7 @@ const Chatbot: React.FC = () => {
 
             mediaRecorder.onstop = () => {
                 const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-                // Send audio immediately after stop
                 handleSendMessage(undefined, audioBlob);
-
-                // Stop all tracks
                 stream.getTracks().forEach(track => track.stop());
             };
 
@@ -99,43 +101,13 @@ const Chatbot: React.FC = () => {
         }
     };
 
-    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setSelectedImage(file);
-            const url = URL.createObjectURL(file);
-            setPreviewUrl(url);
-        }
-    };
-
-    const removeImage = () => {
-        setSelectedImage(null);
-        if (previewUrl) {
-            URL.revokeObjectURL(previewUrl);
-            setPreviewUrl(null);
-        }
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-    };
-
     const handleSendMessage = async (textInput?: string, audioBlob?: Blob) => {
-        if (!textInput && !audioBlob && !selectedImage) return;
+        if (!textInput && !audioBlob) return;
 
         setIsLoading(true);
-        const currentImage = selectedImage;
-        const currentPreview = previewUrl;
 
-        // Clear image state immediately
-        removeImage();
-
-        // Add user message to UI
-        if (textInput || currentImage) {
-            setMessages(prev => [...prev, {
-                type: 'user',
-                content: textInput || '',
-                image: currentPreview || undefined
-            }]);
+        if (textInput) {
+            setMessages(prev => [...prev, { type: 'user', content: textInput }]);
             setMessage('');
         } else if (audioBlob) {
             setMessages(prev => [...prev, { type: 'user', content: '🎤 Audio Message Sent' }]);
@@ -149,13 +121,13 @@ const Chatbot: React.FC = () => {
                 formData.append('chatInput', textInput);
             }
 
-            if (currentImage) {
-                formData.append('image', currentImage);
+            if (selectedFile) {
+                formData.append('file', selectedFile);
             }
 
             if (audioBlob) {
-                formData.append('audio', audioBlob, 'recording.webm');
-                if (!textInput) formData.append('chatInput', 'Voice message');
+                formData.append('audio', audioBlob, 'recording.webm')
+                formData.append('chatInput', 'Voice message');
             }
 
             const response = await fetch(WEBHOOK_URL, {
@@ -163,77 +135,167 @@ const Chatbot: React.FC = () => {
                 body: formData,
             });
 
-            if (!response.ok) throw new Error('Network response was not ok');
-
-            // Check Content-Type to determine how to handle the response
-            const contentType = response.headers.get('content-type');
-
-            if (contentType && contentType.includes('audio')) {
-                // Handle Audio Response (Binary)
-                const audioBlob = await response.blob();
-                const audioUrl = URL.createObjectURL(audioBlob);
-                const audio = new Audio(audioUrl);
-
-                setMessages(prev => [...prev, { type: 'bot', content: '🎤 (Playing Audio Response...)' }]);
-
-                audio.play().catch(e => console.error("Audio play failed", e));
-
-            } else {
-                const data = await response.json();
-
-                let botText = "I received your message.";
-                if (data.output) botText = data.output;
-                else if (data.text) botText = data.text;
-                else if (data.message) botText = data.message;
-                else if (Array.isArray(data) && data[0]?.output) botText = data[0].output;
-                else if (typeof data === 'string') botText = data; // Pure text response
-
-                if (data.audioUrl) {
-                    const audio = new Audio(data.audioUrl);
-                    audio.play().catch(e => console.error("Audio play failed", e));
-                    botText += " 🔊";
-                }
-
-                setMessages(prev => [...prev, { type: 'bot', content: botText }]);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
             }
 
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('audio/')) {
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                setMessages(prev => [
+                    ...prev,
+                    { type: 'bot', content: '🔊 Playing voice response…' }
+                ]);
+
+                // const audio = new Audio();
+                // audio.src = audioUrl;
+                // audio.preload = 'auto';
+
+                // audio.oncanplaythrough = () => {
+                //     audio.play().catch(err => {
+                //         console.error('Autoplay blocked:', err);
+                //     });
+                // };
+
+                // audio.onerror = (e) => {
+                //     console.error('Audio playback error', e);
+                // };
+
+                const audio = new Audio(audioUrl);
+                audio.preload = 'auto';
+
+                try {
+                    await audio.play(); // user already interacted → autoplay allowed
+                } catch (err) {
+                    console.error('Audio play failed:', err);
+                }
+
+                return;
+            }
+            else {
+                const rawText = await response.text();
+
+                if (!rawText) {
+                    setMessages(prev => [
+                        ...prev,
+                        { type: 'bot', content: '✅ Voice received. Processing…' }
+                    ]);
+                    return;
+                }
+
+                let data: any;
+
+                try {
+                    data = JSON.parse(rawText);
+                } catch {
+                    setMessages(prev => [
+                        ...prev,
+                        { type: 'bot', content: rawText }
+                    ]);
+                    return;
+                }
+
+                const botText =
+                    data.output ||
+                    data.text ||
+                    data.message ||
+                    (Array.isArray(data) && data[0]?.output) ||
+                    'I received your message.';
+
+                setMessages(prev => [
+                    ...prev,
+                    { type: 'bot', content: botText }
+                ]);
+            }
         } catch (error) {
             console.error('Error sending message:', error);
             setMessages(prev => [...prev, { type: 'bot', content: "Sorry, I'm having trouble connecting right now." }]);
         } finally {
             setIsLoading(false);
+            setSelectedFile(null);
         }
     };
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (message.trim() || selectedImage) {
+        if (message.trim() || selectedFile) {
             handleSendMessage(message);
         }
     };
 
     return (
         <>
-            {/* Trigger Button - Floating & Sticky */}
+            <style>{`
+                .ai-copilot-button:hover {
+                    background-color: ${COLORS.primaryDark} !important;
+                }
+                .ai-copilot-suggestion {
+                    background-color: white;
+                    border: 1.5px solid ${COLORS.primary};
+                    color: ${COLORS.text};
+                    border-radius: 20px;
+                    padding: 8px 14px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+                .ai-copilot-suggestion:hover {
+                    background-color: ${COLORS.primary};
+                    color: white;
+                    transform: translateY(-2px);
+                }
+                /* Custom Scrollbar Styling */
+                .ai-copilot-chat::-webkit-scrollbar {
+                    width: 8px;
+                }
+                .ai-copilot-chat::-webkit-scrollbar-track {
+                    background: ${COLORS.background};
+                    border-radius: 10px;
+                }
+                .ai-copilot-chat::-webkit-scrollbar-thumb {
+                    background: ${COLORS.accent};
+                    border-radius: 10px;
+                    transition: all 0.3s ease;
+                }
+                .ai-copilot-chat::-webkit-scrollbar-thumb:hover {
+                    background: ${COLORS.accentLight};
+                }
+                /* Firefox Scrollbar */
+                .ai-copilot-chat {
+                    scrollbar-color: ${COLORS.accent} ${COLORS.background};
+                    scrollbar-width: thin;
+                }
+            `}</style>
+
+            {/* Trigger Button - Always Visible */}
             <motion.button
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={toggleChat}
-                className={`fixed bottom-6 right-6 z-[9999] p-1 rounded-full shadow-2xl transition-all duration-300 ${isOpen
-                    ? 'bg-gray-100 text-brand-gray-800 rotate-90'
-                    : 'bg-brand-green-500 text-white hover:bg-brand-green-400 animate-pulse-subtle'
-                    }`}
+                style={{
+                    position: 'fixed',
+                    bottom: '24px',
+                    right: '24px',
+                    zIndex: 10000,
+                    backgroundColor: isOpen ? '#f0f0f0' : COLORS.primary,
+                }}
+                className={`p-3 rounded-full shadow-2xl transition-all duration-300 ai-copilot-button ${isOpen ? 'rotate-90' : ''}`}
             >
                 {isOpen ? (
-                    <X className="w-8 h-8" />
+                    <X className="w-6 h-6" style={{ color: COLORS.text }} />
                 ) : (
-                    <div className="w-14 h-14 relative">
+                    <div className="w-12 h-12 relative flex items-center justify-center">
                         <img
-                            src="/robo2.gif"
+                            src="/optimized/robot.webp"
                             alt="Chat"
-                            className="w-full h-full object-contain scale-125 rounded-full"
+                            className="w-full h-full object-contain"
                         />
                     </div>
                 )}
@@ -252,71 +314,92 @@ const Chatbot: React.FC = () => {
                             className="fixed inset-0 bg-black/40 z-[9998] backdrop-blur-sm md:hidden"
                         />
 
-                        {/* Sidebar Panel */}
+                        {/* Draggable Sidebar Panel */}
                         <motion.div
-                            initial={{ x: '100%', opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: '100%', opacity: 0 }}
+                            ref={chatContainerRef}
+                            drag
+                            dragElastic={0.15}
+                            dragMomentum={false}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed bottom-[90px] right-4 md:right-6 w-[380px] max-w-[95vw] h-[600px] max-h-[80vh] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col z-[9999]"
+                            className="fixed bottom-[90px] right-4 md:right-6 
+                                        w-[380px] max-w-[95vw] h-[600px] max-h-[80vh] 
+                                        rounded-2xl shadow-2xl border border-gray-200
+                                        overflow-hidden flex flex-col z-[9999]"
+                            style={{ backgroundColor: COLORS.white }}
                         >
-                            {/* Header */}
-                            <div className="bg-gradient-to-r from-brand-green-500 to-teal-400 p-4 flex items-center justify-between text-white rounded-t-2xl">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
-                                        <img src="/robo2.gif" className="w-full h-full object-cover" />
+
+                            {/* Header - Draggable Area */}
+                            <div 
+                                className="p-4 flex items-center justify-between text-white rounded-t-2xl cursor-grab active:cursor-grabbing select-none touch-none"
+                                style={{ backgroundColor: COLORS.primary }}
+                            >
+                                <div className="flex items-center gap-3 pointer-events-none">
+                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                                        <img src="/optimized/robot.webp" className="w-7 h-7" alt="Robot" />
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-sm">Frostrek Assistant</h3>
                                         <p className="text-xs opacity-90">Online • Ready to help</p>
                                     </div>
                                 </div>
-                                <button onClick={toggleChat}>
+                                <button 
+                                    onClick={toggleChat}
+                                    className="pointer-events-auto hover:bg-white/20 p-1 rounded transition"
+                                >
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
-                            {messages.length === 1 && (
+
+                            {/* Chat Body (Messages) */}
+                            <div 
+                                className="ai-copilot-chat flex-1 overflow-y-auto p-6 flex flex-col gap-4" 
+                                style={{ backgroundColor: COLORS.background, overscrollBehavior: 'contain' }}
+                            >
                                 <div className="text-center px-6 py-6">
-                                    <img src="/robo2.gif" className="w-20 mx-auto mb-4 rounded-full" />
-                                    <h4 className="text-lg font-semibold text-gray-800">
-                                        Hi, I'm Frostrek Assistant 👋
+                                    <img src="/optimized/robot.webp" className="w-20 mx-auto mb-4" alt="Robot" />
+                                    <h4 className="text-lg font-semibold" style={{ color: COLORS.text }}>
+                                        Hi, I'm Frostry 👋
                                     </h4>
-                                    <p className="text-sm text-gray-500 mt-2">
-                                        Ask me anything about innovation, products or support.
+                                    <p className="text-sm mt-2" style={{ color: COLORS.textLight }}>
+                                        Ask me anything about your business, support, or innovation.
                                     </p>
 
                                     <div className="flex flex-wrap justify-center gap-2 mt-4">
-                                        <button className="suggestion-chip">💡 Get product ideas</button>
-                                        <button className="suggestion-chip">📊 Help with analytics</button>
-                                        <button className="suggestion-chip">🛠 Solve a technical issue</button>
+                                        <button className="ai-copilot-suggestion">💡 Get ideas</button>
+                                        <button className="ai-copilot-suggestion">📊 Analytics</button>
+                                        <button className="ai-copilot-suggestion">🛠 Support</button>
                                     </div>
                                 </div>
-                            )}
-                            {/* Chat Body (Messages) */}
-                            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 flex flex-col gap-4" style={{ overscrollBehavior: 'contain' }}
-                            >
+
                                 {messages.map((msg, idx) => (
                                     <div
                                         key={idx}
                                         className={`flex gap-3 max-w-[85%] ${msg.type === 'user' ? 'self-end flex-row-reverse' : ''}`}
                                     >
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${msg.type === 'user' ? 'bg-gray-200' : 'bg-brand-green-100 border border-brand-green-200'
-                                            }`}>
+                                        <div 
+                                            className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${msg.type === 'user' ? 'text-xs font-bold' : ''}`}
+                                            style={{
+                                                backgroundColor: msg.type === 'user' ? '#e8e8e8' : COLORS.accent + '20',
+                                                color: msg.type === 'user' ? COLORS.text : COLORS.accent,
+                                            }}
+                                        >
                                             {msg.type === 'user' ? (
-                                                <span className="text-xs font-bold text-gray-600">You</span>
+                                                <span>You</span>
                                             ) : (
-                                                <img src="/robo2.gif" alt="Bot" className="w-full h-full object-cover" />
+                                                <img src="/optimized/robot.webp" alt="Bot" className="w-6 h-6 object-contain" />
                                             )}
                                         </div>
-                                        <div className={`p-4 rounded-2xl shadow-sm text-sm leading-relaxed whitespace-pre-wrap ${msg.type === 'user'
-                                            ? 'bg-gradient-to-r from-brand-green-500 to-teal-400 text-white rounded-2xl'
-                                            : 'bg-white text-gray-700 rounded-2xl shadow-sm border border-gray-100'
-                                            }`}>
-                                            {msg.image && (
-                                                <div className="mb-2 max-w-[200px]">
-                                                    <img src={msg.image} alt="Uploaded" className="rounded-lg w-full h-auto" />
-                                                </div>
-                                            )}
+                                        <div 
+                                            className={`p-4 rounded-2xl shadow-sm text-sm leading-relaxed whitespace-pre-wrap ${msg.type === 'user' ? 'text-white rounded-br-sm' : 'text-gray-700 rounded-bl-sm border'}`}
+                                            style={{
+                                                backgroundColor: msg.type === 'user' ? COLORS.primary : COLORS.white,
+                                                color: msg.type === 'user' ? COLORS.white : COLORS.text,
+                                                borderColor: msg.type === 'user' ? 'transparent' : '#e0e0e0',
+                                            }}
+                                        >
                                             {msg.content}
                                         </div>
                                     </div>
@@ -324,36 +407,43 @@ const Chatbot: React.FC = () => {
 
                                 {isLoading && (
                                     <div className="flex gap-3 max-w-[85%]">
-                                        <div className="w-8 h-8 rounded-full bg-brand-green-100 flex items-center justify-center flex-shrink-0 border border-brand-green-200">
-                                            <Sparkles className="w-4 h-4 text-brand-green-600" />
+                                        <div 
+                                            className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border"
+                                            style={{ 
+                                                backgroundColor: COLORS.accent + '20',
+                                                borderColor: COLORS.accent,
+                                            }}
+                                        >
+                                            <Sparkles className="w-4 h-4" style={{ color: COLORS.accent }} />
                                         </div>
-                                        <div className="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
-                                            <Loader2 className="w-5 h-5 animate-spin text-brand-green-500" />
+                                        <div className="p-4 rounded-2xl rounded-tl-none shadow-sm border" style={{ backgroundColor: COLORS.white, borderColor: '#e0e0e0' }}>
+                                            <Loader2 className="w-5 h-5 animate-spin" style={{ color: COLORS.primary }} />
                                         </div>
                                     </div>
                                 )}
-                                <div ref={scrollRef} />
+                                <div ref={messagesEndRef} />
                             </div>
 
                             {/* Footer (Input) */}
-                            <div className="p-4 border-t bg-gray-50">
-                                {previewUrl && (
-                                    <div className="mb-2 relative inline-block">
-                                        <img src={previewUrl} alt="Preview" className="h-16 w-16 object-cover rounded-lg border border-gray-200" />
+                            <div className="p-4 border-t" style={{ backgroundColor: COLORS.white, borderColor: '#e0e0e0' }}>
+                                {selectedFile && (
+                                    <div className="text-xs mb-2 flex items-center gap-2" style={{ color: COLORS.textLight }}>
+                                        <span>📎 {selectedFile.name}</span>
                                         <button
-                                            onClick={removeImage}
-                                            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5"
+                                            onClick={() => setSelectedFile(null)}
+                                            className="text-red-500 text-xs hover:underline"
                                         >
-                                            <X className="w-3 h-3" />
+                                            Remove
                                         </button>
                                     </div>
                                 )}
-                                <form onSubmit={onSubmit} className="flex items-center gap-2 bg-white rounded-full px-3 py-2 shadow-sm border border-gray-100">
+
+                                <form onSubmit={onSubmit} className="flex items-center gap-2 rounded-full px-3 py-2 shadow-sm border" style={{ backgroundColor: COLORS.background, borderColor: '#d0d0d0' }}>
+                                    {/* Hidden File Input */}
                                     <input
                                         type="file"
                                         ref={fileInputRef}
-                                        onChange={handleImageSelect}
-                                        accept="image/*"
+                                        onChange={handleFileSelect}
                                         className="hidden"
                                     />
 
@@ -361,9 +451,12 @@ const Chatbot: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={() => fileInputRef.current?.click()}
-                                        className="p-2 text-gray-400 hover:text-brand-green-500 transition-colors"
-                                        disabled={isRecording || isLoading}
-                                        title="Upload Image"
+                                        className="p-2 rounded-lg transition-all duration-200"
+                                        style={{ 
+                                            backgroundColor: COLORS.primary + '20',
+                                            color: COLORS.primary,
+                                        }}
+                                        title="Upload file"
                                     >
                                         <Paperclip className="w-5 h-5" />
                                     </button>
@@ -372,14 +465,16 @@ const Chatbot: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={isRecording ? stopRecording : startRecording}
-                                        className={`p-3 rounded-xl transition-all duration-200 ${isRecording
-                                            ? 'bg-red-50 text-red-500 animate-pulse ring-2 ring-red-500/20'
-                                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700'
-                                            }`}
+                                        className={`p-2 rounded-lg transition-all duration-200 ${isRecording ? 'animate-pulse' : ''}`}
+                                        style={{
+                                            backgroundColor: isRecording ? '#ff4444' : COLORS.primary + '20',
+                                            color: isRecording ? 'white' : COLORS.primary,
+                                        }}
                                         title={isRecording ? "Stop Recording" : "Start Recording"}
                                     >
                                         {isRecording ? <Square className="w-5 h-5 fill-current" /> : <Mic className="w-5 h-5" />}
                                     </button>
+
                                     <input
                                         type="text"
                                         value={message}
@@ -387,17 +482,21 @@ const Chatbot: React.FC = () => {
                                         placeholder={isRecording ? "Listening..." : "Type your message..."}
                                         disabled={isRecording || isLoading}
                                         className="flex-1 bg-transparent outline-none text-sm px-2"
+                                        style={{ color: COLORS.text }}
                                     />
+
                                     <button
                                         type="submit"
-                                        disabled={(!message.trim() && !selectedImage) || isLoading || isRecording}
-                                        className="w-9 h-9 bg-gradient-to-r from-brand-green-500 to-teal-400 text-white rounded-full flex items-center justify-center"
+                                        disabled={!message.trim() || isLoading || isRecording}
+                                        className="w-9 h-9 text-white rounded-full flex items-center justify-center hover:shadow-lg transition-shadow disabled:opacity-50"
+                                        style={{ backgroundColor: COLORS.primary }}
                                     >
                                         <Send className="w-4 h-4" />
                                     </button>
                                 </form>
+
                                 <div className="text-center mt-2">
-                                    <p className="text-[10px] text-gray-400">Powered by Frostrek AI</p>
+                                    <p className="text-[10px]" style={{ color: COLORS.textLight }}>Powered by Frostrek AI</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -408,4 +507,4 @@ const Chatbot: React.FC = () => {
     );
 };
 
-export default Chatbot; 
+export default Chatbot;
