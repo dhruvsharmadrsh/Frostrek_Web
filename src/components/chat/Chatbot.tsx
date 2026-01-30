@@ -139,7 +139,7 @@ const Chatbot: React.FC = () => {
                 const errorText = await response.text();
                 throw new Error(errorText);
             }
-
+// hello 
             const contentType = response.headers.get('content-type') || '';
 
             if (contentType.includes('audio/')) {
@@ -151,7 +151,7 @@ const Chatbot: React.FC = () => {
                     { type: 'bot', content: '🔊 Playing voice response…' }
                 ]);
 
-                // const audio = new Audio();
+                // const audio = new Audio()  ;
                 // audio.src = audioUrl;
                 // audio.preload = 'auto';
 
