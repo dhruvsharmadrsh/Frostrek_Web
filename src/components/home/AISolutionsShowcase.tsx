@@ -119,10 +119,10 @@ const ChatDemo = () => {
     ];
 
     return (
-        <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 h-[200px] overflow-hidden border border-gray-700/50">
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-700/50">
+        <div className="rounded-xl p-4 h-[200px] overflow-hidden border border-gray-300" style={{ backgroundColor: '#f5ece4' }}>
+            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-300">
                 <div className="w-2 h-2 rounded-full bg-[#B07552] animate-pulse" />
-                <span className="text-xs text-gray-400">Frosty AI Agent</span>
+                <span className="text-xs text-gray-600">Frosty AI Agent</span>
             </div>
             <div className="space-y-3">
                 {messages.map((msg, i) => (
@@ -134,7 +134,7 @@ const ChatDemo = () => {
                         <div
                             className={`max-w-[80%] px-3 py-2 rounded-xl text-xs animate-fade-in ${msg.role === 'user'
                                 ? 'bg-[#B07552] text-white rounded-br-sm'
-                                : 'bg-gray-700 text-gray-200 rounded-bl-sm'
+                                : 'bg-white text-gray-700 rounded-bl-sm border border-gray-200'
                                 }`}
                             style={{ animationDelay: `${i * 0.4}s` }}
                         >
@@ -144,9 +144,9 @@ const ChatDemo = () => {
                 ))}
                 <div className="flex justify-start">
                     <div className="flex gap-1 px-3 py-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0s' }} />
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.1s' }} />
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0s' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0.1s' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0.2s' }} />
                     </div>
                 </div>
             </div>
@@ -156,7 +156,7 @@ const ChatDemo = () => {
 
 const VoiceDemo = () => {
     return (
-        <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 h-[200px] border border-gray-700/50 flex flex-col items-center justify-center">
+        <div className="rounded-xl p-4 h-[200px] border border-gray-300 flex flex-col items-center justify-center" style={{ backgroundColor: '#f5ece4' }}>
             <div className="relative mb-4">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B07552] to-[#8A5A35] flex items-center justify-center animate-pulse">
                     <Volume2 className="w-8 h-8 text-white" />
@@ -176,7 +176,7 @@ const VoiceDemo = () => {
                     />
                 ))}
             </div>
-            <span className="text-xs text-gray-400">Voice AI responding...</span>
+            <span className="text-xs text-gray-600">Voice AI responding...</span>
         </div>
     );
 };
@@ -189,23 +189,23 @@ const SearchDemo = () => {
     ];
 
     return (
-        <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 h-[200px] border border-gray-700/50">
-            <div className="flex items-center gap-2 bg-gray-800 rounded-lg px-3 py-2 mb-3">
-                <Search className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-300">What were last quarter's revenue targets?</span>
+        <div className="rounded-xl p-4 h-[200px] border border-gray-300" style={{ backgroundColor: '#f5ece4' }}>
+            <div className="flex items-center gap-2 bg-white rounded-lg px-3 py-2 mb-3 border border-gray-200">
+                <Search className="w-4 h-4 text-gray-600" />
+                <span className="text-sm text-gray-700">What were last quarter's revenue targets?</span>
             </div>
             <div className="space-y-2">
                 {results.map((result, i) => (
                     <div
                         key={i}
-                        className="flex items-center justify-between bg-gray-800/50 rounded-lg px-3 py-2 animate-fade-in"
+                        className="flex items-center justify-between bg-white rounded-lg px-3 py-2 animate-fade-in border border-gray-200"
                         style={{ animationDelay: `${i * 0.15}s` }}
                     >
                         <div className="flex items-center gap-2">
-                            <Database className="w-3 h-3 text-[#F3E9CD]" />
-                            <span className="text-xs text-gray-300">{result.title}</span>
+                            <Database className="w-3 h-3 text-[#B07552]" />
+                            <span className="text-xs text-gray-700">{result.title}</span>
                         </div>
-                        <span className="text-xs font-medium text-[#F3E9CD]">{result.match}</span>
+                        <span className="text-xs font-medium text-[#B07552]">{result.match}</span>
                     </div>
                 ))}
             </div>
@@ -217,7 +217,7 @@ const WorkflowDemo = () => {
     const steps = ['Trigger', 'Process', 'Validate', 'Output'];
 
     return (
-        <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 h-[200px] border border-gray-700/50 flex items-center justify-center">
+        <div className="rounded-xl p-4 h-[200px] border border-gray-300 flex items-center justify-center" style={{ backgroundColor: '#f5ece4' }}>
             <div className="flex items-center gap-2">
                 {steps.map((step, i) => (
                     <div key={i} className="flex items-center">
@@ -227,17 +227,17 @@ const WorkflowDemo = () => {
                         >
                             <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${i === 0 ? 'bg-orange-500' :
                                 i === 3 ? 'bg-[#B07552]' :
-                                    'bg-gray-700'
+                                    'bg-gray-300'
                                 }`}>
                                 {i === 0 && <Sparkles className="w-5 h-5 text-white" />}
                                 {i === 1 && <GitBranch className="w-5 h-5 text-white" />}
                                 {i === 2 && <CheckCircle2 className="w-5 h-5 text-white" />}
                                 {i === 3 && <ArrowRight className="w-5 h-5 text-white" />}
                             </div>
-                            <span className="text-[10px] text-gray-400 mt-1">{step}</span>
+                            <span className="text-[10px] text-gray-600 mt-1">{step}</span>
                         </div>
                         {i < steps.length - 1 && (
-                            <div className="w-4 h-0.5 bg-gradient-to-r from-gray-600 to-gray-500 mx-1 animate-pulse" />
+                            <div className="w-4 h-0.5 bg-gradient-to-r from-gray-400 to-gray-300 mx-1 animate-pulse" />
                         )}
                     </div>
                 ))}
@@ -250,9 +250,9 @@ const AnalyticsDemo = () => {
     const bars = [35, 55, 45, 70, 60, 80, 75];
 
     return (
-        <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 h-[200px] border border-gray-700/50">
+        <div className="rounded-xl p-4 h-[200px] border border-gray-300" style={{ backgroundColor: '#f5ece4' }}>
             <div className="flex items-center justify-between mb-3">
-                <span className="text-xs text-gray-400">Revenue Growth</span>
+                <span className="text-xs text-gray-600">Revenue Growth</span>
                 <div className="flex items-center gap-1 text-[#B07552]">
                     <TrendingUp className="w-3 h-3" />
                     <span className="text-xs font-semibold">+24%</span>
@@ -272,7 +272,7 @@ const AnalyticsDemo = () => {
             </div>
             <div className="flex justify-between mt-2">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                    <span key={day} className="text-[9px] text-gray-500 flex-1 text-center">{day}</span>
+                    <span key={day} className="text-[9px] text-gray-600 flex-1 text-center">{day}</span>
                 ))}
             </div>
         </div>

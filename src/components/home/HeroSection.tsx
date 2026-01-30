@@ -4,6 +4,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 // Lazy load 3D component to prevent blocking initial page load
 import HeroRobot from './HeroRobot';
@@ -109,9 +110,9 @@ const HeroSection = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                            <button className="px-8 py-4 bg-[#B07552] hover:bg-[#8A5A35] text-white rounded-xl font-semibold shadow-lg shadow-[#B07552]/20 transition-all transform hover:scale-105 w-full sm:w-auto">
+                            <Link to="/schedule-demo" className="px-8 py-4 bg-[#B07552] hover:bg-[#8A5A35] text-white rounded-xl font-semibold shadow-lg shadow-[#B07552]/20 transition-all transform hover:scale-105 w-full sm:w-auto text-center">
                                 Schedule a Demo
-                            </button>
+                            </Link>
                             <button className="px-8 py-4 bg-transparent border-2 border-[#B07552] text-[#B07552] hover:bg-[#B07552]/5 rounded-xl font-semibold transition-all w-full sm:w-auto">
                                 Contact Sales
                             </button>
