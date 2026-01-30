@@ -24,10 +24,16 @@ const HeroSection = () => {
 
     return (
         <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-32 lg:pt-44 pb-16 bg-[#FDFBF7]">
-            {/* Background Texture (Subtle shapes) */}
+            {/* Decorative Elements - Bronze Theme (matching TestimonialsSection) */}
+            <div className="absolute top-10 left-10 w-32 h-32 rounded-full border-4 border-[#B07552]/20 opacity-60" />
+            <div className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-to-br from-[#E6D0C6] to-[#B07552] opacity-20" />
+            <div className="absolute bottom-20 right-10 w-40 h-40 rounded-full border-4 border-[#B07552]/20 opacity-50" />
+            <div className="absolute bottom-10 right-20 w-24 h-24 rounded-full bg-gradient-to-br from-[#B07552] to-amber-600 opacity-20" />
+            <div className="absolute top-1/2 right-0 w-16 h-16 rounded-full bg-[#B07552] opacity-20 translate-x-1/2" />
+            {/* Additional subtle background gradients */}
             <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
-                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#E6D0C6]/20 blur-[100px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[700px] h-[700px] rounded-full bg-[#F3E9CD]/30 blur-[120px]" />
+                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#E6D0C6]/10 blur-[100px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[700px] h-[700px] rounded-full bg-[#F3E9CD]/15 blur-[120px]" />
             </div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
