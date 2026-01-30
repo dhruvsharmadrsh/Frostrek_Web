@@ -62,7 +62,7 @@ const FeaturesSection = () => {
     }, { scope: sectionRef });
 
     return (
-        <section ref={sectionRef} className="py-16 relative overflow-hidden">
+        <section ref={sectionRef} className="pt-8 pb-16 relative overflow-hidden">
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-[0.03]" style={{
                 backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
