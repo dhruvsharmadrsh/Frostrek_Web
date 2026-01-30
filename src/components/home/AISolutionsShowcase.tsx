@@ -42,7 +42,7 @@ const SOLUTIONS: Solution[] = [
             'Custom personality & brand voice'
         ],
         link: '/products/frosty-ai',
-        gradient: 'from-brand-green-400 to-emerald-500'
+        gradient: 'from-[#E6D0C6] to-[#B07552]'
     },
     {
         id: 'voice-ai',
@@ -58,7 +58,7 @@ const SOLUTIONS: Solution[] = [
             'Real-time transcription & analytics'
         ],
         link: '/products/voice-ai',
-        gradient: 'from-purple-400 to-indigo-500'
+        gradient: 'from-[#F3E9CD] to-[#E6D0C6]'
     },
     {
         id: 'rag-solutions',
@@ -74,7 +74,7 @@ const SOLUTIONS: Solution[] = [
             'Secure enterprise deployment'
         ],
         link: '/solutions/erp',
-        gradient: 'from-cyan-400 to-blue-500'
+        gradient: 'from-[#E6D0C6] to-amber-500'
     },
     {
         id: 'workflow-automation',
@@ -90,7 +90,7 @@ const SOLUTIONS: Solution[] = [
             'Error handling & retry logic'
         ],
         link: '/solutions/sales',
-        gradient: 'from-orange-400 to-rose-500'
+        gradient: 'from-[#F3E9CD] to-orange-400'
     },
     {
         id: 'data-intelligence',
@@ -106,7 +106,7 @@ const SOLUTIONS: Solution[] = [
             'Custom report generation'
         ],
         link: '/solutions/ecommerce',
-        gradient: 'from-brand-green-400 to-teal-500'
+        gradient: 'from-[#B07552] to-[#8A5A35]'
     }
 ];
 
@@ -121,7 +121,7 @@ const ChatDemo = () => {
     return (
         <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 h-[200px] overflow-hidden border border-gray-700/50">
             <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-700/50">
-                <div className="w-2 h-2 rounded-full bg-brand-green-400 animate-pulse" />
+                <div className="w-2 h-2 rounded-full bg-[#B07552] animate-pulse" />
                 <span className="text-xs text-gray-400">Frosty AI Agent</span>
             </div>
             <div className="space-y-3">
@@ -133,7 +133,7 @@ const ChatDemo = () => {
                     >
                         <div
                             className={`max-w-[80%] px-3 py-2 rounded-xl text-xs animate-fade-in ${msg.role === 'user'
-                                ? 'bg-brand-green-500 text-white rounded-br-sm'
+                                ? 'bg-[#B07552] text-white rounded-br-sm'
                                 : 'bg-gray-700 text-gray-200 rounded-bl-sm'
                                 }`}
                             style={{ animationDelay: `${i * 0.4}s` }}
@@ -158,17 +158,17 @@ const VoiceDemo = () => {
     return (
         <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 h-[200px] border border-gray-700/50 flex flex-col items-center justify-center">
             <div className="relative mb-4">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center animate-pulse">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B07552] to-[#8A5A35] flex items-center justify-center animate-pulse">
                     <Volume2 className="w-8 h-8 text-white" />
                 </div>
-                <div className="absolute inset-0 w-16 h-16 rounded-full border-2 border-purple-400/50 animate-ping" />
-                <div className="absolute inset-[-8px] w-20 h-20 rounded-full border border-purple-400/30 animate-ping" style={{ animationDelay: '0.5s' }} />
+                <div className="absolute inset-0 w-16 h-16 rounded-full border-2 border-[#B07552]/50 animate-ping" />
+                <div className="absolute inset-[-8px] w-20 h-20 rounded-full border border-[#B07552]/30 animate-ping" style={{ animationDelay: '0.5s' }} />
             </div>
             <div className="flex items-center gap-1 mb-2">
                 {[...Array(12)].map((_, i) => (
                     <div
                         key={i}
-                        className="w-1 bg-gradient-to-t from-purple-500 to-indigo-400 rounded-full animate-voice-wave"
+                        className="w-1 bg-gradient-to-t from-[#B07552] to-[#E6D0C6] rounded-full animate-voice-wave"
                         style={{
                             height: `${Math.random() * 24 + 8}px`,
                             animationDelay: `${i * 0.05}s`
@@ -202,10 +202,10 @@ const SearchDemo = () => {
                         style={{ animationDelay: `${i * 0.15}s` }}
                     >
                         <div className="flex items-center gap-2">
-                            <Database className="w-3 h-3 text-cyan-400" />
+                            <Database className="w-3 h-3 text-[#F3E9CD]" />
                             <span className="text-xs text-gray-300">{result.title}</span>
                         </div>
-                        <span className="text-xs font-medium text-cyan-400">{result.match}</span>
+                        <span className="text-xs font-medium text-[#F3E9CD]">{result.match}</span>
                     </div>
                 ))}
             </div>
@@ -226,7 +226,7 @@ const WorkflowDemo = () => {
                             style={{ animationDelay: `${i * 0.2}s` }}
                         >
                             <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${i === 0 ? 'bg-orange-500' :
-                                i === 3 ? 'bg-green-500' :
+                                i === 3 ? 'bg-[#B07552]' :
                                     'bg-gray-700'
                                 }`}>
                                 {i === 0 && <Sparkles className="w-5 h-5 text-white" />}
@@ -253,7 +253,7 @@ const AnalyticsDemo = () => {
         <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 h-[200px] border border-gray-700/50">
             <div className="flex items-center justify-between mb-3">
                 <span className="text-xs text-gray-400">Revenue Growth</span>
-                <div className="flex items-center gap-1 text-brand-green-400">
+                <div className="flex items-center gap-1 text-[#B07552]">
                     <TrendingUp className="w-3 h-3" />
                     <span className="text-xs font-semibold">+24%</span>
                 </div>
@@ -262,7 +262,7 @@ const AnalyticsDemo = () => {
                 {bars.map((height, i) => (
                     <div
                         key={i}
-                        className="flex-1 bg-gradient-to-t from-brand-green-500 to-teal-400 rounded-t-sm animate-grow"
+                        className="flex-1 bg-gradient-to-t from-[#B07552] to-[#E6D0C6] rounded-t-sm animate-grow"
                         style={{
                             height: `${height}%`,
                             animationDelay: `${i * 0.1}s`
@@ -386,25 +386,25 @@ const AISolutionsShowcase = () => {
     };
 
     return (
-        <section ref={sectionRef} className="relative py-24 overflow-hidden">
+        <section ref={sectionRef} className="relative py-16 overflow-hidden">
             {/* Decorative blur elements */}
-            <div className="absolute top-20 right-10 w-64 h-64 bg-brand-green-200/30 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-20 left-10 w-48 h-48 bg-emerald-200/30 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-20 right-10 w-64 h-64 bg-[#E6D0C6]/30 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-20 left-10 w-48 h-48 bg-[#B07552]/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 {/* Header */}
                 <div ref={headerRef} className="text-center mb-12">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-100 border border-brand-green-300 mb-3">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#fdfbf7] border border-[#E6D0C6] mb-3">
                         <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green-400 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green-500" />
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B07552]/60 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B07552]" />
                         </span>
-                        <span className="text-xs font-semibold text-brand-green-700 uppercase tracking-wider">
+                        <span className="text-xs font-semibold text-[#8A5A35] uppercase tracking-wider">
                             AI Solutions
                         </span>
                     </div>
                     <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3">
-                        Our AI Business <span className="text-gradient-green">Solutions</span>
+                        Our AI Business <span className="text-[#B07552]">Solutions</span>
                     </h2>
                     <p className="text-base text-gray-600 max-w-2xl mx-auto">
                         AI Agents and agentic workflows that embed AI where the value is.
@@ -427,15 +427,15 @@ const AISolutionsShowcase = () => {
                                             key={solution.id}
                                             onClick={() => handleTabChange(index)}
                                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 group ${isActive
-                                                ? 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white shadow-lg shadow-brand-green-500/30'
-                                                : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 hover:border-brand-green-300'
+                                                ? 'bg-gradient-to-r from-[#B07552] to-[#8A5A35] text-white shadow-lg shadow-[#B07552]/30'
+                                                : 'bg-white hover:bg-[#FDFBF7] text-gray-700 border border-gray-200 hover:border-[#E6D0C6]'
                                                 }`}
                                         >
-                                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${isActive
+                                            <div className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center transition-all duration-300 ${isActive
                                                 ? 'bg-white/10'
-                                                : 'bg-gray-100 group-hover:bg-brand-green-100'
+                                                : 'bg-gray-100 group-hover:bg-[#E6D0C6]/30'
                                                 }`}>
-                                                <Icon className={`w-5 h-5 transition-colors ${isActive ? 'text-white' : 'text-gray-600 group-hover:text-brand-green-600'
+                                                <Icon className={`w-5 h-5 transition-colors ${isActive ? 'text-white' : 'text-gray-600 group-hover:text-[#B07552]'
                                                     }`} />
                                             </div>
                                             <div className="flex-1">
@@ -447,7 +447,7 @@ const AISolutionsShowcase = () => {
                                                 </div>
                                             </div>
                                             {isActive && (
-                                                <div className="w-1.5 h-8 bg-brand-green-400 rounded-full" />
+                                                <div className="w-1.5 h-8 bg-[#F3E9CD] rounded-full" />
                                             )}
                                         </button>
                                     );
@@ -457,7 +457,7 @@ const AISolutionsShowcase = () => {
                             {/* View Ecosystem Link */}
                             <Link
                                 to="/products"
-                                className="mt-4 flex items-center gap-2 px-4 py-3 rounded-xl border border-dashed border-gray-300 text-gray-600 hover:border-brand-green-400 hover:text-brand-green-600 transition-all group"
+                                className="mt-4 flex items-center gap-2 px-4 py-3 rounded-xl border border-dashed border-gray-300 text-gray-600 hover:border-[#B07552] hover:text-[#B07552] transition-all group"
                             >
                                 <Sparkles className="w-4 h-4" />
                                 <span className="text-sm font-medium">View Full AI Ecosystem</span>
@@ -471,12 +471,12 @@ const AISolutionsShowcase = () => {
                                 {/* Content Header */}
                                 <div className="p-6 border-b border-gray-100">
                                     <div className="flex items-start gap-4">
-                                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${activeSolution.gradient} flex items-center justify-center shadow-lg`}>
+                                        <div className={`w-14 h-14 shrink-0 rounded-full bg-gradient-to-br ${activeSolution.gradient} flex items-center justify-center shadow-lg`}>
                                             <activeSolution.icon className="w-7 h-7 text-white" />
                                         </div>
                                         <div>
                                             <h3 className="text-xl font-bold text-gray-900 mb-1">
-                                                AI for <span className="text-brand-green-600">{activeSolution.title}</span>
+                                                AI for <span className="text-[#B07552]">{activeSolution.title}</span>
                                             </h3>
                                             <p className="text-gray-600 text-sm leading-relaxed">
                                                 {activeSolution.description}
@@ -500,7 +500,7 @@ const AISolutionsShowcase = () => {
                                                 className="flex items-start gap-2 animate-fade-in"
                                                 style={{ animationDelay: `${i * 0.1}s` }}
                                             >
-                                                <CheckCircle2 className="w-4 h-4 text-brand-green-500 mt-0.5 flex-shrink-0" />
+                                                <CheckCircle2 className="w-4 h-4 text-[#B07552] mt-0.5 flex-shrink-0" />
                                                 <span className="text-sm text-gray-600">{feature}</span>
                                             </div>
                                         ))}
@@ -511,14 +511,14 @@ const AISolutionsShowcase = () => {
                                 <div className="px-6 pb-6 flex flex-wrap gap-3">
                                     <Link
                                         to={activeSolution.link}
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium text-sm transition-all hover:shadow-lg"
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#8A5A35] hover:bg-[#B07552] text-white rounded-lg font-medium text-sm transition-all hover:shadow-lg"
                                     >
                                         Learn More
                                         <ArrowRight className="w-4 h-4" />
                                     </Link>
                                     <Link
                                         to="/contact"
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 border border-gray-300 hover:border-brand-green-400 text-gray-700 hover:text-brand-green-600 rounded-lg font-medium text-sm transition-all"
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 border border-gray-300 hover:border-[#B07552] text-gray-700 hover:text-[#B07552] rounded-lg font-medium text-sm transition-all"
                                     >
                                         <MessageCircle className="w-4 h-4" />
                                         Book Demo

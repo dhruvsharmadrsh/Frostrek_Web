@@ -23,7 +23,7 @@ const HeroSection = () => {
     }, []);
 
     return (
-        <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-32 lg:pt-44 pb-16 bg-[#FDFBF7]">
+        <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-32 lg:pt-44 pb-8 bg-[#FDFBF7]">
             {/* Decorative Elements - Bronze Theme (matching TestimonialsSection) */}
             <div className="absolute top-10 left-10 w-32 h-32 rounded-full border-4 border-[#B07552]/20 opacity-60" />
             <div className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-to-br from-[#E6D0C6] to-[#B07552] opacity-20" />

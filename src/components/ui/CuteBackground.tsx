@@ -4,8 +4,8 @@
 const CuteBackground = () => {
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-            {/* Base gradient background - soft white to teal */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white via-cyan-50/40 to-teal-50/30" />
+            {/* Base gradient background - soft white to warm beige */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#FDFBF7] to-[#F3E9CD]/30" />
 
             {/* Flowing Wave Layers - SVG with CSS Animations */}
             <div className="absolute inset-0">
@@ -19,12 +19,12 @@ const CuteBackground = () => {
                     <defs>
                         {/* Gradient definitions for waves */}
                         <linearGradient id="wave-gradient-1" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#5EEAD4" stopOpacity="0.12" />
-                            <stop offset="100%" stopColor="#14B8A6" stopOpacity="0.04" />
+                            <stop offset="0%" stopColor="#B07552" stopOpacity="0.08" />
+                            <stop offset="100%" stopColor="#8A5A35" stopOpacity="0.03" />
                         </linearGradient>
                         <linearGradient id="wave-gradient-2" x1="100%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="#99F6E4" stopOpacity="0.1" />
-                            <stop offset="100%" stopColor="#2DD4BF" stopOpacity="0.03" />
+                            <stop offset="0%" stopColor="#E6D0C6" stopOpacity="0.1" />
+                            <stop offset="100%" stopColor="#B07552" stopOpacity="0.03" />
                         </linearGradient>
                     </defs>
 
@@ -47,11 +47,11 @@ const CuteBackground = () => {
             {/* Soft gradient blobs - reduced to 2 for performance */}
             <div className="absolute inset-0">
                 <div
-                    className="absolute top-[10%] left-[15%] w-[400px] h-[400px] bg-teal-200/15 rounded-full blur-[100px] animate-blob-slow"
+                    className="absolute top-[10%] left-[15%] w-[400px] h-[400px] bg-[#E6D0C6]/20 rounded-full blur-[100px] animate-blob-slow"
                     style={{ willChange: 'transform' }}
                 />
                 <div
-                    className="absolute bottom-[15%] right-[10%] w-[450px] h-[450px] bg-cyan-200/12 rounded-full blur-[110px] animate-blob-medium"
+                    className="absolute bottom-[15%] right-[10%] w-[450px] h-[450px] bg-[#F3E9CD]/30 rounded-full blur-[110px] animate-blob-medium"
                     style={{ willChange: 'transform' }}
                 />
             </div>
@@ -59,16 +59,16 @@ const CuteBackground = () => {
             {/* Minimal sparkles - reduced from 10 to 4 */}
             <div className="absolute inset-0">
                 <div className="absolute top-[18%] left-[15%] animate-sparkle-slow">
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/60 shadow-sm shadow-teal-300/30" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#B07552]/40 shadow-sm shadow-[#B07552]/30" />
                 </div>
                 <div className="absolute top-[35%] right-[25%] animate-sparkle-medium">
-                    <div className="w-1 h-1 rounded-full bg-white/50" />
+                    <div className="w-1 h-1 rounded-full bg-[#8A5A35]/30" />
                 </div>
                 <div className="absolute bottom-[35%] left-[20%] animate-sparkle-fast">
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/55" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#B07552]/30" />
                 </div>
                 <div className="absolute bottom-[25%] right-[30%] animate-sparkle-slow">
-                    <div className="w-1 h-1 rounded-full bg-white/45" />
+                    <div className="w-1 h-1 rounded-full bg-[#8A5A35]/20" />
                 </div>
             </div>
         </div>

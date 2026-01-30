@@ -90,7 +90,7 @@ const CTASection = () => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="py-24 relative overflow-hidden bg-gradient-to-br from-[#8A5A35] via-[#B07552] to-[#8A5A35]">
+        <section ref={sectionRef} className="py-16 relative overflow-hidden bg-gradient-to-br from-[#8A5A35] via-[#B07552] to-[#8A5A35]">
             {/* Animated dot pattern */}
             <div
                 ref={patternRef}

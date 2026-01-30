@@ -142,7 +142,7 @@ const TestimonialsSection = () => {
     return (
         <section
             ref={sectionRef}
-            className="py-24 relative overflow-hidden bg-[#FDFBF7]"
+            className="py-16 relative overflow-hidden bg-[#FDFBF7]"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >

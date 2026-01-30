@@ -79,7 +79,7 @@ const TrustedBySection = () => {
     return (
         <section
             ref={sectionRef}
-            className="relative py-20 md:py-28 overflow-hidden bg-transparent"
+            className="relative py-10 md:py-16 overflow-hidden bg-transparent"
         >
             <div className="container mx-auto px-6 relative z-10">
                 {/* Title */}
