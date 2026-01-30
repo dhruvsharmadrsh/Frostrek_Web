@@ -2,8 +2,11 @@
 
 
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Lazy load 3D component to prevent blocking initial page load
+import HeroRobot from './HeroRobot';
 
 const ROTATING_TEXTS = [
     { part1: "Employee Experiences", part2: "AI Copilots" },
@@ -11,8 +14,17 @@ const ROTATING_TEXTS = [
     { part1: "Operations", part2: "Automation" },
 ];
 
+const ROBOT_MESSAGES = [
+    "Hi there! 👋",
+    "I'm Frostry 🤖",
+    "Ask me anything! 💡",
+    "How can I help? 🚀"
+];
+
 const HeroSection = () => {
     const [index, setIndex] = useState(0);
+    const [messageIndex, setMessageIndex] = useState(0);
+    const [showMessage, setShowMessage] = useState(true);
 
     // Text Rotation Interval
     useEffect(() => {
@@ -22,8 +34,20 @@ const HeroSection = () => {
         return () => clearInterval(interval);
     }, []);
 
+    // Robot Message Cycling
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setShowMessage(false);
+            setTimeout(() => {
+                setMessageIndex((prev) => (prev + 1) % ROBOT_MESSAGES.length);
+                setShowMessage(true);
+            }, 500);
+        }, 4000);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
-        <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-32 lg:pt-44 pb-8 bg-[#FDFBF7]">
+        <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-24 lg:pt-32 pb-8 bg-[#FDFBF7]">
             {/* Decorative Elements - Bronze Theme (matching TestimonialsSection) */}
             <div className="absolute top-10 left-10 w-32 h-32 rounded-full border-4 border-[#B07552]/20 opacity-60" />
             <div className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-to-br from-[#E6D0C6] to-[#B07552] opacity-20" />
@@ -94,20 +118,54 @@ const HeroSection = () => {
                         </div>
                     </div>
 
-                    {/* Right Column: Robot Image (Clean) */}
+                    {/* Right Column: 3D Robot */}
                     <div className="flex justify-center lg:justify-end relative mt-8 lg:mt-0">
-                        <div className="relative w-full max-w-[400px] lg:max-w-[500px] aspect-square flex items-center justify-center">
+                        <div className="relative w-full max-w-[450px] lg:max-w-[550px] aspect-square flex items-center justify-center">
                             {/* Subtle glow behind robot */}
                             <div className="absolute inset-0 bg-gradient-to-tr from-[#E6D0C6] to-transparent opacity-30 rounded-full blur-3xl transform scale-90" />
 
-                            <motion.img
-                                src="/robo2.gif"
-                                alt="AI Robot Assistant"
-                                className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
+                            {/* Interactive Message Bubble - positioned above robot head */}
+                            <AnimatePresence>
+                                {showMessage && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                                        transition={{ duration: 0.4, ease: "easeOut" }}
+                                        className="absolute top-[-5%] left-1/2 -translate-x-1/2 z-50"
+                                        style={{ fontFamily: 'Quicksand, sans-serif' }}
+                                    >
+                                        <div className="relative bg-gradient-to-br from-white to-[#FDF8F3] backdrop-blur-md px-6 py-3 rounded-2xl shadow-[0_8px_32px_rgba(176,117,82,0.25)] border-2 border-[#B07552]/30">
+                                            <span className="text-[#5c3d2e] font-semibold text-lg whitespace-nowrap">
+                                                {ROBOT_MESSAGES[messageIndex]}
+                                            </span>
+                                            {/* Speech bubble arrow pointing down to robot */}
+                                            <div
+                                                className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-gradient-to-br from-white to-[#FDF8F3] rotate-45 border-r-2 border-b-2 border-[#B07552]/30"
+                                                style={{ boxShadow: '2px 2px 4px rgba(176,117,82,0.15)' }}
+                                            />
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            {/* 3D Robot with loading fallback */}
+                            <motion.div
+                                className="w-full h-full relative z-10"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
-                            />
+                            >
+                                <Suspense
+                                    fallback={
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <div className="w-32 h-32 rounded-full border-4 border-[#B07552]/20 border-t-[#B07552] animate-spin" />
+                                        </div>
+                                    }
+                                >
+                                    <HeroRobot />
+                                </Suspense>
+                            </motion.div>
                         </div>
                     </div>
 
@@ -118,3 +176,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+

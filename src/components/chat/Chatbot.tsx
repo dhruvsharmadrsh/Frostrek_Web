@@ -21,9 +21,7 @@ const COLORS = {
 const Chatbot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string }>>([
-        { type: 'bot', content: "Hello! 👋 I'm Frostry.\nHow can I help you today?" }
-    ]);
+    const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string }>>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -36,8 +34,9 @@ const Chatbot: React.FC = () => {
     // Session ID Management
     const [sessionId] = useState(() => {
         const stored = localStorage.getItem('chatSessionId');
-        if (stored) return stored;
-        const newId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
+        if (stored && stored.startsWith('session_')) return stored;
+
+        const newId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
         localStorage.setItem('chatSessionId', newId);
         return newId;
     });
@@ -102,7 +101,7 @@ const Chatbot: React.FC = () => {
     };
 
     const handleSendMessage = async (textInput?: string, audioBlob?: Blob) => {
-        if (!textInput && !audioBlob) return;
+        if (!textInput && !audioBlob && !selectedFile) return;
 
         setIsLoading(true);
 
@@ -114,32 +113,46 @@ const Chatbot: React.FC = () => {
         }
 
         try {
-            const formData = new FormData();
-            formData.append('sessionId', sessionId);
+            let response;
 
-            if (textInput) {
-                formData.append('chatInput', textInput);
+            if (selectedFile || audioBlob) {
+                // Use FormData for files/audio
+                const formData = new FormData();
+                formData.append('sessionId', sessionId);
+                formData.append('message', textInput || (audioBlob ? 'Voice message' : 'File uploaded'));
+
+                if (selectedFile) {
+                    formData.append('file', selectedFile);
+                }
+
+                if (audioBlob) {
+                    formData.append('audio', audioBlob, 'recording.webm');
+                }
+
+                response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    body: formData,
+                });
+            } else {
+                // Use JSON for text-only messages (as requested)
+                console.log('Sending JSON payload:', { message: textInput, sessionId });
+                response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: textInput,
+                        sessionId: sessionId
+                    }),
+                });
             }
-
-            if (selectedFile) {
-                formData.append('file', selectedFile);
-            }
-
-            if (audioBlob) {
-                formData.append('audio', audioBlob, 'recording.webm')
-                formData.append('chatInput', 'Voice message');
-            }
-
-            const response = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                body: formData,
-            });
 
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(errorText);
             }
-// hello 
+            // hello 
             const contentType = response.headers.get('content-type') || '';
 
             if (contentType.includes('audio/')) {
@@ -178,6 +191,7 @@ const Chatbot: React.FC = () => {
             }
             else {
                 const rawText = await response.text();
+                console.log('Raw Server Response:', rawText);
 
                 if (!rawText) {
                     setMessages(prev => [
@@ -191,7 +205,18 @@ const Chatbot: React.FC = () => {
 
                 try {
                     data = JSON.parse(rawText);
+                    console.log('=== FULL PARSED RESPONSE ===');
+                    console.log('Type:', typeof data);
+                    console.log('Is Array:', Array.isArray(data));
+                    console.log('Data:', JSON.stringify(data, null, 2));
+                    if (Array.isArray(data)) {
+                        console.log('Array Length:', data.length);
+                        console.log('First Item:', data[0]);
+                    }
+                    console.log('Keys:', Object.keys(data));
+                    console.log('===========================');
                 } catch {
+                    console.log('Could not parse JSON, displaying raw text');
                     setMessages(prev => [
                         ...prev,
                         { type: 'bot', content: rawText }
@@ -199,12 +224,41 @@ const Chatbot: React.FC = () => {
                     return;
                 }
 
-                const botText =
-                    data.output ||
-                    data.text ||
-                    data.message ||
-                    (Array.isArray(data) && data[0]?.output) ||
-                    'I received your message.';
+                // Try to extract the bot response from various possible structures
+                let botText: string | undefined;
+
+                // Handle array response (n8n often returns arrays)
+                if (Array.isArray(data)) {
+                    const firstItem = data[0];
+                    if (firstItem) {
+                        console.log('First array item keys:', Object.keys(firstItem));
+                        botText =
+                            firstItem.output ||
+                            firstItem.text ||
+                            firstItem.message ||
+                            firstItem.response ||
+                            firstItem.content ||
+                            (firstItem.body && (firstItem.body.message || firstItem.body.output || firstItem.body.text)) ||
+                            (typeof firstItem === 'string' ? firstItem : undefined);
+                    }
+                } else {
+                    // Handle object response
+                    botText =
+                        data.output ||
+                        data.text ||
+                        data.message ||
+                        data.response ||
+                        data.content ||
+                        (data.body && (data.body.message || data.body.output || data.body.text));
+                }
+
+                // Fallback to raw JSON if nothing found
+                if (!botText) {
+                    console.warn('Could not extract text from response, showing raw JSON');
+                    botText = JSON.stringify(data, null, 2);
+                }
+
+                console.log('Extracted botText:', botText);
 
                 setMessages(prev => [
                     ...prev,
@@ -291,11 +345,11 @@ const Chatbot: React.FC = () => {
                 {isOpen ? (
                     <X className="w-6 h-6" style={{ color: COLORS.text }} />
                 ) : (
-                    <div className="w-12 h-12 relative flex items-center justify-center">
+                    <div className="w-12 h-12 relative flex items-center justify-center overflow-hidden">
                         <img
-                            src="/optimized/robot.webp"
+                            src="/robo2.gif"
                             alt="Chat"
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-cover scale-150"
                         />
                     </div>
                 )}
@@ -332,20 +386,20 @@ const Chatbot: React.FC = () => {
                         >
 
                             {/* Header - Draggable Area */}
-                            <div 
+                            <div
                                 className="p-4 flex items-center justify-between text-white rounded-t-2xl cursor-grab active:cursor-grabbing select-none touch-none"
                                 style={{ backgroundColor: COLORS.primary }}
                             >
                                 <div className="flex items-center gap-3 pointer-events-none">
-                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                                        <img src="/optimized/robot.webp" className="w-7 h-7" alt="Robot" />
+                                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                                        <img src="/robo2.gif" className="w-10 h-10" alt="Robot" />
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-sm">Frostrek Assistant</h3>
                                         <p className="text-xs opacity-90">Online • Ready to help</p>
                                     </div>
                                 </div>
-                                <button 
+                                <button
                                     onClick={toggleChat}
                                     className="pointer-events-auto hover:bg-white/20 p-1 rounded transition"
                                 >
@@ -354,12 +408,12 @@ const Chatbot: React.FC = () => {
                             </div>
 
                             {/* Chat Body (Messages) */}
-                            <div 
-                                className="ai-copilot-chat flex-1 overflow-y-auto p-6 flex flex-col gap-4" 
+                            <div
+                                className="ai-copilot-chat flex-1 overflow-y-auto p-6 flex flex-col gap-4"
                                 style={{ backgroundColor: COLORS.background, overscrollBehavior: 'contain' }}
                             >
                                 <div className="text-center px-6 py-6">
-                                    <img src="/optimized/robot.webp" className="w-20 mx-auto mb-4" alt="Robot" />
+                                    <img src="/robo2.gif" className="w-32 mx-auto mb-4" alt="Robot" />
                                     <h4 className="text-lg font-semibold" style={{ color: COLORS.text }}>
                                         Hi, I'm Frostry 👋
                                     </h4>
@@ -379,7 +433,7 @@ const Chatbot: React.FC = () => {
                                         key={idx}
                                         className={`flex gap-3 max-w-[85%] ${msg.type === 'user' ? 'self-end flex-row-reverse' : ''}`}
                                     >
-                                        <div 
+                                        <div
                                             className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${msg.type === 'user' ? 'text-xs font-bold' : ''}`}
                                             style={{
                                                 backgroundColor: msg.type === 'user' ? '#e8e8e8' : COLORS.accent + '20',
@@ -389,10 +443,10 @@ const Chatbot: React.FC = () => {
                                             {msg.type === 'user' ? (
                                                 <span>You</span>
                                             ) : (
-                                                <img src="/optimized/robot.webp" alt="Bot" className="w-6 h-6 object-contain" />
+                                                <img src="/robo2.gif" alt="Bot" className="w-6 h-6 object-contain" />
                                             )}
                                         </div>
-                                        <div 
+                                        <div
                                             className={`p-4 rounded-2xl shadow-sm text-sm leading-relaxed whitespace-pre-wrap ${msg.type === 'user' ? 'text-white rounded-br-sm' : 'text-gray-700 rounded-bl-sm border'}`}
                                             style={{
                                                 backgroundColor: msg.type === 'user' ? COLORS.primary : COLORS.white,
@@ -407,9 +461,9 @@ const Chatbot: React.FC = () => {
 
                                 {isLoading && (
                                     <div className="flex gap-3 max-w-[85%]">
-                                        <div 
+                                        <div
                                             className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border"
-                                            style={{ 
+                                            style={{
                                                 backgroundColor: COLORS.accent + '20',
                                                 borderColor: COLORS.accent,
                                             }}
@@ -452,7 +506,7 @@ const Chatbot: React.FC = () => {
                                         type="button"
                                         onClick={() => fileInputRef.current?.click()}
                                         className="p-2 rounded-lg transition-all duration-200"
-                                        style={{ 
+                                        style={{
                                             backgroundColor: COLORS.primary + '20',
                                             color: COLORS.primary,
                                         }}
