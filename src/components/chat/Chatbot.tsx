@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Sparkles, Mic, Square, Loader2, Image as ImageIcon, Paperclip, Trash2 } from 'lucide-react';
+import { X, Send, Sparkles, Mic, Square, Loader2, Paperclip } from 'lucide-react';
 
 
 // Webhook URL
@@ -13,7 +13,7 @@ const Chatbot: React.FC = () => {
         { type: 'bot', content: "Hello! 👋 I'm your AI assistant from Frostrek.\nHow can I help you innovate today?" }
     ]);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     // Image Upload State
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -46,16 +46,16 @@ const Chatbot: React.FC = () => {
         scrollToBottom();
     }, [messages, isOpen, previewUrl]);
     useEffect(() => {
-    if (isOpen) {
-        document.body.style.overflow = 'hidden';
-    } else {
-        document.body.style.overflow = '';
-    }
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
 
-    // Cleanup on unmount
-    return () => {
-        document.body.style.overflow = '';
-    };
+        // Cleanup on unmount
+        return () => {
+            document.body.style.overflow = '';
+        };
     }, [isOpen]);
 
 
@@ -131,10 +131,10 @@ const Chatbot: React.FC = () => {
 
         // Add user message to UI
         if (textInput || currentImage) {
-            setMessages(prev => [...prev, { 
-                type: 'user', 
-                content: textInput || '', 
-                image: currentPreview || undefined 
+            setMessages(prev => [...prev, {
+                type: 'user',
+                content: textInput || '',
+                image: currentPreview || undefined
             }]);
             setMessage('');
         } else if (audioBlob) {
@@ -148,7 +148,7 @@ const Chatbot: React.FC = () => {
             if (textInput) {
                 formData.append('chatInput', textInput);
             }
-            
+
             if (currentImage) {
                 formData.append('image', currentImage);
             }
@@ -259,42 +259,42 @@ const Chatbot: React.FC = () => {
                             exit={{ x: '100%', opacity: 0 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                             className="fixed bottom-[90px] right-4 md:right-6 w-[380px] max-w-[95vw] h-[600px] max-h-[80vh] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col z-[9999]"
->
+                        >
                             {/* Header */}
                             <div className="bg-gradient-to-r from-brand-green-500 to-teal-400 p-4 flex items-center justify-between text-white rounded-t-2xl">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
-                                <img src="/robo2.gif" className="w-full h-full object-cover"/>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
+                                        <img src="/robo2.gif" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-sm">Frostrek Assistant</h3>
+                                        <p className="text-xs opacity-90">Online • Ready to help</p>
+                                    </div>
                                 </div>
-                                <div>
-                                <h3 className="font-semibold text-sm">Frostrek Assistant</h3>
-                                <p className="text-xs opacity-90">Online • Ready to help</p>
-                                </div>
-                            </div>
-                            <button onClick={toggleChat}>
-                                <X className="w-5 h-5"/>
-                            </button>
+                                <button onClick={toggleChat}>
+                                    <X className="w-5 h-5" />
+                                </button>
                             </div>
                             {messages.length === 1 && (
                                 <div className="text-center px-6 py-6">
-                                    <img src="/robo2.gif" className="w-20 mx-auto mb-4 rounded-full"/>
+                                    <img src="/robo2.gif" className="w-20 mx-auto mb-4 rounded-full" />
                                     <h4 className="text-lg font-semibold text-gray-800">
-                                    Hi, I'm Frostrek Assistant 👋
+                                        Hi, I'm Frostrek Assistant 👋
                                     </h4>
                                     <p className="text-sm text-gray-500 mt-2">
-                                    Ask me anything about innovation, products or support.
+                                        Ask me anything about innovation, products or support.
                                     </p>
 
                                     <div className="flex flex-wrap justify-center gap-2 mt-4">
-                                    <button className="suggestion-chip">💡 Get product ideas</button>
-                                    <button className="suggestion-chip">📊 Help with analytics</button>
-                                    <button className="suggestion-chip">🛠 Solve a technical issue</button>
+                                        <button className="suggestion-chip">💡 Get product ideas</button>
+                                        <button className="suggestion-chip">📊 Help with analytics</button>
+                                        <button className="suggestion-chip">🛠 Solve a technical issue</button>
                                     </div>
                                 </div>
-                                )}
+                            )}
                             {/* Chat Body (Messages) */}
                             <div className="flex-1 overflow-y-auto p-6 bg-gray-50 flex flex-col gap-4" style={{ overscrollBehavior: 'contain' }}
->
+                            >
                                 {messages.map((msg, idx) => (
                                     <div
                                         key={idx}
@@ -340,7 +340,7 @@ const Chatbot: React.FC = () => {
                                 {previewUrl && (
                                     <div className="mb-2 relative inline-block">
                                         <img src={previewUrl} alt="Preview" className="h-16 w-16 object-cover rounded-lg border border-gray-200" />
-                                        <button 
+                                        <button
                                             onClick={removeImage}
                                             className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5"
                                         >
@@ -349,14 +349,14 @@ const Chatbot: React.FC = () => {
                                     </div>
                                 )}
                                 <form onSubmit={onSubmit} className="flex items-center gap-2 bg-white rounded-full px-3 py-2 shadow-sm border border-gray-100">
-                                    <input 
-                                        type="file" 
-                                        ref={fileInputRef} 
-                                        onChange={handleImageSelect} 
-                                        accept="image/*" 
-                                        className="hidden" 
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        onChange={handleImageSelect}
+                                        accept="image/*"
+                                        className="hidden"
                                     />
-                                    
+
                                     {/* Upload Button */}
                                     <button
                                         type="button"
