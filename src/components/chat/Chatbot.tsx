@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Sparkles, Mic, Square, Loader2 } from 'lucide-react';
+import { X, Send, Sparkles, Mic, Square, Loader2, Image as ImageIcon, Paperclip, Trash2 } from 'lucide-react';
+
 
 // Webhook URL
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
@@ -8,10 +9,15 @@ const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9a
 const Chatbot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string }>>([
+    const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string, image?: string }>>([
         { type: 'bot', content: "Hello! 👋 I'm your AI assistant from Frostrek.\nHow can I help you innovate today?" }
     ]);
     const [isLoading, setIsLoading] = useState(false);
+    
+    // Image Upload State
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Audio Recording State
     const [isRecording, setIsRecording] = useState(false);
@@ -28,15 +34,17 @@ const Chatbot: React.FC = () => {
         return newId;
     });
 
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => {
+            scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+        }, 100);
     };
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
+    }, [messages, isOpen, previewUrl]);
     useEffect(() => {
     if (isOpen) {
         document.body.style.overflow = 'hidden';
@@ -91,14 +99,43 @@ const Chatbot: React.FC = () => {
         }
     };
 
+    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedImage(file);
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+        }
+    };
+
+    const removeImage = () => {
+        setSelectedImage(null);
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+            setPreviewUrl(null);
+        }
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
     const handleSendMessage = async (textInput?: string, audioBlob?: Blob) => {
-        if (!textInput && !audioBlob) return;
+        if (!textInput && !audioBlob && !selectedImage) return;
 
         setIsLoading(true);
+        const currentImage = selectedImage;
+        const currentPreview = previewUrl;
+
+        // Clear image state immediately
+        removeImage();
 
         // Add user message to UI
-        if (textInput) {
-            setMessages(prev => [...prev, { type: 'user', content: textInput }]);
+        if (textInput || currentImage) {
+            setMessages(prev => [...prev, { 
+                type: 'user', 
+                content: textInput || '', 
+                image: currentPreview || undefined 
+            }]);
             setMessage('');
         } else if (audioBlob) {
             setMessages(prev => [...prev, { type: 'user', content: '🎤 Audio Message Sent' }]);
@@ -110,6 +147,10 @@ const Chatbot: React.FC = () => {
 
             if (textInput) {
                 formData.append('chatInput', textInput);
+            }
+            
+            if (currentImage) {
+                formData.append('image', currentImage);
             }
 
             if (audioBlob) {
@@ -166,7 +207,7 @@ const Chatbot: React.FC = () => {
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (message.trim()) {
+        if (message.trim() || selectedImage) {
             handleSendMessage(message);
         }
     };
@@ -190,9 +231,9 @@ const Chatbot: React.FC = () => {
                 ) : (
                     <div className="w-14 h-14 relative">
                         <img
-                            src="/optimized/robot.webp"
+                            src="/robo2.gif"
                             alt="Chat"
-                            className="w-full h-full object-contain scale-125"
+                            className="w-full h-full object-contain scale-125 rounded-full"
                         />
                     </div>
                 )}
@@ -222,8 +263,8 @@ const Chatbot: React.FC = () => {
                             {/* Header */}
                             <div className="bg-gradient-to-r from-brand-green-500 to-teal-400 p-4 flex items-center justify-between text-white rounded-t-2xl">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                                <img src="/optimized/robot.webp" className="w-7 h-7"/>
+                                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
+                                <img src="/robo2.gif" className="w-full h-full object-cover"/>
                                 </div>
                                 <div>
                                 <h3 className="font-semibold text-sm">Frostrek Assistant</h3>
@@ -236,7 +277,7 @@ const Chatbot: React.FC = () => {
                             </div>
                             {messages.length === 1 && (
                                 <div className="text-center px-6 py-6">
-                                    <img src="/optimized/robot.webp" className="w-20 mx-auto mb-4"/>
+                                    <img src="/robo2.gif" className="w-20 mx-auto mb-4 rounded-full"/>
                                     <h4 className="text-lg font-semibold text-gray-800">
                                     Hi, I'm Frostrek Assistant 👋
                                     </h4>
@@ -264,13 +305,18 @@ const Chatbot: React.FC = () => {
                                             {msg.type === 'user' ? (
                                                 <span className="text-xs font-bold text-gray-600">You</span>
                                             ) : (
-                                                <img src="/optimized/robot.webp" alt="Bot" className="w-6 h-6 object-contain" />
+                                                <img src="/robo2.gif" alt="Bot" className="w-full h-full object-cover" />
                                             )}
                                         </div>
                                         <div className={`p-4 rounded-2xl shadow-sm text-sm leading-relaxed whitespace-pre-wrap ${msg.type === 'user'
                                             ? 'bg-gradient-to-r from-brand-green-500 to-teal-400 text-white rounded-2xl'
                                             : 'bg-white text-gray-700 rounded-2xl shadow-sm border border-gray-100'
                                             }`}>
+                                            {msg.image && (
+                                                <div className="mb-2 max-w-[200px]">
+                                                    <img src={msg.image} alt="Uploaded" className="rounded-lg w-full h-auto" />
+                                                </div>
+                                            )}
                                             {msg.content}
                                         </div>
                                     </div>
@@ -286,12 +332,42 @@ const Chatbot: React.FC = () => {
                                         </div>
                                     </div>
                                 )}
-                                <div ref={messagesEndRef} />
+                                <div ref={scrollRef} />
                             </div>
 
                             {/* Footer (Input) */}
                             <div className="p-4 border-t bg-gray-50">
+                                {previewUrl && (
+                                    <div className="mb-2 relative inline-block">
+                                        <img src={previewUrl} alt="Preview" className="h-16 w-16 object-cover rounded-lg border border-gray-200" />
+                                        <button 
+                                            onClick={removeImage}
+                                            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5"
+                                        >
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                )}
                                 <form onSubmit={onSubmit} className="flex items-center gap-2 bg-white rounded-full px-3 py-2 shadow-sm border border-gray-100">
+                                    <input 
+                                        type="file" 
+                                        ref={fileInputRef} 
+                                        onChange={handleImageSelect} 
+                                        accept="image/*" 
+                                        className="hidden" 
+                                    />
+                                    
+                                    {/* Upload Button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="p-2 text-gray-400 hover:text-brand-green-500 transition-colors"
+                                        disabled={isRecording || isLoading}
+                                        title="Upload Image"
+                                    >
+                                        <Paperclip className="w-5 h-5" />
+                                    </button>
+
                                     {/* Mic Button */}
                                     <button
                                         type="button"
@@ -314,7 +390,7 @@ const Chatbot: React.FC = () => {
                                     />
                                     <button
                                         type="submit"
-                                        disabled={!message.trim() || isLoading || isRecording}
+                                        disabled={(!message.trim() && !selectedImage) || isLoading || isRecording}
                                         className="w-9 h-9 bg-gradient-to-r from-brand-green-500 to-teal-400 text-white rounded-full flex items-center justify-center"
                                     >
                                         <Send className="w-4 h-4" />
