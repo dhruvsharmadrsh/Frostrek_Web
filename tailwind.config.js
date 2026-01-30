@@ -7,62 +7,62 @@ export default {
     theme: {
         extend: {
             colors: {
-                // Teal/Cyan Bluish Theme
-                background: '#FFFFFF',
-                'background-alt': '#F8F9FA',
-                navbar: '#FFFFFF',
+                // Brown/Bronze Earthy Theme
+                background: '#FDFBF7', // Warm Eggshell
+                'background-alt': '#F7F5F0', // Slightly darker warm gray
+                navbar: '#FDFBF7',
 
                 // Text colors (dark for readability)
-                primary: '#1A1A1A',
-                secondary: '#4A4A4A',
-                muted: '#6B7280',
+                primary: '#2D241E', // Dark Brown/Black
+                secondary: '#5D5046', // Medium Brown
+                muted: '#8C7E72', // Muted Brown-Gray
 
-                // Teal/Cyan accent colors
+                // Primary Accent - Bronze/Copper (Replacing brand-green)
                 'brand-green': {
-                    50: '#F0FDFA',
-                    100: '#CCFBF1',
-                    200: '#99F6E4',
-                    300: '#5EEAD4',
-                    400: '#2DD4BF',
-                    500: '#14B8A6',
-                    600: '#0D9488',
-                    700: '#0F766E',
-                    800: '#115E59',
-                    900: '#134E4A',
+                    50: '#FAF6F3',
+                    100: '#F2E8DF',
+                    200: '#E6D0C6',
+                    300: '#D5B09D',
+                    400: '#C48F71',
+                    500: '#B07552', // Main Bronze
+                    600: '#A97142', // Slightly richer for hover
+                    700: '#8A5A35',
+                    800: '#6E4629',
+                    900: '#563621',
                 },
-                // Bright cyan for highlights
+                // Secondary Accent - Sand/Gold (Replacing brand-yellow)
                 'brand-yellow': {
-                    50: '#ECFEFF',
-                    100: '#CFFAFE',
-                    200: '#A5F3FC',
-                    300: '#67E8F9',
-                    400: '#22D3EE',
-                    500: '#06B6D4',
-                    600: '#0891B2',
-                    700: '#0E7490',
-                    800: '#155E75',
-                    900: '#164E63',
+                    50: '#FDFBF5',
+                    100: '#FAF5E6',
+                    200: '#F3E9CD',
+                    300: '#EBDCB3',
+                    400: '#E0CC94',
+                    500: '#D4BB75', // Main Sand/Gold
+                    600: '#BFA45E',
+                    700: '#9E8547',
+                    800: '#7D6836',
+                    900: '#614E29',
                 },
 
-                // Accent colors - Teal/Cyan
-                'accent-green': '#14B8A6',
-                'accent-yellow': '#22D3EE',
-                'dark-green': '#0F766E',
-                'dark-yellow': '#0E7490',
+                // Accent colors - Mapped to new palette
+                'accent-green': '#B07552', // Bronze
+                'accent-yellow': '#D4BB75', // Gold
+                'dark-green': '#8A5A35',
+                'dark-yellow': '#9E8547',
 
-                // Button gradient colors - Teal/Cyan
-                'green-bright': '#2DD4BF',
-                'green-dark': '#14B8A6',
-                'yellow-bright': '#22D3EE',
-                'yellow-dark': '#06B6D4',
+                // Button gradient colors - Mapped
+                'green-bright': '#C48F71',
+                'green-dark': '#B07552',
+                'yellow-bright': '#E0CC94',
+                'yellow-dark': '#D4BB75',
             },
             fontFamily: {
                 sans: ['Raleway', 'system-ui', 'sans-serif'],
                 body: ['Quicksand', 'system-ui', 'sans-serif'],
             },
             backgroundImage: {
-                'hero-gradient': 'linear-gradient(135deg, rgba(15, 118, 110, 0.05) 0%, rgba(19, 78, 74, 0.05) 100%)',
-                'card-gradient': 'linear-gradient(135deg, #FFFFFF 0%, #F0FDFA 100%)',
+                'hero-gradient': 'linear-gradient(135deg, rgba(169, 113, 66, 0.05) 0%, rgba(138, 90, 53, 0.05) 100%)',
+                'card-gradient': 'linear-gradient(135deg, #FDFBF7 0%, #FAF6F3 100%)',
             },
             animation: {
                 // Wave animations

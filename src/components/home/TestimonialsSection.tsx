@@ -142,23 +142,23 @@ const TestimonialsSection = () => {
     return (
         <section
             ref={sectionRef}
-            className="py-24 relative overflow-hidden"
+            className="py-24 relative overflow-hidden bg-[#FDFBF7]"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            {/* Decorative Elements - Teal Theme */}
-            <div className="absolute top-10 left-10 w-32 h-32 rounded-full border-4 border-teal-200/50 opacity-60" />
-            <div className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-to-br from-teal-300 to-emerald-400 opacity-40" />
-            <div className="absolute bottom-20 right-10 w-40 h-40 rounded-full border-4 border-teal-300/40 opacity-50" />
-            <div className="absolute bottom-10 right-20 w-24 h-24 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 opacity-30" />
-            <div className="absolute top-1/2 right-0 w-16 h-16 rounded-full bg-emerald-400 opacity-40 translate-x-1/2" />
+            {/* Decorative Elements - Bronze Theme */}
+            <div className="absolute top-10 left-10 w-32 h-32 rounded-full border-4 border-[#B07552]/20 opacity-60" />
+            <div className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-to-br from-[#E6D0C6] to-[#B07552] opacity-20" />
+            <div className="absolute bottom-20 right-10 w-40 h-40 rounded-full border-4 border-[#B07552]/20 opacity-50" />
+            <div className="absolute bottom-10 right-20 w-24 h-24 rounded-full bg-gradient-to-br from-[#B07552] to-amber-600 opacity-20" />
+            <div className="absolute top-1/2 right-0 w-16 h-16 rounded-full bg-[#B07552] opacity-20 translate-x-1/2" />
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 {/* Header */}
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-light text-gray-800">
                         Don't take our word for it. <br />
-                        <span className="font-bold italic text-gray-900">Take theirs...</span>
+                        <span className="font-bold italic text-[#B07552]">Take theirs...</span>
                     </h2>
                 </div>
 
@@ -171,8 +171,8 @@ const TestimonialsSection = () => {
                             className="relative flex-shrink-0"
                         >
                             {/* Decorative frame behind image */}
-                            <div className="absolute -inset-4 bg-gradient-to-br from-teal-100 to-cyan-50 rounded-3xl transform rotate-3" />
-                            <div className="absolute -inset-2 bg-gradient-to-br from-orange-200 to-amber-100 rounded-3xl transform -rotate-2 opacity-60" />
+                            <div className="absolute -inset-4 bg-gradient-to-br from-[#F3E9CD] to-[#E6D0C6] rounded-3xl transform rotate-3" />
+                            <div className="absolute -inset-2 bg-gradient-to-br from-[#B07552]/30 to-[#8A5A35]/30 rounded-3xl transform -rotate-2 opacity-60" />
 
                             <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden shadow-2xl">
                                 <img
@@ -181,7 +181,7 @@ const TestimonialsSection = () => {
                                     className="w-full h-full object-cover"
                                 />
                                 {/* Gradient overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-teal-600/30 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#B07552]/40 to-transparent" />
                             </div>
                         </div>
 
@@ -192,13 +192,13 @@ const TestimonialsSection = () => {
                         >
                             {/* Author Info */}
                             <div className="mb-6">
-                                <h3 className="text-xl font-bold text-teal-700">{current.author}</h3>
+                                <h3 className="text-xl font-bold text-[#8A5A35]">{current.author}</h3>
                                 <p className="text-sm text-gray-500">{current.role}</p>
                             </div>
 
                             {/* Quote */}
                             <div className="relative">
-                                <Quote className="absolute -top-4 -left-4 w-8 h-8 text-teal-200 opacity-50" />
+                                <Quote className="absolute -top-4 -left-4 w-8 h-8 text-[#B07552] opacity-30" />
                                 <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-medium">
                                     {current.quote}
                                 </p>
@@ -212,7 +212,7 @@ const TestimonialsSection = () => {
                         <button
                             onClick={goToPrev}
                             disabled={isAnimating}
-                            className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-500 hover:border-teal-500 hover:text-teal-600 transition-colors disabled:opacity-50"
+                            className="w-10 h-10 rounded-full border-2 border-[#E6D0C6] flex items-center justify-center text-gray-500 hover:border-[#B07552] hover:text-[#B07552] transition-colors disabled:opacity-50"
                             aria-label="Previous testimonial"
                         >
                             <ChevronLeft size={20} />
@@ -225,8 +225,8 @@ const TestimonialsSection = () => {
                                     key={idx}
                                     onClick={() => goToIndex(idx)}
                                     className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === currentIndex
-                                        ? 'bg-teal-600 w-8'
-                                        : 'bg-gray-300 hover:bg-teal-300'
+                                        ? 'bg-[#B07552] w-8'
+                                        : 'bg-[#E6D0C6] hover:bg-[#B07552]/70'
                                         }`}
                                     aria-label={`Go to testimonial ${idx + 1}`}
                                 />
@@ -237,7 +237,7 @@ const TestimonialsSection = () => {
                         <button
                             onClick={goToNext}
                             disabled={isAnimating}
-                            className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-500 hover:border-teal-500 hover:text-teal-600 transition-colors disabled:opacity-50"
+                            className="w-10 h-10 rounded-full border-2 border-[#E6D0C6] flex items-center justify-center text-gray-500 hover:border-[#B07552] hover:text-[#B07552] transition-colors disabled:opacity-50"
                             aria-label="Next testimonial"
                         >
                             <ChevronRight size={20} />
@@ -246,9 +246,9 @@ const TestimonialsSection = () => {
 
                     {/* Progress Bar */}
                     <div className="max-w-xs mx-auto mt-6">
-                        <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-1 bg-[#E6D0C6] rounded-full overflow-hidden">
                             <div
-                                className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-300"
+                                className="h-full bg-gradient-to-r from-[#B07552] to-[#8A5A35] transition-all duration-300"
                                 style={{
                                     width: `${((currentIndex + 1) / TESTIMONIALS.length) * 100}%`
                                 }}

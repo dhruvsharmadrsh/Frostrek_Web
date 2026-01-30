@@ -21,33 +21,33 @@
 
 @layer components {
 
-  /* Custom scrollbar for white theme */
+  /* Custom scrollbar for brown theme */
   ::-webkit-scrollbar {
     width: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #F8F9FA;
+    background: #F7F5F0;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #14B8A6 0%, #0F766E 100%);
+    background: linear-gradient(180deg, #B07552 0%, #8A5A35 100%);
     border-radius: 5px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #0F766E 0%, #0F5953 100%);
+    background: linear-gradient(180deg, #8A5A35 0%, #6E4629 100%);
   }
 }
 
 @layer utilities {
 
-  /* Readable green gradient text */
+  /* Readable bronze gradient text */
   .text-gradient-green {
     @apply bg-gradient-to-r from-brand-green-700 to-brand-green-600 bg-clip-text text-transparent;
   }
 
-  /* Primary green button with good contrast */
+  /* Primary bronze button with good contrast */
   .btn-primary-green {
     @apply bg-gradient-to-r from-brand-green-600 to-brand-green-500 text-white;
     @apply hover:from-brand-green-700 hover:to-brand-green-600;
@@ -72,13 +72,13 @@
     }
   }
 
-  /* Green glow effect */
+  /* Bronze glow effect */
   .glow-green {
-    box-shadow: 0 0 20px rgba(15, 118, 110, 0.3);
+    box-shadow: 0 0 20px rgba(169, 113, 66, 0.3);
   }
 
   .glow-green-strong {
-    box-shadow: 0 0 30px rgba(15, 118, 110, 0.5);
+    box-shadow: 0 0 30px rgba(169, 113, 66, 0.5);
   }
 
   @keyframes pulse-subtle {

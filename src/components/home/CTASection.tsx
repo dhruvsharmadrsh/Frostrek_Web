@@ -90,7 +90,7 @@ const CTASection = () => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="py-24 relative overflow-hidden bg-gradient-to-br from-brand-green-700 via-dark-green to-brand-green-800">
+        <section ref={sectionRef} className="py-24 relative overflow-hidden bg-gradient-to-br from-[#8A5A35] via-[#B07552] to-[#8A5A35]">
             {/* Animated dot pattern */}
             <div
                 ref={patternRef}
@@ -102,22 +102,22 @@ const CTASection = () => {
             />
 
             {/* Gradient orbs */}
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-green-400/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#E6D0C6]/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#F3E9CD]/10 rounded-full blur-3xl" />
 
             <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
                 <div ref={contentRef} className="max-w-4xl mx-auto">
                     <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white leading-tight">
                         Ready to transform your business?
                     </h2>
-                    <p className="text-xl text-green-100 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-xl text-[#F3E9CD] mb-10 max-w-2xl mx-auto leading-relaxed">
                         Join forward-thinking enterprises using Frostrek to automate, scale, and innovate.
                     </p>
 
                     <div ref={buttonsRef} className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link to="/schedule-demo" className="cta-button">
                             <MagneticButton
-                                className="primary-cta px-10 py-4 bg-white text-brand-green-700 font-bold text-lg rounded-xl hover:bg-green-50 shadow-2xl transition-colors"
+                                className="primary-cta px-10 py-4 bg-white text-[#B07552] font-bold text-lg rounded-xl hover:bg-[#FDFBF7] shadow-2xl transition-colors"
                                 strength={0.3}
                             >
                                 <Calendar className="mr-2" size={20} />
