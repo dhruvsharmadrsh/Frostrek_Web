@@ -245,19 +245,7 @@ const TestimonialsSection = () => {
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="max-w-xs mx-auto mt-6">
-                        <div className="h-1 bg-[#E6D0C6] rounded-full overflow-hidden">
-                            <div
-                                className="h-full bg-gradient-to-r from-[#B07552] to-[#8A5A35] transition-all duration-300"
-                                style={{
-                                    width: `${((currentIndex + 1) / TESTIMONIALS.length) * 100}%`
-                                }}
-                            />
-                        </div>
-                        <p className="text-xs text-gray-400 text-center mt-2">
-                            {currentIndex + 1} of {TESTIMONIALS.length}
-                        </p>
-                    </div>
+
                 </div>
             </div>
         </section>

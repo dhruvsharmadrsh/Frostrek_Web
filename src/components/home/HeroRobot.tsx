@@ -126,12 +126,14 @@ const HeroRobot = () => {
             />
 
             {/* Contact shadow for grounding */}
+            {/* Contact shadow for grounding */}
             <ContactShadows
-                position={[0, -1.2, 0]}
-                opacity={0.4}
-                scale={8}
-                blur={2.5}
-                far={4}
+                position={[0, -1.4, 0]}
+                opacity={0.7}
+                scale={20}
+                blur={2}
+                far={10}
+                resolution={512}
                 color="#3d2914"
             />
 

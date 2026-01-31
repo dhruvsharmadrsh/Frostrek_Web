@@ -76,8 +76,7 @@ const TrustedBySection = () => {
 
                 {/* Marquee */}
                 <div className="relative -mx-6 overflow-hidden">
-                    <div className="absolute left-0 top-0 bottom-0 w-24 z-20 pointer-events-none bg-gradient-to-r from-white to-transparent" />
-                    <div className="absolute right-0 top-0 bottom-0 w-24 z-20 pointer-events-none bg-gradient-to-l from-white to-transparent" />
+
 
                     <div ref={marqueeRef} className="flex gap-12 py-10" style={{ width: 'max-content' }}>
                         {[...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS].map((logo, i) => {
