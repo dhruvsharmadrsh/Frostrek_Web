@@ -1,5 +1,7 @@
 export const NAV_ITEMS = [
     { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Experience', href: '/experience' },
     {
         label: 'Products',
         href: '/products',
@@ -38,8 +40,6 @@ export const NAV_ITEMS = [
     },
     { label: 'Services', href: '/services' },
     { label: 'Resources', href: '/resources' },
-    { label: 'About', href: '/about' },
-    { label: 'Experience', href: '/experience' },
 ];
 
 export const COMPANY_INFO = {

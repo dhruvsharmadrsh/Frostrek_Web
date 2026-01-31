@@ -25,8 +25,9 @@ const Header = () => {
         <header className={cn(
             "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
             isScrolled
-                ? "bg-[#EAE6E1]/90 backdrop-blur-xl shadow-sm h-16"
-                : "bg-[#EAE6E1] h-20"
+                    ? "bg-[#B07552] h-16 shadow-[0_1px_0_rgba(176,117,82,0.15)]"
+                    : "bg-[#B07552] h-20"
+
         )}>
             <div className="container mx-auto px-4 md:px-6 h-full flex items-center justify-between">
                 {/* 1. Logo (Left) */}
@@ -36,7 +37,7 @@ const Header = () => {
                         alt="Frostrek"
                         className="h-12 w-auto object-contain"
                     />
-                    <span className="text-xl font-bold font-sans tracking-tight text-primary">
+                    <span className="text-xl font-bold font-sans tracking-tight text-background">
                         Frostrek
                     </span>
                 </Link>
@@ -48,7 +49,7 @@ const Header = () => {
                             <Link
                                 to={item.href}
                                 className={cn(
-                                    "flex items-center gap-1 text-sm font-semibold transition-colors py-2 text-primary/80 hover:text-primary",
+                                    "flex items-center gap-1 text-sm font-semibold transition-colors py-2 text-background hover:text-primary",
                                     location.pathname === item.href && "text-primary font-bold"
                                 )}
                             >
@@ -71,7 +72,7 @@ const Header = () => {
                 {/* 3. CTAs (Right) */}
                 <div className="hidden lg:flex items-center justify-end min-w-[140px]">
                     <Link to="/schedule-demo">
-                        <Button size="sm" className="px-6 bg-[#B07552] hover:bg-[#8A5A35] text-white rounded-md font-semibold border-none shadow-md">
+                        <Button size="sm" className="px-6 bg-background text-[#B07552] rounded-md font-semibold border-none shadow-md">
                             Request Demo
                         </Button>
                     </Link>
