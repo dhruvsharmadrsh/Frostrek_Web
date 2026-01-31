@@ -129,14 +129,14 @@ const ChatDemo = () => {
                     <div
                         key={i}
                         className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                        style={{ animationDelay: `${i * 0.5}s` }}
+                        style={{ animationDelay: `${i * 1}s` }}
                     >
                         <div
                             className={`max-w-[80%] px-3 py-2 rounded-xl text-xs animate-fade-in ${msg.role === 'user'
                                 ? 'bg-[#B07552] text-white rounded-br-sm'
                                 : 'bg-white text-gray-700 rounded-bl-sm border border-gray-200'
                                 }`}
-                            style={{ animationDelay: `${i * 0.4}s` }}
+                            style={{ animationDelay: `${i * 0.8}s` }}
                         >
                             {msg.text}
                         </div>
@@ -162,7 +162,7 @@ const VoiceDemo = () => {
                     <Volume2 className="w-8 h-8 text-white" />
                 </div>
                 <div className="absolute inset-0 w-16 h-16 rounded-full border-2 border-[#B07552]/50 animate-ping" />
-                <div className="absolute inset-[-8px] w-20 h-20 rounded-full border border-[#B07552]/30 animate-ping" style={{ animationDelay: '0.5s' }} />
+                <div className="absolute inset-[-8px] w-20 h-20 rounded-full border border-[#B07552]/30 animate-ping" style={{ animationDelay: '1s' }} />
             </div>
             <div className="flex items-center gap-1 mb-2">
                 {[...Array(12)].map((_, i) => (
@@ -171,7 +171,7 @@ const VoiceDemo = () => {
                         className="w-1 bg-gradient-to-t from-[#B07552] to-[#E6D0C6] rounded-full animate-voice-wave"
                         style={{
                             height: `${Math.random() * 24 + 8}px`,
-                            animationDelay: `${i * 0.05}s`
+                            animationDelay: `${i * 0.2}s`
                         }}
                     />
                 ))}
@@ -199,7 +199,7 @@ const SearchDemo = () => {
                     <div
                         key={i}
                         className="flex items-center justify-between bg-white rounded-lg px-3 py-2 animate-fade-in border border-gray-200"
-                        style={{ animationDelay: `${i * 0.15}s` }}
+                        style={{ animationDelay: `${i * 0.5}s` }}
                     >
                         <div className="flex items-center gap-2">
                             <Database className="w-3 h-3 text-[#B07552]" />

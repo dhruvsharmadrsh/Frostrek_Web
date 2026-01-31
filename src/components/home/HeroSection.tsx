@@ -113,7 +113,7 @@ const HeroSection = () => {
                             <Link to="/schedule-demo" className="px-8 py-4 bg-[#B07552] hover:bg-[#8A5A35] text-white rounded-xl font-semibold shadow-lg shadow-[#B07552]/20 transition-all transform hover:scale-105 w-full sm:w-auto text-center">
                                 Schedule a Demo
                             </Link>
-                            <button className="px-8 py-4 bg-transparent border-2 border-[#B07552] text-[#B07552] hover:bg-[#B07552]/5 rounded-xl font-semibold transition-all w-full sm:w-auto">
+                            <button className="px-8 py-4 bg-transparent border-2 border-[#B07552] text-[#B07552] hover:bg-[#B07552]/5 hover:text-[#8A5A35] rounded-xl font-semibold transition-all w-full sm:w-auto hover:scale-105 transition-all">
                                 Contact Sales
                             </button>
                         </div>
