@@ -115,19 +115,19 @@ const Chatbot: React.FC = () => {
         try {
             let response;
 
-            if (selectedFile || audioBlob) {
-                // Use FormData for files/audio
+            if (audioBlob) {
+                // Audio: Send 'audio' key only (no sessionId, no message)
                 const formData = new FormData();
-                formData.append('sessionId', sessionId);
-                formData.append('message', textInput || (audioBlob ? 'Voice message' : 'File uploaded'));
+                formData.append('audio', audioBlob, 'recording.webm');
 
-                if (selectedFile) {
-                    formData.append('file', selectedFile);
-                }
-
-                if (audioBlob) {
-                    formData.append('audio', audioBlob, 'recording.webm');
-                }
+                response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    body: formData,
+                });
+            } else if (selectedFile) {
+                // Image: Send 'image' key only (no sessionId, no message)
+                const formData = new FormData();
+                formData.append('image', selectedFile);
 
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
