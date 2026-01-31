@@ -28,7 +28,7 @@ const PROCESS_NODES: ProcessNode[] = [
         icon: Lightbulb,
         x: -30,
         y: -30,
-        color: "#8B5CF6"
+        color: "#B07552" // Bronze
     },
     {
         id: "develop",
@@ -37,7 +37,7 @@ const PROCESS_NODES: ProcessNode[] = [
         icon: Code2,
         x: 30,
         y: -30,
-        color: "#0EA5E9"
+        color: "#D4BB75" // Gold
     },
     {
         id: "test",
@@ -46,7 +46,7 @@ const PROCESS_NODES: ProcessNode[] = [
         icon: TestTube2,
         x: 30,
         y: 25,
-        color: "#10B981"
+        color: "#8A5A35" // Dark Brown
     },
     {
         id: "deploy",
@@ -55,7 +55,7 @@ const PROCESS_NODES: ProcessNode[] = [
         icon: Rocket,
         x: -30,
         y: 25,
-        color: "#F59E0B"
+        color: "#C48F71" // Light Bronze
     },
 ];
 
@@ -198,13 +198,13 @@ const InnovationProcess = () => {
             >
                 <defs>
                     <linearGradient id="innovation-line-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.4" />
-                        <stop offset="50%" stopColor="#0ea5e9" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.1" />
+                        <stop offset="0%" stopColor="#B07552" stopOpacity="0.4" />
+                        <stop offset="50%" stopColor="#D4BB75" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#8A5A35" stopOpacity="0.1" />
                     </linearGradient>
                     <linearGradient id="floating-line-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#f97316" stopOpacity="0.6" />
-                        <stop offset="100%" stopColor="#ec4899" stopOpacity="0.3" />
+                        <stop offset="0%" stopColor="#C48F71" stopOpacity="0.6" />
+                        <stop offset="100%" stopColor="#E6D0C6" stopOpacity="0.3" />
                     </linearGradient>
                 </defs>
 
@@ -235,11 +235,11 @@ const InnovationProcess = () => {
             {/* Center Hub - Impact - PREMIUM DESIGN */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                 <div
-                    className="relative bg-white/90 backdrop-blur-xl rounded-full shadow-[0_0_50px_rgba(20,184,166,0.25)] p-6 md:p-8 text-center border-4 border-teal-50 group hover:scale-105 transition-transform duration-500"
+                    className="relative bg-white/90 backdrop-blur-xl rounded-full shadow-[0_0_50px_rgba(176,117,82,0.25)] p-6 md:p-8 text-center border-4 border-brand-green-50 group hover:scale-105 transition-transform duration-500"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-cyan-500/10 rounded-full animate-pulse-slow"></div>
-                    <TrendingUp className="w-8 h-8 md:w-10 md:h-10 text-teal-600 mx-auto mb-2 relative z-10" />
-                    <div className="text-lg md:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-cyan-600 relative z-10">Impact</div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-brand-green-500/10 to-brand-yellow-500/10 rounded-full animate-pulse-slow"></div>
+                    <TrendingUp className="w-8 h-8 md:w-10 md:h-10 text-brand-green-600 mx-auto mb-2 relative z-10" />
+                    <div className="text-lg md:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-green-600 to-brand-green-500 relative z-10">Impact</div>
                     <div className="text-[10px] md:text-xs text-slate-500 font-bold uppercase tracking-widest mt-1 relative z-10">Business Growth</div>
                 </div>
             </div>

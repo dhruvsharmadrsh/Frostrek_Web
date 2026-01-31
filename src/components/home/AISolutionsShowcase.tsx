@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,6 +7,7 @@ import {
     ArrowRight, Sparkles, MessageCircle, Volume2,
     Search, GitBranch, TrendingUp, CheckCircle2
 } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -215,57 +216,143 @@ const SearchDemo = () => {
 
 const WorkflowDemo = () => {
     const steps = ['Trigger', 'Process', 'Validate', 'Output'];
+    const [isHovered, setIsHovered] = useState(false);
+    const containerRef = useRef(null);
+    const isInView = useInView(containerRef, { margin: "-20% 0px -20% 0px", once: true });
+    const [autoPlay, setAutoPlay] = useState(false);
+
+    useEffect(() => {
+        if (isInView) {
+            setAutoPlay(true);
+            const timer = setTimeout(() => setAutoPlay(false), 2400); // 4 steps * 0.6s
+            return () => clearTimeout(timer);
+        }
+    }, [isInView]);
+
+    const isActive = isHovered || autoPlay;
 
     return (
-        <div className="rounded-xl p-4 h-[200px] border border-gray-300 flex items-center justify-center" style={{ backgroundColor: '#f5ece4' }}>
+        <div
+            ref={containerRef}
+            className="rounded-xl p-4 h-[200px] border border-gray-300 flex items-center justify-center cursor-pointer overflow-hidden relative"
+            style={{ backgroundColor: '#f5ece4' }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             <div className="flex items-center gap-2">
                 {steps.map((step, i) => (
                     <div key={i} className="flex items-center">
-                        <div
-                            className="relative flex flex-col items-center animate-fade-in"
-                            style={{ animationDelay: `${i * 0.2}s` }}
+                        <motion.div
+                            className="relative flex flex-col items-center"
+                            initial={{ opacity: 1 }} // Show initially
+                            animate={{
+                                scale: isActive ? [1, 1.1, 1] : 1,
+                                opacity: 1
+                            }}
+                            transition={{
+                                duration: 0.6,
+                                delay: i * 0.3, // Slow stagger
+                                ease: "easeInOut"
+                            }}
                         >
-                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${i === 0 ? 'bg-orange-500' :
-                                i === 3 ? 'bg-[#B07552]' :
-                                    'bg-gray-300'
-                                }`}>
+                            <motion.div
+                                className={`w-12 h-12 rounded-lg flex items-center justify-center ${i === 0 ? 'bg-orange-500' :
+                                    i === 3 ? 'bg-[#B07552]' :
+                                        'bg-gray-300'
+                                    }`}
+                                animate={{
+                                    backgroundColor: isActive
+                                        ? (i === 0 ? ['#f97316', '#d1d5db'] : i === 3 ? '#B07552' : '#d1d5db') // Trigger turns grey
+                                        : (i === 0 ? '#f97316' : i === 3 ? '#B07552' : '#d1d5db')
+                                }}
+                                transition={{
+                                    duration: 0.6,
+                                    times: i === 0 ? [0, 1] : undefined, // Immediate start for trigger
+                                    delay: i * 0.3, // Stagger effect
+                                    ease: "easeInOut"
+                                }}
+                            >
                                 {i === 0 && <Sparkles className="w-5 h-5 text-white" />}
                                 {i === 1 && <GitBranch className="w-5 h-5 text-white" />}
                                 {i === 2 && <CheckCircle2 className="w-5 h-5 text-white" />}
                                 {i === 3 && <ArrowRight className="w-5 h-5 text-white" />}
-                            </div>
-                            <span className="text-[10px] text-gray-600 mt-1">{step}</span>
-                        </div>
+                            </motion.div>
+                            <span className="text-[10px] text-gray-600 mt-1 font-medium">{step}</span>
+                        </motion.div>
+
                         {i < steps.length - 1 && (
-                            <div className="w-4 h-0.5 bg-gradient-to-r from-gray-400 to-gray-300 mx-1 animate-pulse" />
+                            <div className="relative w-8 mx-1 h-0.5 bg-gray-300 overflow-hidden">
+                                <motion.div
+                                    className="absolute inset-0 bg-[#B07552]"
+                                    initial={{ x: '-100%' }}
+                                    animate={{ x: isActive ? '0%' : '-100%' }}
+                                    transition={{
+                                        duration: 0.6,
+                                        delay: i * 0.3 + 0.2,
+                                        ease: "easeInOut"
+                                    }}
+                                />
+                            </div>
                         )}
                     </div>
                 ))}
             </div>
+            {!isActive && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/5 backdrop-blur-[1px] opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <span className="bg-white/90 px-3 py-1 rounded-full text-xs font-medium text-gray-600 shadow-sm">Hover to play</span>
+                </div>
+            )}
         </div>
     );
 };
 
 const AnalyticsDemo = () => {
     const bars = [35, 55, 45, 70, 60, 80, 75];
+    const [isHovered, setIsHovered] = useState(false);
+    const containerRef = useRef(null);
+    const isInView = useInView(containerRef, { margin: "-20% 0px -20% 0px", once: true });
+    const [autoPlay, setAutoPlay] = useState(false);
+
+    useEffect(() => {
+        if (isInView) {
+            setAutoPlay(true);
+            const timer = setTimeout(() => setAutoPlay(false), 2000); // 1.2s duration + delay
+            return () => clearTimeout(timer);
+        }
+    }, [isInView]);
+
+    const isActive = isHovered || autoPlay;
 
     return (
-        <div className="rounded-xl p-4 h-[200px] border border-gray-300" style={{ backgroundColor: '#f5ece4' }}>
+        <div
+            ref={containerRef}
+            className="rounded-xl p-4 h-[200px] border border-gray-300 cursor-pointer overflow-hidden relative"
+            style={{ backgroundColor: '#f5ece4' }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             <div className="flex items-center justify-between mb-3">
                 <span className="text-xs text-gray-600">Revenue Growth</span>
-                <div className="flex items-center gap-1 text-[#B07552]">
+                <motion.div
+                    className="flex items-center gap-1 text-[#B07552]"
+                    animate={{ scale: isActive ? [1, 1.1, 1] : 1 }}
+                    transition={{ duration: 0.5, delay: 1 }}
+                >
                     <TrendingUp className="w-3 h-3" />
                     <span className="text-xs font-semibold">+24%</span>
-                </div>
+                </motion.div>
             </div>
             <div className="flex items-end justify-between gap-2 h-[120px] pt-4">
                 {bars.map((height, i) => (
-                    <div
+                    <motion.div
                         key={i}
-                        className="flex-1 bg-gradient-to-t from-[#B07552] to-[#E6D0C6] rounded-t-sm animate-grow"
-                        style={{
-                            height: `${height}%`,
-                            animationDelay: `${i * 0.1}s`
+                        className="flex-1 bg-gradient-to-t from-[#B07552] to-[#E6D0C6] rounded-t-sm"
+                        initial={{ height: '0%' }}
+                        animate={{ height: isActive ? `${height}%` : '15%' }} // Keep a small visible height when not hovered
+                        transition={{
+                            duration: 1.2, // Slower duration
+                            delay: i * 0.15, // Smoother stagger
+                            ease: [0.34, 1.56, 0.64, 1] // Spring-like ease
                         }}
                     />
                 ))}

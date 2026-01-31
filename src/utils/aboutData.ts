@@ -224,7 +224,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         description: 'Frostrek founded with a vision to revolutionize enterprise AI adoption.',
         icon: Sparkles,
         image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop',
-        color: { border: 'rgb(20, 184, 166)', shadow: 'rgba(20, 184, 166, 0.2)', bg: 'bg-teal-100', text: 'text-teal-700', iconColor: 'text-teal-500' }
+        color: { border: 'rgb(176, 117, 82)', shadow: 'rgba(176, 117, 82, 0.2)', bg: 'bg-brand-green-50', text: 'text-brand-green-700', iconColor: 'text-brand-green-500' }
     },
     {
         year: '2021',
@@ -232,7 +232,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         description: 'Successfully deployed our first AI agent platform for a Fortune 500 partner.',
         icon: Building2,
         image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop',
-        color: { border: 'rgb(99, 102, 241)', shadow: 'rgba(99, 102, 241, 0.2)', bg: 'bg-indigo-100', text: 'text-indigo-700', iconColor: 'text-indigo-500' }
+        color: { border: 'rgb(212, 187, 117)', shadow: 'rgba(212, 187, 117, 0.2)', bg: 'bg-brand-yellow-50', text: 'text-brand-yellow-700', iconColor: 'text-brand-yellow-500' } // Gold
     },
     {
         year: '2022',
@@ -240,7 +240,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         description: 'Opened offices in 3 new continents to serve our growing international client base.',
         icon: Globe,
         image: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=600&h=400&fit=crop',
-        color: { border: 'rgb(6, 182, 212)', shadow: 'rgba(6, 182, 212, 0.2)', bg: 'bg-cyan-100', text: 'text-cyan-700', iconColor: 'text-cyan-500' }
+        color: { border: 'rgb(138, 90, 53)', shadow: 'rgba(138, 90, 53, 0.2)', bg: 'bg-stone-100', text: 'text-stone-700', iconColor: 'text-stone-600' } // Darker Brown
     },
     {
         year: '2023',
@@ -248,7 +248,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         description: 'Released Frostrek Agent V1, setting a new standard for autonomous enterprise agents.',
         icon: Zap,
         image: 'https://images.unsplash.com/photo-1677442135136-760c813028c0?w=600&h=400&fit=crop',
-        color: { border: 'rgb(245, 158, 11)', shadow: 'rgba(245, 158, 11, 0.2)', bg: 'bg-amber-100', text: 'text-amber-700', iconColor: 'text-amber-500' }
+        color: { border: 'rgb(196, 143, 113)', shadow: 'rgba(196, 143, 113, 0.2)', bg: 'bg-brand-green-50', text: 'text-brand-green-600', iconColor: 'text-brand-green-400' } // Light Bronze
     },
     {
         year: '2024',
@@ -256,6 +256,6 @@ export const TIMELINE_DATA: TimelineItem[] = [
         description: 'Recognized as a top AI innovator with over 1M+ active agents managed daily.',
         icon: Award,
         image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop',
-        color: { border: 'rgb(244, 63, 94)', shadow: 'rgba(244, 63, 94, 0.2)', bg: 'bg-rose-100', text: 'text-rose-700', iconColor: 'text-rose-500' }
+        color: { border: 'rgb(212, 187, 117)', shadow: 'rgba(212, 187, 117, 0.2)', bg: 'bg-brand-yellow-50', text: 'text-brand-yellow-700', iconColor: 'text-brand-yellow-600' } // Gold Return
     },
 ];

@@ -233,7 +233,7 @@ const MagneticButton = memo(({ children, className, onClick, variant = 'primary'
     const baseStyles = variant === 'primary'
         ? 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white shadow-lg shadow-brand-green-500/25'
         : variant === 'cta'
-            ? 'bg-white text-teal-600 shadow-xl'
+            ? 'bg-white text-brand-green-600 shadow-xl'
             : 'bg-white/90 border-2 border-brand-green-500/40 text-brand-green-600';
 
     return (
@@ -263,10 +263,10 @@ const MagneticButton = memo(({ children, className, onClick, variant = 'primary'
 });
 
 // ============ 3D TILT CARD ============
-const TiltCard = memo(({ children, className, color = 'teal' }: {
+const TiltCard = memo(({ children, className, color = 'brand-green' }: {
     children: React.ReactNode;
     className?: string;
-    color?: 'teal' | 'cyan' | 'brand-green' | 'brand-yellow'
+    color?: 'brand-green' | 'brand-yellow'
 }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [hover, setHover] = useState(false);
@@ -1108,7 +1108,7 @@ const About = () => {
                                 { value: 50, suffix: '+', label: 'Enterprise Clients' },
                             ].map((s, i) => (
                                 <motion.div key={i} variants={fadeUp}>
-                                    <TiltCard color={i % 2 === 0 ? 'teal' : 'cyan'}>
+                                    <TiltCard color={i % 2 === 0 ? 'brand-green' : 'brand-yellow'}>
                                         <div className="p-6 text-center">
                                             <div className="text-3xl md:text-4xl font-bold text-brand-green-600 mb-1">
                                                 <Counter value={s.value} suffix={s.suffix} />
@@ -1453,7 +1453,7 @@ const About = () => {
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                         {features.map((f, i) => (
                             <motion.div key={i} variants={fadeUp}>
-                                <TiltCard color={i % 2 === 0 ? 'teal' : 'cyan'}>
+                                <TiltCard color={i % 2 === 0 ? 'brand-green' : 'brand-yellow'}>
                                     <div className="p-6 flex gap-5">
                                         <motion.span
                                             className={`text-4xl font-bold ${i % 2 === 0 ? 'text-brand-green-500' : 'text-brand-yellow-500'}`}
@@ -1609,7 +1609,7 @@ const About = () => {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="relative bg-gradient-to-br from-teal-500 via-teal-600 to-cyan-600 rounded-3xl p-12 md:p-16 text-center max-w-4xl mx-auto overflow-hidden"
+                        className="relative bg-gradient-to-br from-brand-green-500 via-brand-green-600 to-brand-green-700 rounded-3xl p-12 md:p-16 text-center max-w-4xl mx-auto overflow-hidden"
                     >
                         {/* Animated background */}
                         <motion.div
@@ -1622,7 +1622,7 @@ const About = () => {
                         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 relative z-10">
                             Ready to Transform Your Business?
                         </h2>
-                        <p className="text-teal-100 text-lg mb-10 relative z-10">
+                        <p className="text-brand-green-100 text-lg mb-10 relative z-10">
                             Let's build the future of AI together.
                         </p>
 
