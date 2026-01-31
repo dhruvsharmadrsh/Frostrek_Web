@@ -25,7 +25,7 @@ const ExperiencePage = () => {
 
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 font-heading">
                             Experience{' '}
-                            <span className="bg-gradient-to-r from-brand-green-500 to-cyan-500 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-brand-green-500 to-brand-green-700 bg-clip-text text-transparent">
                                 AI in Action
                             </span>
                         </h1>
@@ -50,7 +50,7 @@ const ExperiencePage = () => {
                             className="space-y-6"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-green-400 to-cyan-500 flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-green-400 to-brand-green-600 flex items-center justify-center shadow-lg">
                                     <Phone className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
@@ -61,7 +61,7 @@ const ExperiencePage = () => {
 
                             <VoiceCallWidget />
 
-                            <div className="bg-gradient-to-r from-brand-green-50 to-cyan-50 rounded-2xl p-4 border border-brand-green-100">
+                            <div className="bg-gradient-to-r from-brand-green-50 to-[#fdfbf7] rounded-2xl p-4 border border-brand-green-100">
                                 <h4 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
                                     <Zap className="w-4 h-4 text-brand-green-600" />
                                     What to try:
@@ -82,7 +82,7 @@ const ExperiencePage = () => {
                             className="space-y-6"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600 flex items-center justify-center shadow-lg">
                                     <MessageSquare className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
@@ -93,9 +93,9 @@ const ExperiencePage = () => {
 
                             <ChatbotDemo />
 
-                            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 border border-purple-100">
+                            <div className="bg-gradient-to-r from-brand-yellow-50 to-[#fdfbf7] rounded-2xl p-4 border border-brand-yellow-100">
                                 <h4 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-purple-600" />
+                                    <Sparkles className="w-4 h-4 text-brand-yellow-600" />
                                     Features:
                                 </h4>
                                 <ul className="text-sm text-gray-600 space-y-1">
@@ -117,11 +117,11 @@ const ExperiencePage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 sm:p-12 text-center overflow-hidden"
+                        className="relative bg-brand-green-600 rounded-3xl p-8 sm:p-12 text-center overflow-hidden"
                     >
                         {/* Glow effects */}
                         <div className="absolute top-0 left-1/4 w-64 h-64 bg-brand-green-500/20 rounded-full blur-3xl" />
-                        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
+                        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-yellow-500/20 rounded-full blur-3xl" />
 
                         <div className="relative z-10">
                             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 font-heading">
