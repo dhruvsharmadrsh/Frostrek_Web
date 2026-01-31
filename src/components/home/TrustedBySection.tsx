@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -17,21 +17,15 @@ const TrustedBySection = () => {
     const sectionRef = useRef<HTMLElement>(null);
     const marqueeRef = useRef<HTMLDivElement>(null);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const [clickedCard, setClickedCard] = useState<number | null>(null);
-
-    const handleCardClick = (index: number) => {
-        setClickedCard(prev => prev === index ? null : index);
-    };
+    // State and click handler removed
 
     // GSAP hover animation
-    const handleMouseEnter = (card: HTMLDivElement, index: number) => {
-        if (clickedCard === index) return;
+    const handleMouseEnter = (card: HTMLDivElement) => {
         gsap.to(card, { scale: 1.15, duration: 0.4, ease: 'power2.out' });
         gsap.to(card.querySelector('.logo-img'), { filter: 'grayscale(0%)', scale: 1.1, duration: 0.3 });
     };
 
-    const handleMouseLeave = (card: HTMLDivElement, index: number) => {
-        if (clickedCard === index) return;
+    const handleMouseLeave = (card: HTMLDivElement) => {
         gsap.to(card, { scale: 1, duration: 0.4, ease: 'power2.out' });
         gsap.to(card.querySelector('.logo-img'), { filter: 'grayscale(100%)', scale: 1, duration: 0.3 });
     };
@@ -59,17 +53,7 @@ const TrustedBySection = () => {
                 modifiers: { x: gsap.utils.unitize(x => parseFloat(x) % totalWidth) }
             });
 
-            // Continuous wave animation
-            cards.forEach((card, i) => {
-                gsap.to(card, {
-                    y: -12,
-                    duration: 1.2,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: 'sine.inOut',
-                    delay: i * 0.12,
-                });
-            });
+            // Continuous wave animation removed
 
         }, section);
 
@@ -87,7 +71,7 @@ const TrustedBySection = () => {
                     <h3 className="text-2xl md:text-4xl font-light text-gray-900 mb-3">
                         Trusted by <span className="font-semibold" style={{ color: ACCENT_DARK }}>Industry Leaders</span>
                     </h3>
-                    <p className="text-gray-400 text-sm">Hover to preview • Click to see details</p>
+                    <p className="text-gray-400 text-sm">Industry leaders trust us to deliver excellence</p>
                 </div>
 
                 {/* Marquee */}
@@ -97,32 +81,19 @@ const TrustedBySection = () => {
 
                     <div ref={marqueeRef} className="flex gap-12 py-10" style={{ width: 'max-content' }}>
                         {[...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS].map((logo, i) => {
-                            const isClicked = clickedCard === i;
-
                             return (
                                 <div
                                     key={`${logo.name}-${i}`}
                                     ref={el => { cardRefs.current[i] = el; }}
-                                    className="marquee-item relative cursor-pointer select-none"
-                                    onClick={() => handleCardClick(i)}
-                                    onMouseEnter={e => handleMouseEnter(e.currentTarget, i)}
-                                    onMouseLeave={e => handleMouseLeave(e.currentTarget, i)}
+                                    className="marquee-item relative cursor-default select-none"
+                                    onMouseEnter={e => handleMouseEnter(e.currentTarget)}
+                                    onMouseLeave={e => handleMouseLeave(e.currentTarget)}
                                 >
                                     <div
-                                        className="relative p-6 md:p-8 rounded-2xl transition-all duration-300 min-w-[160px] flex flex-col items-center justify-center"
-                                        style={{
-                                            backgroundColor: isClicked ? ACCENT_DARK : 'transparent',
-                                            boxShadow: isClicked ? `0 20px 40px ${ACCENT_DARK}40` : 'none',
-                                        }}
+                                        className="relative p-6 md:p-8 rounded-2xl transition-all duration-300 min-w-[160px] flex flex-col items-center justify-center bg-transparent"
                                     >
                                         {/* Logo */}
-                                        <div
-                                            className="transition-all duration-300"
-                                            style={{
-                                                opacity: isClicked ? 0 : 1,
-                                                position: isClicked ? 'absolute' : 'relative',
-                                            }}
-                                        >
+                                        <div className="transition-all duration-300 relative">
                                             <img
                                                 src={logo.src}
                                                 alt={logo.name}
@@ -131,23 +102,6 @@ const TrustedBySection = () => {
                                                 loading="lazy"
                                                 draggable={false}
                                             />
-                                        </div>
-
-                                        {/* Info */}
-                                        <div
-                                            className="text-center transition-all duration-300"
-                                            style={{
-                                                opacity: isClicked ? 1 : 0,
-                                                transform: isClicked ? 'scale(1)' : 'scale(0.8)',
-                                                position: isClicked ? 'relative' : 'absolute',
-                                            }}
-                                        >
-                                            <p className="text-white font-bold text-lg mb-1">{logo.name}</p>
-                                            <div className="flex items-center justify-center gap-1 mb-1">
-                                                <span className="text-yellow-300">★</span>
-                                                <span className="text-white font-semibold">{logo.rating}</span>
-                                            </div>
-                                            <p className="text-white/80 text-xs">{logo.reviews}</p>
                                         </div>
                                     </div>
                                 </div>

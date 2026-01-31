@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import MagneticButton from '../ui/MagneticButton';
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -79,7 +79,7 @@ const CTASection = () => {
 
         const tl = gsap.timeline({ repeat: -1, yoyo: true });
         tl.to(primaryBtn, {
-            boxShadow: '0 0 30px rgba(255, 255, 255, 0.4), 0 0 60px rgba(34, 197, 94, 0.3)',
+            boxShadow: '0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(34, 197, 94, 0.15)',
             duration: 1.5,
             ease: 'sine.inOut'
         });
@@ -116,21 +116,19 @@ const CTASection = () => {
 
                     <div ref={buttonsRef} className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link to="/schedule-demo" className="cta-button">
-                            <MagneticButton
-                                className="primary-cta px-10 py-4 bg-white text-[#B07552] font-bold text-lg rounded-xl hover:bg-[#FDFBF7] shadow-2xl transition-colors"
-                                strength={0.3}
+                            <button
+                                className="primary-cta flex items-center px-10 py-4 bg-white text-[#B07552] font-bold text-lg rounded-xl hover:bg-[#FDFBF7] shadow-xl transition-all duration-300 transform hover:scale-105"
                             >
                                 <Calendar className="mr-2" size={20} />
                                 Schedule a demo
-                            </MagneticButton>
+                            </button>
                         </Link>
-                        <MagneticButton
-                            className="cta-button px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-xl hover:bg-white/10 transition-colors"
-                            strength={0.3}
+                        <button
+                            className="cta-button flex items-center px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-xl hover:bg-white/10 transition-all duration-300 transform hover:scale-105 group"
                         >
                             Contact Sales
                             <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
-                        </MagneticButton>
+                        </button>
                     </div>
                 </div>
             </div>
