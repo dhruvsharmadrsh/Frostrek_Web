@@ -101,7 +101,7 @@ const AWARDS_DATA = [
         issuer: 'Gartner Magic Quadrant',
         year: '2024',
         icon: Star,
-        color: 'from-teal-400 to-teal-600',
+        color: 'from-brand-green-400 to-brand-green-600',
     },
     {
         title: 'Top 50 AI Startups',
@@ -135,7 +135,7 @@ const TECH_CATEGORIES = [
     {
         name: 'Infrastructure',
         icon: Cloud,
-        color: 'from-cyan-500 to-blue-600',
+        color: 'from-brand-green-500 to-brand-green-600',
         technologies: [
             { name: 'Kubernetes', desc: 'Container orchestration at enterprise scale' },
             { name: 'AWS/GCP/Azure', desc: 'Multi-cloud deployment flexibility' },
@@ -200,7 +200,7 @@ const TypewriterText = memo(({ texts }: { texts: string[] }) => {
         <span className="relative">
             {text}
             <motion.span
-                className="inline-block w-[3px] h-[0.85em] bg-teal-400 ml-1 align-middle rounded-full"
+                className="inline-block w-[3px] h-[0.85em] bg-brand-green-400 ml-1 align-middle rounded-full"
                 animate={{ opacity: [1, 0] }}
                 transition={{ duration: 0.6, repeat: Infinity }}
             />
@@ -231,10 +231,10 @@ const MagneticButton = memo(({ children, className, onClick, variant = 'primary'
     const reset = () => { x.set(0); y.set(0); setHover(false); };
 
     const baseStyles = variant === 'primary'
-        ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/25'
+        ? 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white shadow-lg shadow-brand-green-500/25'
         : variant === 'cta'
             ? 'bg-white text-teal-600 shadow-xl'
-            : 'bg-white/90 border-2 border-teal-500/40 text-teal-600';
+            : 'bg-white/90 border-2 border-brand-green-500/40 text-brand-green-600';
 
     return (
         <motion.button
@@ -294,13 +294,13 @@ const TiltCard = memo(({ children, className, color = 'teal' }: {
             className={`relative cursor-pointer ${className}`}
             animate={{
                 y: hover ? -8 : 0,
-                boxShadow: hover ? `0 20px 40px -15px ${color === 'teal' ? 'rgba(20,184,166,0.3)' : 'rgba(6,182,212,0.3)'}` : '0 4px 20px -5px rgba(0,0,0,0.1)'
+                boxShadow: hover ? `0 20px 40px -15px ${color === 'brand-green' ? 'rgba(176,117,82,0.3)' : 'rgba(212,187,117,0.3)'}` : '0 4px 20px -5px rgba(0,0,0,0.1)'
             }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
             {/* Gradient border on hover */}
             <motion.div
-                className={`absolute -inset-[2px] rounded-2xl bg-gradient-to-r ${color === 'teal' ? 'from-teal-400 via-cyan-400 to-teal-400' : 'from-cyan-400 via-teal-400 to-cyan-400'}`}
+                className={`absolute -inset-[2px] rounded-2xl bg-gradient-to-r ${color === 'brand-green' ? 'from-brand-green-400 via-brand-yellow-400 to-brand-green-400' : 'from-brand-yellow-400 via-brand-green-400 to-brand-yellow-400'}`}
                 animate={{ opacity: hover ? 1 : 0 }}
                 transition={{ duration: 0.2 }}
             />
@@ -341,12 +341,12 @@ const Counter = memo(({ value, suffix = '' }: { value: number; suffix?: string }
 // ============ FLOATING ICON ============
 const FloatingIcon = memo(({ icon: Icon, delay, x, y }: { icon: React.ElementType; delay: number; x: string; y: string }) => (
     <motion.div
-        className="absolute w-10 h-10 bg-white/80 backdrop-blur rounded-xl shadow-lg flex items-center justify-center border border-teal-500/20"
+        className="absolute w-10 h-10 bg-white/80 backdrop-blur rounded-xl shadow-lg flex items-center justify-center border border-brand-green-500/20"
         style={{ left: x, top: y }}
         animate={{ y: [0, -12, 0], rotate: [0, 5, -5, 0] }}
         transition={{ duration: 4, delay, repeat: Infinity, ease: 'easeInOut' }}
     >
-        <Icon className="w-5 h-5 text-teal-600" />
+        <Icon className="w-5 h-5 text-brand-green-600" />
     </motion.div>
 ));
 
@@ -368,33 +368,33 @@ const InteractiveGlobe = memo(() => {
         <div className="relative w-full h-80 flex items-center justify-center">
             {/* Animated rings */}
             <motion.div
-                className="absolute w-56 h-56 border-2 border-dashed border-teal-500/20 rounded-full"
+                className="absolute w-56 h-56 border-2 border-dashed border-brand-green-500/20 rounded-full"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
             />
             <motion.div
-                className="absolute w-44 h-44 border-2 border-dashed border-cyan-500/20 rounded-full"
+                className="absolute w-44 h-44 border-2 border-dashed border-brand-yellow-500/20 rounded-full"
                 animate={{ rotate: -360 }}
                 transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
             />
 
             {/* Globe center */}
             <motion.div
-                className="relative w-24 h-24 bg-gradient-to-br from-teal-400 via-teal-500 to-cyan-600 rounded-full flex items-center justify-center shadow-2xl cursor-pointer z-10"
+                className="relative w-24 h-24 bg-gradient-to-br from-brand-green-400 via-brand-green-500 to-brand-green-600 rounded-full flex items-center justify-center shadow-2xl cursor-pointer z-10"
                 onMouseEnter={() => setIsGlobeHovered(true)}
                 onMouseLeave={() => setIsGlobeHovered(false)}
                 animate={{
                     scale: isGlobeHovered ? 1.1 : 1,
                     boxShadow: isGlobeHovered
-                        ? '0 0 60px 10px rgba(20,184,166,0.4)'
-                        : '0 20px 50px -10px rgba(20,184,166,0.4)'
+                        ? '0 0 60px 10px rgba(176,117,82,0.4)'
+                        : '0 20px 50px -10px rgba(176,117,82,0.4)'
                 }}
                 transition={{ type: 'spring', stiffness: 300 }}
             >
                 <Globe className="w-12 h-12 text-white" />
                 {/* Pulse rings */}
                 <motion.div
-                    className="absolute inset-0 rounded-full border-2 border-teal-300"
+                    className="absolute inset-0 rounded-full border-2 border-brand-green-300"
                     animate={{ scale: [1, 1.8], opacity: [0.6, 0] }}
                     transition={{ duration: 2, repeat: Infinity }}
                 />
@@ -416,9 +416,9 @@ const InteractiveGlobe = memo(() => {
                         className="relative cursor-pointer"
                         animate={{ scale: hoveredCity === i ? 1.5 : 1 }}
                     >
-                        <div className="w-4 h-4 bg-teal-500 rounded-full shadow-lg" />
+                        <div className="w-4 h-4 bg-brand-green-500 rounded-full shadow-lg" />
                         <motion.div
-                            className="absolute inset-0 rounded-full bg-teal-400"
+                            className="absolute inset-0 rounded-full bg-brand-green-400"
                             animate={{ scale: [1, 2.5], opacity: [0.5, 0] }}
                             transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }}
                         />
@@ -452,7 +452,7 @@ const CheckItem = memo(({ text, delay }: { text: string; delay: number }) => (
         className="flex items-center gap-3 group"
     >
         <motion.div
-            className="w-6 h-6 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center"
+            className="w-6 h-6 rounded-full bg-gradient-to-br from-brand-green-500 to-brand-green-600 flex items-center justify-center"
             whileHover={{ scale: 1.2, rotate: 10 }}
         >
             <CheckCircle2 className="w-4 h-4 text-white" />
@@ -475,15 +475,15 @@ const TechIcon = memo(({ icon: Icon, label, delay }: { icon: React.ElementType; 
             onMouseLeave={() => setHover(false)}
         >
             <motion.div
-                className="w-16 h-16 bg-white rounded-2xl border-2 border-teal-500/20 flex items-center justify-center shadow-lg cursor-pointer"
+                className="w-16 h-16 bg-white rounded-2xl border-2 border-brand-green-500/20 flex items-center justify-center shadow-lg cursor-pointer"
                 animate={{
                     y: hover ? -8 : 0,
-                    borderColor: hover ? 'rgb(20 184 166)' : 'rgba(20 184 166 / 0.2)',
-                    boxShadow: hover ? '0 15px 30px -10px rgba(20,184,166,0.3)' : '0 4px 15px -5px rgba(0,0,0,0.1)'
+                    borderColor: hover ? 'rgb(176 117 82)' : 'rgba(176 117 82 / 0.2)',
+                    boxShadow: hover ? '0 15px 30px -10px rgba(176,117,82,0.3)' : '0 4px 15px -5px rgba(0,0,0,0.1)'
                 }}
                 transition={{ type: 'spring', stiffness: 300 }}
             >
-                <Icon className="w-8 h-8 text-teal-600" />
+                <Icon className="w-8 h-8 text-brand-green-600" />
             </motion.div>
             <AnimatePresence>
                 {hover && (
@@ -491,7 +491,7 @@ const TechIcon = memo(({ icon: Icon, label, delay }: { icon: React.ElementType; 
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -5 }}
-                        className="absolute -bottom-6 text-xs font-medium text-teal-600 whitespace-nowrap"
+                        className="absolute -bottom-6 text-xs font-medium text-brand-green-600 whitespace-nowrap"
                     >
                         {label}
                     </motion.span>
@@ -509,7 +509,7 @@ const ScrollIndicator = memo(() => (
         transition={{ duration: 2, repeat: Infinity }}
         onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}
     >
-        <MousePointer2 className="w-5 h-5 text-teal-500" />
+        <MousePointer2 className="w-5 h-5 text-brand-green-500" />
     </motion.div>
 ));
 
@@ -549,7 +549,7 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
                         <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
                             <div className="backdrop-blur-sm bg-white/10 rounded-xl p-4 border border-white/20">
                                 <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
-                                <p className="text-teal-300 font-medium">{member.role}</p>
+                                <p className="text-brand-yellow-300 font-medium">{member.role}</p>
                             </div>
                         </div>
                         {/* Hover Hint */}
@@ -575,11 +575,11 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
                                 <img
                                     src={member.image}
                                     alt={member.name}
-                                    className="w-16 h-16 rounded-xl object-cover border-2 border-teal-500/50"
+                                    className="w-16 h-16 rounded-xl object-cover border-2 border-brand-green-500/50"
                                 />
                                 <div>
                                     <h3 className="text-lg font-bold text-white">{member.name}</h3>
-                                    <p className="text-teal-400 text-sm font-medium">{member.role}</p>
+                                    <p className="text-brand-yellow-400 text-sm font-medium">{member.role}</p>
                                 </div>
                             </div>
 
@@ -590,7 +590,7 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
                                 {member.linkedin && (
                                     <motion.a
                                         href={member.linkedin}
-                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-teal-500/50 transition-colors"
+                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-brand-green-500/50 transition-colors"
                                         whileHover={{ scale: 1.1, y: -2 }}
                                         whileTap={{ scale: 0.95 }}
                                     >
@@ -600,7 +600,7 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
                                 {member.twitter && (
                                     <motion.a
                                         href={member.twitter}
-                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-teal-500/50 transition-colors"
+                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-brand-green-500/50 transition-colors"
                                         whileHover={{ scale: 1.1, y: -2 }}
                                         whileTap={{ scale: 0.95 }}
                                     >
@@ -610,7 +610,7 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
                                 {member.github && (
                                     <motion.a
                                         href={member.github}
-                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-teal-500/50 transition-colors"
+                                        className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-brand-green-500/50 transition-colors"
                                         whileHover={{ scale: 1.1, y: -2 }}
                                         whileTap={{ scale: 0.95 }}
                                     >
@@ -694,8 +694,8 @@ const AwardCard = memo(({ award, delay }: { award: typeof AWARDS_DATA[0]; delay:
                 className="relative bg-white rounded-2xl p-6 border-2 border-gray-100 shadow-lg overflow-hidden cursor-pointer h-full min-h-[200px]"
                 animate={{
                     y: hover ? -8 : 0,
-                    borderColor: hover ? 'rgba(20, 184, 166, 0.5)' : 'rgb(243, 244, 246)',
-                    boxShadow: hover ? '0 20px 40px -15px rgba(20,184,166,0.3)' : '0 4px 20px -5px rgba(0,0,0,0.1)',
+                    borderColor: hover ? 'rgba(176, 117, 82, 0.5)' : 'rgb(243, 244, 246)',
+                    boxShadow: hover ? '0 20px 40px -15px rgba(176,117,82,0.3)' : '0 4px 20px -5px rgba(0,0,0,0.1)',
                 }}
                 transition={{ type: 'spring', stiffness: 300 }}
             >
@@ -742,14 +742,14 @@ const ExpandableTechCategory = memo(({ category, delay }: { category: typeof TEC
             <motion.div
                 className="bg-white rounded-2xl border-2 border-gray-100 shadow-lg overflow-hidden cursor-pointer"
                 animate={{
-                    borderColor: isExpanded ? 'rgba(20, 184, 166, 0.5)' : 'rgb(243, 244, 246)',
+                    borderColor: isExpanded ? 'rgba(176, 117, 82, 0.5)' : 'rgb(243, 244, 246)',
                 }}
             >
                 {/* Header */}
                 <motion.div
                     className="p-6 flex items-center justify-between"
                     onClick={() => setIsExpanded(!isExpanded)}
-                    whileHover={{ backgroundColor: 'rgba(20, 184, 166, 0.05)' }}
+                    whileHover={{ backgroundColor: 'rgba(176, 117, 82, 0.05)' }}
                 >
                     <div className="flex items-center gap-4">
                         <motion.div
@@ -813,8 +813,8 @@ const TechEcosystemDiagram = memo(() => {
 
     const categories = [
         { icon: Brain, label: 'AI/ML', angle: 0, color: '#8B5CF6' },
-        { icon: Cloud, label: 'Cloud', angle: 90, color: '#06B6D4' },
-        { icon: ShieldCheck, label: 'Security', angle: 180, color: '#10B981' },
+        { icon: Cloud, label: 'Cloud', angle: 90, color: '#B07552' },
+        { icon: ShieldCheck, label: 'Security', angle: 180, color: '#D4BB75' },
         { icon: Code, label: 'Dev', angle: 270, color: '#F97316' },
     ];
 
@@ -834,7 +834,7 @@ const TechEcosystemDiagram = memo(() => {
 
             {/* Center Logo */}
             <motion.div
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-2xl z-10"
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-brand-green-500 to-brand-yellow-600 rounded-2xl flex items-center justify-center shadow-2xl z-10"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 3, repeat: Infinity }}
             >
@@ -926,10 +926,10 @@ const About = () => {
     const texts = useMemo(() => ['Intelligent Systems', 'Agentic AI', 'Machine Learning', 'Neural Networks'], []);
 
     const values = useMemo(() => [
-        { icon: Zap, title: 'Innovation', desc: 'Cutting-edge AI solutions', color: 'teal' as const },
-        { icon: Award, title: 'Excellence', desc: 'ISO certified quality', color: 'cyan' as const },
-        { icon: Shield, title: 'Trust', desc: 'Enterprise security', color: 'teal' as const },
-        { icon: Target, title: 'Collaboration', desc: 'Partnership focused', color: 'cyan' as const },
+        { icon: Zap, title: 'Innovation', desc: 'Cutting-edge AI solutions', color: 'brand-green' as const },
+        { icon: Award, title: 'Excellence', desc: 'ISO certified quality', color: 'brand-yellow' as const },
+        { icon: Shield, title: 'Trust', desc: 'Enterprise security', color: 'brand-green' as const },
+        { icon: Target, title: 'Collaboration', desc: 'Partnership focused', color: 'brand-yellow' as const },
     ], []);
 
     const features = useMemo(() => [
@@ -1045,10 +1045,10 @@ const About = () => {
                             className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 text-gray-900 leading-tight"
                         >
                             Revolutionizing AI Solutions with{' '}
-                            <span className="text-teal-500 relative inline-block">
+                            <span className="text-brand-green-500 relative inline-block">
                                 <TypewriterText texts={texts} />
                                 <motion.span
-                                    className="absolute -bottom-2 left-0 h-1.5 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-full"
+                                    className="absolute -bottom-2 left-0 h-1.5 bg-gradient-to-r from-brand-green-400 to-brand-yellow-400 rounded-full"
                                     initial={{ width: 0 }}
                                     animate={{ width: '100%' }}
                                     transition={{ delay: 0.5, duration: 0.8 }}
@@ -1110,7 +1110,7 @@ const About = () => {
                                 <motion.div key={i} variants={fadeUp}>
                                     <TiltCard color={i % 2 === 0 ? 'teal' : 'cyan'}>
                                         <div className="p-6 text-center">
-                                            <div className="text-3xl md:text-4xl font-bold text-teal-600 mb-1">
+                                            <div className="text-3xl md:text-4xl font-bold text-brand-green-600 mb-1">
                                                 <Counter value={s.value} suffix={s.suffix} />
                                             </div>
                                             <div className="text-sm text-gray-500">{s.label}</div>
@@ -1176,8 +1176,8 @@ const About = () => {
                                 <div className="absolute bottom-0 left-[-1px] w-[1px] h-8 bg-black"></div>
 
                                 <div className="flex flex-wrap gap-4">
-                                    <MagneticButton variant="primary" className="!bg-gray-950 !text-white hover:!bg-teal-600 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase">
-                                        <span className="flex items-center gap-2">VIEW OUR AGENT PLATFORM <span className="text-teal-400">•</span></span>
+                                    <MagneticButton variant="primary" className="!bg-gray-950 !text-white hover:!bg-brand-green-600 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase">
+                                        <span className="flex items-center gap-2">VIEW OUR AGENT PLATFORM <span className="text-brand-green-400">•</span></span>
                                     </MagneticButton>
 
                                     <MagneticButton variant="secondary" className="!bg-transparent !border-gray-900 !text-gray-900 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase hover:!bg-gray-50">
@@ -1213,14 +1213,14 @@ const About = () => {
                                 >
                                     <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50">
                                         <div className="text-2xl font-bold tracking-tight text-gray-900">
-                                            Frostrek<span className="text-teal-500">.ai</span>
+                                            Frostrek<span className="text-brand-green-500">.ai</span>
                                         </div>
                                     </div>
                                 </motion.div>
                             </div>
 
                             {/* Subtle Decorative Elements */}
-                            <div className="absolute -top-12 -right-12 w-64 h-64 bg-teal-50/30 rounded-full blur-3xl -z-10"></div>
+                            <div className="absolute -top-12 -right-12 w-64 h-64 bg-brand-green-50/30 rounded-full blur-3xl -z-10"></div>
                             <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-blue-50/30 rounded-full blur-3xl -z-10"></div>
                         </motion.div>
                     </div>
@@ -1252,7 +1252,7 @@ const About = () => {
 
                     <div className="relative max-w-5xl mx-auto">
                         {/* Vertical Line */}
-                        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-500/0 via-teal-500/50 to-teal-500/0 md:-translate-x-1/2"></div>
+                        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-green-500/0 via-brand-green-500/50 to-brand-green-500/0 md:-translate-x-1/2"></div>
 
                         {TIMELINE_DATA.map((item, i) => (
                             <motion.div
@@ -1264,8 +1264,8 @@ const About = () => {
                                 className={`relative flex items-center gap-8 mb-16 last:mb-0 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                             >
                                 {/* Timeline Dot (Center) */}
-                                <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-teal-500 shadow-[0_0_0_4px_rgba(20,184,166,0.2)] z-10 md:-translate-x-1/2 translate-x-[-7px] md:translate-x-[-8px]">
-                                    <div className="absolute inset-0 bg-teal-400 animate-ping rounded-full opacity-75"></div>
+                                <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-brand-green-500 shadow-[0_0_0_4px_rgba(176,117,82,0.2)] z-10 md:-translate-x-1/2 translate-x-[-7px] md:translate-x-[-8px]">
+                                    <div className="absolute inset-0 bg-brand-green-400 animate-ping rounded-full opacity-75"></div>
                                 </div>
 
                                 {/* Content Card */}
@@ -1340,7 +1340,7 @@ const About = () => {
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="inline-block px-4 py-2 bg-gradient-to-r from-teal-100 to-cyan-100 text-teal-700 rounded-full text-sm font-semibold mb-4"
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-brand-green-100 to-brand-green-200 text-brand-green-700 rounded-full text-sm font-semibold mb-4"
                         >
                             How We Work
                         </motion.span>
@@ -1382,7 +1382,7 @@ const About = () => {
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="inline-block px-4 py-2 bg-teal-100 text-teal-700 rounded-full text-sm font-semibold mb-4"
+                            className="inline-block px-4 py-2 bg-brand-green-100 text-brand-green-700 rounded-full text-sm font-semibold mb-4"
                         >
                             Meet the Team
                         </motion.span>
@@ -1427,7 +1427,7 @@ const About = () => {
                                 <TiltCard color={v.color}>
                                     <div className="p-6 text-center">
                                         <motion.div
-                                            className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 ${v.color === 'teal' ? 'bg-gradient-to-br from-teal-400 to-teal-600' : 'bg-gradient-to-br from-cyan-400 to-cyan-600'}`}
+                                            className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 ${v.color === 'teal' ? 'bg-gradient-to-br from-brand-green-400 to-brand-green-600' : 'bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600'}`}
                                             whileHover={{ rotate: 10, scale: 1.1 }}
                                         >
                                             <v.icon className="w-7 h-7 text-white" />
@@ -1456,7 +1456,7 @@ const About = () => {
                                 <TiltCard color={i % 2 === 0 ? 'teal' : 'cyan'}>
                                     <div className="p-6 flex gap-5">
                                         <motion.span
-                                            className={`text-4xl font-bold ${i % 2 === 0 ? 'text-teal-500' : 'text-cyan-500'}`}
+                                            className={`text-4xl font-bold ${i % 2 === 0 ? 'text-brand-green-500' : 'text-brand-yellow-500'}`}
                                             whileHover={{ scale: 1.2, rotate: -5 }}
                                         >
                                             {f.num}
@@ -1464,7 +1464,7 @@ const About = () => {
                                         <div>
                                             <h3 className="font-bold text-gray-900 mb-1">{f.title}</h3>
                                             <p className="text-gray-600 text-sm mb-2">{f.desc}</p>
-                                            <span className={`text-xs font-semibold ${i % 2 === 0 ? 'text-teal-600' : 'text-cyan-600'}`}>{f.stat} →</span>
+                                            <span className={`text-xs font-semibold ${i % 2 === 0 ? 'text-brand-green-600' : 'text-brand-yellow-600'}`}>{f.stat} →</span>
                                         </div>
                                     </div>
                                 </TiltCard>
@@ -1490,7 +1490,7 @@ const About = () => {
                                     <motion.div
                                         key={i}
                                         className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-300 ${activeOffice === i
-                                            ? 'bg-white shadow-lg border-l-4 border-teal-500'
+                                            ? 'bg-white shadow-lg border-l-4 border-brand-green-500'
                                             : 'bg-white/60 hover:bg-white hover:shadow-md border-l-4 border-transparent'
                                             }`}
                                         onClick={() => setActiveOffice(i)}
@@ -1503,14 +1503,14 @@ const About = () => {
                                             className="w-8 h-6 object-cover rounded shadow-sm"
                                         />
                                         <div>
-                                            <div className={`font-semibold transition-colors ${activeOffice === i ? 'text-teal-600' : 'text-gray-900'}`}>
+                                            <div className={`font-semibold transition-colors ${activeOffice === i ? 'text-brand-green-600' : 'text-gray-900'}`}>
                                                 {o.city}
                                             </div>
                                             <div className="text-xs text-gray-500">{o.country}</div>
                                         </div>
                                         {activeOffice === i && (
                                             <motion.div
-                                                className="ml-auto w-2 h-2 rounded-full bg-teal-500"
+                                                className="ml-auto w-2 h-2 rounded-full bg-brand-green-500"
                                                 layoutId="activeIndicator"
                                                 initial={{ scale: 0 }}
                                                 animate={{ scale: 1 }}
@@ -1553,13 +1553,13 @@ const About = () => {
 
                                     <div className="space-y-4 flex-1">
                                         {/* Address Card */}
-                                        <div className="p-4 border border-gray-200 rounded-xl hover:border-teal-200 hover:shadow-sm transition-all">
+                                        <div className="p-4 border border-gray-200 rounded-xl hover:border-brand-green-200 hover:shadow-sm transition-all">
                                             <div className="flex gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-50 to-cyan-50 flex items-center justify-center flex-shrink-0 border border-teal-100">
-                                                    <MapPin className="w-5 h-5 text-teal-600" />
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-green-50 to-brand-green-50 flex items-center justify-center flex-shrink-0 border border-brand-green-100">
+                                                    <MapPin className="w-5 h-5 text-brand-green-600" />
                                                 </div>
                                                 <div>
-                                                    <div className="text-xs text-teal-600 font-semibold mb-1 uppercase tracking-wide">Address</div>
+                                                    <div className="text-xs text-brand-green-600 font-semibold mb-1 uppercase tracking-wide">Address</div>
                                                     <div className="text-sm text-gray-700 leading-relaxed">
                                                         {offices[activeOffice].address}
                                                     </div>
@@ -1568,13 +1568,13 @@ const About = () => {
                                         </div>
 
                                         {/* Contact Card */}
-                                        <div className="p-4 border border-gray-200 rounded-xl hover:border-teal-200 hover:shadow-sm transition-all">
+                                        <div className="p-4 border border-gray-200 rounded-xl hover:border-brand-green-200 hover:shadow-sm transition-all">
                                             <div className="flex gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-50 to-cyan-50 flex items-center justify-center flex-shrink-0 border border-teal-100">
-                                                    <Phone className="w-5 h-5 text-teal-600" />
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-green-50 to-brand-green-50 flex items-center justify-center flex-shrink-0 border border-brand-green-100">
+                                                    <Phone className="w-5 h-5 text-brand-green-600" />
                                                 </div>
                                                 <div>
-                                                    <div className="text-xs text-teal-600 font-semibold mb-1 uppercase tracking-wide">Contact</div>
+                                                    <div className="text-xs text-brand-green-600 font-semibold mb-1 uppercase tracking-wide">Contact</div>
                                                     <div className="text-sm text-gray-700">
                                                         {offices[activeOffice].phone}
                                                     </div>
@@ -1593,7 +1593,7 @@ const About = () => {
                                         whileTap={{ scale: 0.98 }}
                                     >
                                         GET DIRECTIONS
-                                        <span className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse" />
+                                        <span className="w-1.5 h-1.5 bg-brand-green-400 rounded-full animate-pulse" />
                                     </motion.a>
                                 </motion.div>
                             </div>

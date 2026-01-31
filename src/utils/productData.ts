@@ -183,7 +183,7 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
         subtitle: 'Scalable Intelligence for Business',
         description: 'Leverage our full suite of AI tools to modernize your entire operation. From ERP automation to predictive analytics, we build the future of your business.',
         badge: 'Enterprise Grade',
-        heroImage: '/auto.png',
+        heroImage: '/enterprise_ai_suite.png',
         statistics: [
             { value: '100%', label: 'Customizable', icon: Settings },
             { value: '99.9%', label: 'Uptime SLA', icon: Server },

@@ -6,6 +6,9 @@ import { PRODUCT_DATA } from '../utils/productData';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import CuteBackground from '../components/ui/CuteBackground';
+import { ImpactMetrics } from '../components/product/ImpactMetrics';
+import { WorkflowBuilder } from '../components/product/WorkflowBuilder';
+import { CapabilitiesSystem } from '../components/product/CapabilitiesSystem';
 
 const ProductPage = () => {
     const location = useLocation();
@@ -19,7 +22,7 @@ const ProductPage = () => {
     if (!product) return null;
 
     return (
-        <div className="pt-20 relative min-h-screen">
+        <div className="relative min-h-screen">
             {/* CuteBackground - placed at root level with proper z-indexing */}
             <CuteBackground />
 
@@ -128,84 +131,37 @@ const ProductPage = () => {
                         <p className="text-gray-600 max-w-2xl mx-auto text-lg">Real results from companies that switched to {product.title}.</p>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-                        {product.statistics?.map((stat, idx) => (
-                            <div key={idx} className="text-center group">
-                                <div className="mb-6 inline-flex p-4 rounded-2xl bg-white group-hover:bg-brand-green-100 transition-colors duration-300 shadow-sm">
-                                    {stat.icon && <stat.icon className="w-8 h-8 text-brand-green-600" />}
-                                </div>
-                                <h3 className="text-5xl md:text-6xl font-sans font-bold mb-2 text-brand-green-600">
-                                    {stat.value}
-                                </h3>
-                                <p className="text-gray-600 font-medium">{stat.label}</p>
-                            </div>
-                        ))}
+                    <div className="mt-12">
+                        <ImpactMetrics statistics={product.statistics || []} />
                     </div>
                 </div>
             </section>
 
-            {/* 3. Process Section - "Simplify Creation" */}
-            <section className="py-24 bg-white">
-                <div className="container mx-auto px-4 md:px-6">
-                    <div className="text-center mb-20">
+            {/* 3. Workflow / Process Section - SIMPLIFY YOUR WORKFLOW */}
+            <section className="py-24 bg-white relative overflow-hidden">
+                <div className="container mx-auto px-4 md:px-6 relative z-10">
+                    <div className="text-center mb-16">
                         <span className="text-brand-green-600 font-bold tracking-widest uppercase text-sm mb-4 block">Workflow</span>
-                        <h2 className="text-4xl md:text-5xl font-sans font-bold text-gray-900">Simplify Your Workflow</h2>
+                        <h2 className="text-4xl md:text-5xl font-sans font-bold text-gray-900 mb-6">Simplify Your Workflow</h2>
+                        <p className="text-gray-600 max-w-2xl mx-auto text-lg">From concept to execution, we streamline every step.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {product.process?.map((step, idx) => (
-                            <div key={idx} className="relative p-8 rounded-[2rem] bg-white border border-gray-100 hover:border-brand-green-200 hover:shadow-2xl hover:shadow-brand-green-500/10 transition-all duration-300 group">
-                                <span className="absolute top-8 right-8 text-6xl font-sans font-bold text-gray-100 group-hover:text-brand-green-50 transition-colors pointer-events-none select-none">
-                                    {step.step}
-                                </span>
-                                <div className="w-12 h-12 rounded-xl bg-brand-green-100 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
-                                    <div className="w-3 h-3 rounded-full bg-brand-green-600" />
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">{step.title}</h3>
-                                <p className="text-gray-600 leading-relaxed">{step.description}</p>
-                            </div>
-                        ))}
-                    </div>
+                    <WorkflowBuilder steps={product.process || []} />
                 </div>
             </section>
 
             {/* 4. Experience Zone / Capabilities */}
-            <section className="py-24 bg-brand-green-50/30">
+            <section className="py-24 bg-brand-green-50/30 overflow-hidden">
                 <div className="container mx-auto px-4 md:px-6">
-                    <div className="flex flex-col md:flex-row gap-16 items-center">
-                        <div className="w-full md:w-5/12">
-                            <span className="text-brand-green-600 font-bold tracking-widest uppercase text-sm mb-4 block">Capabilities</span>
-                            <h2 className="text-4xl md:text-5xl font-serif text-gray-900 mb-8">
-                                Everything you need to <br className="hidden md:block" />
-                                <span className="text-brand-green-600 italic">scale effortlessly.</span>
-                            </h2>
-                            <div className="space-y-6">
-                                {product.features?.map((feature, idx) => (
-                                    <div key={idx} className="flex gap-4 p-4 rounded-2xl hover:bg-white transition-colors duration-300 cursor-default group">
-                                        <div className="w-12 h-12 rounded-xl bg-brand-green-100 flex items-center justify-center flex-shrink-0 group-hover:bg-brand-green-600 transition-colors">
-                                            {feature.icon && <feature.icon className="w-6 h-6 text-brand-green-700 group-hover:text-white" />}
-                                        </div>
-                                        <div>
-                                            <h4 className="text-xl font-bold text-gray-900 mb-1">{feature.title}</h4>
-                                            <p className="text-gray-600">{feature.description}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="w-full md:w-7/12">
-                            <div className="relative">
-                                <div className="absolute inset-0 bg-gradient-to-tr from-brand-green-400 to-blue-400 rounded-[2.5rem] rotate-3 opacity-20 blur-2xl" />
-                                <div className="relative rounded-[2.5rem]">
-                                    <img
-                                        src={product.demoImage || "/saas_dashboard_ui.png"}
-                                        alt="Dashboard Interface"
-                                        className="w-full h-auto rounded-[2rem] transform hover:scale-[1.02] transition-transform duration-500"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                    <div className="mb-16">
+                        <span className="text-brand-green-600 font-bold tracking-widest uppercase text-sm mb-4 block">Capabilities</span>
+                        <h2 className="text-4xl md:text-5xl font-serif text-gray-900 leading-tight">
+                            Everything you need to <br className="hidden md:block" />
+                            <span className="text-brand-green-600 italic">scale effortlessly.</span>
+                        </h2>
                     </div>
+
+                    <CapabilitiesSystem features={product.features || []} />
                 </div>
             </section>
 
