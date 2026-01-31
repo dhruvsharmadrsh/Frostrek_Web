@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useMotionValue, AnimatePresence } from 'framer-motion';
-import { Target, Award, Zap, Shield, Globe, MapPin, Phone, ArrowRight, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, MousePointer2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, ChevronDown } from 'lucide-react';
+import { Target, Award, Zap, Shield, Globe, MapPin, Phone, ArrowRight, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, MousePointer2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, ChevronDown, type LucideIcon } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useRef, useState, useEffect, useMemo, memo } from 'react';
 import { TIMELINE_DATA } from '../utils/aboutData';
@@ -339,7 +339,7 @@ const Counter = memo(({ value, suffix = '' }: { value: number; suffix?: string }
 });
 
 // ============ FLOATING ICON ============
-const FloatingIcon = memo(({ icon: Icon, delay, x, y }: { icon: React.ElementType; delay: number; x: string; y: string }) => (
+const FloatingIcon = memo(({ icon: Icon, delay, x, y }: { icon: LucideIcon; delay: number; x: string; y: string }) => (
     <motion.div
         className="absolute w-10 h-10 bg-white/80 backdrop-blur rounded-xl shadow-lg flex items-center justify-center border border-brand-green-500/20"
         style={{ left: x, top: y }}
@@ -462,7 +462,7 @@ const CheckItem = memo(({ text, delay }: { text: string; delay: number }) => (
 ));
 
 // ============ TECH STACK ICON ============
-const TechIcon = memo(({ icon: Icon, label, delay }: { icon: React.ElementType; label: string; delay: number }) => {
+const TechIcon = memo(({ icon: Icon, label, delay }: { icon: LucideIcon; label: string; delay: number }) => {
     const [hover, setHover] = useState(false);
 
     return (

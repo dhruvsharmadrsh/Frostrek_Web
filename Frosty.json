@@ -1,0 +1,621 @@
+{
+  "name": "Frosty",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Frosty ❄️. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1328,
+        -64
+      ],
+      "id": "72724f6b-7897-4810-b3d3-375affdc7821",
+      "name": "When chat message received",
+      "webhookId": "72d274ae-598c-4a3e-ae08-ff367afbf369"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "=You are Frosty — the official AI assistant of Frostrek LLP.\n\nMission:\nAssist website visitors by providing information about Frostrek’s services, vision, operations, team, partnerships, academic collaborations, talent/career offerings, and contact information. Guide users to relevant website sections and help them understand what Frostrek can do for them.\n\nYour Knowledge:\n{{ $json.services }}\n{{ $json.about }}\n{{ $json.benefits }}\n{{ $json.team_leadership }}\n{{ $json.academic }}\n{{ $json.navigation }}\n{{ $json.blogs }}\n{{ $json.industry_partners }}\n{{ $('knowledge extractor').item.json['Talent Hunt '] }}\n{{ $json.faq }}\n{{ $json.contact }}\n{{ $json.greeting }}\n{{ $json.client_team_fedback }}\nIntent: {{ $json.intent }}\n\nAllowed Domains of Conversation:\n- Frostrek services & offerings\n- Sales enquiries\n- Partnership enquiries\n- Support enquiries\n- General corporate information\n- Academic / Industry collaborations\n- Talent & career opportunities\n- Navigation guidance across Frostrek sections\n- Contact information\n- Project development discussion (scoping stage only)\n\nSTRICT REFUSAL POLICY (CRITICAL):\nIf the user asks anything outside Frostrek or its knowledge base (e.g., world facts, politics, math, coding, generic chat, personal advice, competitor details, unrelated companies, etc.), respond with:\n\n“Sorry — I can only assist with information related to Frostrek LLP.”\n\nNever answer or speculate outside Frostrek’s domain.\nNever hallucinate or invent information.\nIf unsure, ask clarifying questions or politely decline.\n\nNavigation Framework:\nIf the user asks to explore, view, locate, or navigate a topic or section:\n1. Identify which section it matches (services, team, contact, careers, blogs, etc.)\n2. Summarize what that section contains\n3. Suggest the correct section name\n4. Ask if they would like more details or to proceed\n\nSales / Partnership Intent Handling:\nIf user intends a sales, partnership, or collaboration discussion:\n- Ask clarifying questions such as:\n  • “What industry are you in?”\n  • “What type of problem or goal are you trying to solve?”\n  • “What is the expected timeline?”\n  • “Are you exploring partnerships or purchasing services?”\n- After clarifications, guide them to contact information.\n\nProject Development Intent Handling (Important):\nIf user asks for development of a project (software, product, AI, platform, tech, etc.):\n1. Ask for project scope details (requirements gathering):\n   • Project type\n   • Target users / industry\n   • Features or goals\n   • Timeline / urgency\n   • Scale (MVP vs Full Product)\n   • Budget range (optional to ask gently)\n2. Keep response short and structured.\n3. After user provides details, respond:\n   “For full project evaluation and engagement, please contact Frostrek’s official team.”\n4. Provide contact details from Frostrek’s contact field.\n\nSupport Intent:\nIf support intent is detected, ask for:\n- Issue context\n- Type\n- Priority\n- Desired resolution\n\nCareer / Talent Intent:\nIf talent-related questions appear, respond with information from {{ $('knowledge extractor').item.json['Talent Hunt '] }} and ask for relevant details (roles, background, etc.) if needed.\n\nPersona & Style:\n- Professional + Friendly\n- Warm but efficient\n- Structured replies\n- No long essays\n- No filler statements\n- No sarcasm\n- No aggression\n- No jargon overload\n- Never robotic, never overly casual\n\nTone Constraints:\n- 100% English\n- Short, clear, helpful\n- Frostrek brand professionalism\n\nSafety Requirements:\n- Do not answer speculative or opinion-based questions\n- Do not generate content that misrepresents Frostrek\n- Never invent numbers, timelines, or internal details\n- Never impersonate humans or leadership\n\nWhen responding:\n✓ Identify intent (Sales / Navigation / Info / Partnership / Support / Talent / Project / Contact / General)\n✓ Ask clarifying questions when appropriate\n✓ Keep messages concise and meaningful\n\nSession Behavior:\nMaintain context of ongoing conversation but never assume beyond what is said. If user attempts to derail or change topics outside Frostrek, redirect or decline as per refusal policy.\n\nAlways reply as Frosty.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        464,
+        -64
+      ],
+      "id": "f5a5a6a8-2834-4ec4-afa2-b4bd75ddc4b5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 1000
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        600,
+        160
+      ],
+      "id": "b0ae092a-95e7-4d74-ab91-83e7cad92401",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "wGTNTzQVjxvNK7Kn",
+          "name": "Postgres account Testing"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        472,
+        160
+      ],
+      "id": "1eca298c-c8f6-4e94-adc3-927ce0e9db7d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "NsqWrq1RsF5hiz2h",
+          "name": "OpenAi"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  session_id: $json.sessionId,\n  user_id: $json.sessionId,\n  role: \"user\",\n  message: $json.chatInput,\n  timestamp: new Date().toISOString(),\n  channel: \"website\"\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        -64
+      ],
+      "id": "1141efbb-0576-4812-869b-3bfcfea588c0",
+      "name": "formate aligner"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $json.chatInput?.toLowerCase() || ''\n\nfunction detectIntent(text) {\n  if (!text.trim()) return 'general'\n\nif (\n  text.includes('buy') ||\n  text.includes('purchase') ||\n  text.includes('services') ||\n  text.includes('pricing') ||\n  text.includes('quotation') ||\n  text.includes('cost') ||\n  text.includes('need') ||\n  text.includes('project') ||\n  text.includes('sales') ||\n  text.includes('enquiry') ||\n  text.includes('inquiry') ||\n  text.includes('hire') ||\n  text.includes('recruit') ||\n  text.includes('recruiting') ||\n  text.includes('hiring') ||\n  text.includes('consulting')\n) return 'sales'\nif (text.match(/(sales|pricing|quote|hire|recruit|project|services|purchase|need help)/))\n  return 'sales'\n  \n  if (text.includes('issue') || text.includes('problem') || text.includes('support') || text.includes('error') || text.includes('stuck'))\n    return 'support'\n\n  if (text.includes('contact') || text.includes('email') || text.includes('call') || text.includes('reach') || text.includes('talk'))\n    return 'contact'\n\n  if (text.includes('feedback') || text.includes('suggestion') || text.includes('complaint'))\n    return 'feedback'\n\n  if (text.includes('what') || text.includes('who') || text.includes('about') || text.includes('how') || text.includes('why'))\n    return 'info'\n\n  const offTopicWords = ['love', 'biryani', 'game', 'song', 'cricket', 'elon', 'bill gates']\n  if (offTopicWords.some(w => text.includes(w)))\n    return 'off-topic'\n\n  return 'general'\n}\n\nreturn {\n  chatInput: $json.chatInput,\n  intent: detectIntent(text)\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -656,
+        -64
+      ],
+      "id": "b41dc522-fa3a-4878-8cf7-a6b11c98f239",
+      "name": "intent"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = items.map(i => i.json);\n\nconst obj = {};\nfor (const row of rows) {\n  obj[row.Key] = row.value;\n}\n\nreturn [{ json: obj }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -208,
+        -64
+      ],
+      "id": "509c2c8c-0719-47bc-8495-7f19eb7d65a5",
+      "name": "sheet json format"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf0f6860-8a60-40fd-9f4d-88fcd787e99c",
+              "name": "services",
+              "value": "={{ $json.services }}",
+              "type": "string"
+            },
+            {
+              "id": "550bd0c0-9167-4650-937d-95c0cbb635d8",
+              "name": "about",
+              "value": "={{ $json.about }}",
+              "type": "string"
+            },
+            {
+              "id": "3dea1916-e8fc-44ea-8a7d-b8f024eaddaf",
+              "name": "benefits",
+              "value": "={{ $json['benefits '] }}",
+              "type": "string"
+            },
+            {
+              "id": "dd213a12-c59b-4bbf-84e5-d5fd02bd1bcc",
+              "name": "contact",
+              "value": "={{ $json.contact }}",
+              "type": "string"
+            },
+            {
+              "id": "ab4733dc-b463-46d2-806a-aa8d8ce6706c",
+              "name": "Greeting",
+              "value": "={{ $json.greeting }}",
+              "type": "string"
+            },
+            {
+              "id": "c7041dd4-4ada-4619-b8ea-48779ba3def8",
+              "name": "intent",
+              "value": "={{ $('intent').first().json.intent }}",
+              "type": "string"
+            },
+            {
+              "id": "171fb41a-6c10-49d7-a859-01f858f7c52d",
+              "name": "Campus & Academic Collaborations",
+              "value": "={{ $json['Campus & Academic Collaborations'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6049b038-1494-417f-84d8-1dc5abcc150d",
+              "name": "Team & Leadership",
+              "value": "={{ $json['Team & Leadership'] }}",
+              "type": "string"
+            },
+            {
+              "id": "5cfcd8e3-77eb-476f-be9f-e3e8592b57c7",
+              "name": "FAQ",
+              "value": "={{ $json.FAQ }}",
+              "type": "string"
+            },
+            {
+              "id": "2d6d2a67-e379-4145-a8ad-7e3b4cc3739f",
+              "name": "Talent Hunt ",
+              "value": "={{ $json['Talent Hunt '] }}",
+              "type": "string"
+            },
+            {
+              "id": "899e789f-7c9b-461e-be00-4209b83f5942",
+              "name": "navigations",
+              "value": "={{ $json.navigations }}",
+              "type": "string"
+            },
+            {
+              "id": "e5b5459b-33ba-4403-a7f4-3d98939f4e8b",
+              "name": "Industry Partners",
+              "value": "={{ $json['Industry Partners'] }}",
+              "type": "string"
+            },
+            {
+              "id": "e9f5dba8-03ee-4476-b715-b74ffb7d50f6",
+              "name": "Client & Team Feedback",
+              "value": "={{ $json['Client & Team Feedback'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        16,
+        -64
+      ],
+      "id": "1cef651f-147d-425a-a4dc-a8ca7d66bd89",
+      "name": "knowledge extractor"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1-8rNAwFbGi_3R9V1Y8fUppCoJc1UPYdCZGXB5IgsifI",
+          "mode": "list",
+          "cachedResultName": "Frostrek-Knowledge",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-8rNAwFbGi_3R9V1Y8fUppCoJc1UPYdCZGXB5IgsifI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Knowledge",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-8rNAwFbGi_3R9V1Y8fUppCoJc1UPYdCZGXB5IgsifI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -432,
+        -64
+      ],
+      "id": "323e2d47-3727-4ba1-b780-1e114191cf59",
+      "name": "DATA BASE",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5i1oaDqcJREojcbd",
+          "name": "Google Sheets testing"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      // User Input\n      chatInput: $('When chat message received').first().json.chatInput,\n\n      // Knowledge Base\n      services: $('knowledge extractor').first().json.services,\n      about: $('knowledge extractor').first().json.about,\n      benefits: $('knowledge extractor').first().json.benefits,\n      contact: $('knowledge extractor').first().json.contact,\n      greeting: $('knowledge extractor').first().json.greeting,\n\n      team_leadership: $('knowledge extractor').first().json['Team & Leadership'],\n      academic: $('knowledge extractor').first().json['Campus & Academic Collaborations'],\n      navigation: $('knowledge extractor').first().json.navigations,\n      blogs: $('knowledge extractor').first().json.Blogs,\n      industry_partners: $('knowledge extractor').first().json['Industry Partners'],\n      talent_hunt: $('knowledge extractor').first().json['Talent Hunt'],\n     client_team_fedback: $('knowledge extractor').first().json['Client & Team Feedback'],\n      faq: $('knowledge extractor').first().json['FAQ'],\n\n      // Secondary field renaming (if duplicates present)\n      benefits2: $('knowledge extractor').first().json.benefits2 || null,\n      greeting2: $('knowledge extractor').first().json.greeting2 || null,\n\n      // AI detected intent\n      intent: $('intent').first().json.intent || \"general\",\n\n      // Metadata (optional)\n      timestamp: new Date().toISOString(),\n      source: \"knowledge_sheet_v1\"\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        -64
+      ],
+      "id": "32b4f2c9-6f6a-47aa-a512-4752323e3690",
+      "name": "Knowledge extractor format"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "p2mXK7Wbtsz8EOYA",
+          "mode": "list",
+          "cachedResultName": "user data",
+          "cachedResultUrl": "/projects/jtUnQfYKh4ewr5GO/datatables/p2mXK7Wbtsz8EOYA"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ $json.session_id }}",
+            "timestamp": "={{ $json.timestamp }}",
+            "user_id": "={{ $json.user_id }}",
+            "role": "={{ $json.role }}",
+            "message": "={{ $json.message }}",
+            "channel": "={{ $json.channel }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -880,
+        -64
+      ],
+      "id": "16447790-3417-4f1e-b897-0881fe8fb3ce",
+      "name": "user input log"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    session_id: $('When chat message received').first().json.sessionId,\n    user_id: $('When chat message received').first().json.sessionId,\n    role: \"bot\",\n    message: $json.output,\n    timestamp: new Date().toISOString(),\n    channel: \"website\",\n    intent: $('intent').first().json.intent ?? null\n  }\n}];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        816,
+        -64
+      ],
+      "id": "1cae831b-2d9c-442c-a062-a36db58b08de",
+      "name": "output format aligner"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "LhxZbPHdmSz98uR9",
+          "mode": "list",
+          "cachedResultName": "BAsic logging",
+          "cachedResultUrl": "/projects/jtUnQfYKh4ewr5GO/datatables/LhxZbPHdmSz98uR9"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ $json.session_id }}",
+            "user_id": "={{ $json.user_id }}",
+            "role": "={{ $json.role }}",
+            "message": "={{ $json.message }}",
+            "channel": "={{ $json.channel }}",
+            "timestamp": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        -64
+      ],
+      "id": "d4c8113b-adb4-4722-9eb9-fed25c9ed961",
+      "name": "output logs"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "formate aligner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "output format aligner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "formate aligner": {
+      "main": [
+        [
+          {
+            "node": "user input log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "intent": {
+      "main": [
+        [
+          {
+            "node": "DATA BASE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sheet json format": {
+      "main": [
+        [
+          {
+            "node": "knowledge extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "knowledge extractor": {
+      "main": [
+        [
+          {
+            "node": "Knowledge extractor format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DATA BASE": {
+      "main": [
+        [
+          {
+            "node": "sheet json format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge extractor format": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "user input log": {
+      "main": [
+        [
+          {
+            "node": "intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "output format aligner": {
+      "main": [
+        [
+          {
+            "node": "output logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "output logs": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "8c8d8474-118e-4e1f-adc0-f9d6f722f9f9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a0df640705d3c492bc49f452d23a8c6705d16a65dc5f84e6a13fb86f1374d867"
+  },
+  "id": "eNP7pJ76mYNb48wWKAJ6K",
+  "tags": []
+}
