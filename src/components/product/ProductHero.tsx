@@ -5,13 +5,11 @@ import Button from '../ui/Button';
 
 const ProductHero = ({
     description,
-    tagline,
-    demoImage
+    tagline
 }: {
     title: string,
     description: string,
-    tagline: string,
-    demoImage?: string
+    tagline: string
 }) => {
     return (
         <section className="relative min-h-[90vh] flex items-center pt-32 pb-20 overflow-hidden bg-transparent">
