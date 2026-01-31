@@ -266,7 +266,7 @@ const MagneticButton = memo(({ children, className, onClick, variant = 'primary'
 const TiltCard = memo(({ children, className, color = 'teal' }: {
     children: React.ReactNode;
     className?: string;
-    color?: 'teal' | 'cyan'
+    color?: 'teal' | 'cyan' | 'brand-green' | 'brand-yellow'
 }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [hover, setHover] = useState(false);
@@ -1427,7 +1427,7 @@ const About = () => {
                                 <TiltCard color={v.color}>
                                     <div className="p-6 text-center">
                                         <motion.div
-                                            className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 ${v.color === 'teal' ? 'bg-gradient-to-br from-brand-green-400 to-brand-green-600' : 'bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600'}`}
+                                            className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 ${v.color === 'brand-green' ? 'bg-gradient-to-br from-brand-green-400 to-brand-green-600' : 'bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600'}`}
                                             whileHover={{ rotate: 10, scale: 1.1 }}
                                         >
                                             <v.icon className="w-7 h-7 text-white" />
