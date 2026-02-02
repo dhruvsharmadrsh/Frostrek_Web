@@ -3,6 +3,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,6 +41,7 @@ const TESTIMONIALS = [
 const ROTATION_INTERVAL = 4000; // 4.5 seconds per testimonial
 
 const TestimonialsSection = () => {
+    const { theme } = useTheme();
     const sectionRef = useRef<HTMLElement>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -142,7 +144,7 @@ const TestimonialsSection = () => {
     return (
         <section
             ref={sectionRef}
-            className="py-16 relative overflow-hidden bg-[#FDFBF7]"
+            className={`py-16 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-[#FDFBF7]'}`}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
@@ -156,9 +158,9 @@ const TestimonialsSection = () => {
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 {/* Header */}
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-light text-gray-800">
+                    <h2 className={`text-3xl md:text-4xl font-light transition-colors ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>
                         Don't take our word for it. <br />
-                        <span className="font-bold italic text-[#B07552]">Take theirs...</span>
+                        <span className={`font-bold italic ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`}>Take theirs...</span>
                     </h2>
                 </div>
 
@@ -192,14 +194,14 @@ const TestimonialsSection = () => {
                         >
                             {/* Author Info */}
                             <div className="mb-6">
-                                <h3 className="text-xl font-bold text-[#8A5A35]">{current.author}</h3>
-                                <p className="text-sm text-gray-500">{current.role}</p>
+                                <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-[#8A5A35]'}`}>{current.author}</h3>
+                                <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>{current.role}</p>
                             </div>
 
                             {/* Quote */}
                             <div className="relative">
-                                <Quote className="absolute -top-4 -left-4 w-8 h-8 text-[#B07552] opacity-30" />
-                                <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-medium">
+                                <Quote className={`absolute -top-4 -left-4 w-8 h-8 opacity-30 ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`} />
+                                <p className={`text-lg md:text-xl leading-relaxed font-medium ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
                                     {current.quote}
                                 </p>
                             </div>

@@ -6,8 +6,10 @@ import { SOLUTION_DATA } from '../utils/solutionData';
 import Button from '../components/ui/Button';
 import CommonChallenges from '../components/solution/CommonChallenges';
 import FrostrekAdvantage from '../components/solution/FrostrekAdvantage';
+import { useTheme } from '../context/ThemeContext';
 
 const SolutionPage = () => {
+    const { theme } = useTheme();
     const location = useLocation();
     const solution = SOLUTION_DATA[location.pathname] || SOLUTION_DATA['generic'];
 
@@ -18,9 +20,9 @@ const SolutionPage = () => {
     if (!solution) return null;
 
     return (
-        <div className="pt-20">
+        <div className={`pt-20 ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-brand-green-900 text-white pt-24 pb-32">
+            <section className={`relative overflow-hidden text-white pt-24 pb-32 ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-brand-green-900'}`}>
                 <div className="container mx-auto px-4 md:px-6 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         {/* Left Column: Content */}
@@ -28,7 +30,7 @@ const SolutionPage = () => {
                             <motion.div
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="inline-block px-4 py-1.5 rounded-full bg-brand-green-800 border border-brand-green-700 text-brand-green-100 font-medium text-sm mb-6"
+                                className={`inline-block px-4 py-1.5 rounded-full border font-medium text-sm mb-6 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30 text-dark-accent' : 'bg-brand-green-800 border-brand-green-700 text-brand-green-100'}`}
                             >
                                 Industry Solutions
                             </motion.div>
@@ -39,14 +41,14 @@ const SolutionPage = () => {
                                 transition={{ delay: 0.1 }}
                                 className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
                             >
-                                {solution.title}: <br /><span className="text-brand-green-300">{solution.subtitle}</span>
+                                {solution.title}: <br /><span className={theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-300'}>{solution.subtitle}</span>
                             </motion.h1>
 
                             <motion.p
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="text-xl text-brand-green-100 mb-10 leading-relaxed max-w-xl"
+                                className={`text-xl mb-10 leading-relaxed max-w-xl ${theme === 'dark' ? 'text-dark-text-muted' : 'text-brand-green-100'}`}
                             >
                                 {solution.description}
                             </motion.p>
@@ -56,7 +58,7 @@ const SolutionPage = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
                             >
-                                <Button size="lg" className="bg-white text-brand-green-900 hover:bg-gray-100 shadow-xl border-none">
+                                <Button size="lg" className={`shadow-xl border-none ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-white text-brand-green-900 hover:bg-gray-100'}`}>
                                     Book a Demo
                                     <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
@@ -70,31 +72,31 @@ const SolutionPage = () => {
                             transition={{ delay: 0.2, duration: 0.8 }}
                             className="relative hidden lg:block"
                         >
-                            <div className="relative z-10 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 p-6 shadow-2xl">
+                            <div className={`relative z-10 rounded-2xl backdrop-blur-md border p-6 shadow-2xl ${theme === 'dark' ? 'bg-dark-card/50 border-dark-accent/20' : 'bg-white/10 border-white/20'}`}>
                                 {/* Fake Header */}
-                                <div className="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                                <div className={`flex items-center gap-4 mb-6 border-b pb-4 ${theme === 'dark' ? 'border-dark-accent/20' : 'border-white/10'}`}>
                                     <div className="flex gap-2">
                                         <div className="w-3 h-3 rounded-full bg-red-400" />
                                         <div className="w-3 h-3 rounded-full bg-yellow-400" />
                                         <div className="w-3 h-3 rounded-full bg-green-400" />
                                     </div>
-                                    <div className="h-2 w-32 bg-white/20 rounded-full" />
+                                    <div className={`h-2 w-32 rounded-full ${theme === 'dark' ? 'bg-dark-accent/30' : 'bg-white/20'}`} />
                                 </div>
                                 {/* Fake Chart / Content */}
                                 <div className="grid grid-cols-3 gap-4 mb-6">
                                     {[1, 2, 3].map((i) => (
-                                        <div key={i} className="bg-black/20 rounded-lg p-4">
-                                            <div className="h-2 w-8 bg-white/30 rounded mb-2" />
-                                            <div className="h-6 w-16 bg-brand-green-400/80 rounded" />
+                                        <div key={i} className={`rounded-lg p-4 ${theme === 'dark' ? 'bg-dark-bg/50' : 'bg-black/20'}`}>
+                                            <div className={`h-2 w-8 rounded mb-2 ${theme === 'dark' ? 'bg-dark-text/30' : 'bg-white/30'}`} />
+                                            <div className={`h-6 w-16 rounded ${theme === 'dark' ? 'bg-dark-accent/80' : 'bg-brand-green-400/80'}`} />
                                         </div>
                                     ))}
                                 </div>
                                 <div className="flex gap-4 items-end h-32">
-                                    <div className="w-full bg-brand-green-500/30 rounded-t-lg h-[40%]" />
-                                    <div className="w-full bg-brand-green-500/50 rounded-t-lg h-[70%]" />
-                                    <div className="w-full bg-brand-green-500/40 rounded-t-lg h-[50%]" />
-                                    <div className="w-full bg-brand-green-500/60 rounded-t-lg h-[80%]" />
-                                    <div className="w-full bg-brand-green-400 rounded-t-lg h-[65%]" />
+                                    <div className={`w-full rounded-t-lg h-[40%] ${theme === 'dark' ? 'bg-dark-accent/30' : 'bg-brand-green-500/30'}`} />
+                                    <div className={`w-full rounded-t-lg h-[70%] ${theme === 'dark' ? 'bg-dark-accent/50' : 'bg-brand-green-500/50'}`} />
+                                    <div className={`w-full rounded-t-lg h-[50%] ${theme === 'dark' ? 'bg-dark-accent/40' : 'bg-brand-green-500/40'}`} />
+                                    <div className={`w-full rounded-t-lg h-[80%] ${theme === 'dark' ? 'bg-dark-accent/60' : 'bg-brand-green-500/60'}`} />
+                                    <div className={`w-full rounded-t-lg h-[65%] ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-400'}`} />
                                 </div>
                             </div>
 
@@ -102,20 +104,20 @@ const SolutionPage = () => {
                             <motion.div
                                 animate={{ y: [0, -10, 0] }}
                                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                                className="absolute -top-6 -right-6 bg-white rounded-xl p-4 shadow-xl z-20"
+                                className={`absolute -top-6 -right-6 rounded-xl p-4 shadow-xl z-20 ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                                        <CheckCircle2 className="w-6 h-6 text-green-600" />
+                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-green-100'}`}>
+                                        <CheckCircle2 className={`w-6 h-6 ${theme === 'dark' ? 'text-dark-accent' : 'text-green-600'}`} />
                                     </div>
                                     <div>
-                                        <div className="text-xs text-gray-500 font-semibold">Efficiency</div>
-                                        <div className="text-lg font-bold text-gray-900">+127%</div>
+                                        <div className={`text-xs font-semibold ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>Efficiency</div>
+                                        <div className={`text-lg font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>+127%</div>
                                     </div>
                                 </div>
                             </motion.div>
 
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-brand-green-400/20 rounded-full blur-3xl -z-10" />
+                            <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] rounded-full blur-3xl -z-10 ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-400/20'}`} />
                         </motion.div>
                     </div>
                 </div>
@@ -123,7 +125,7 @@ const SolutionPage = () => {
                 {/* Abstract Background with Geometric Patterns */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     {/* Base Gradient */}
-                    <div className="absolute inset-0 bg-brand-green-900" />
+                    <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-brand-green-900'}`} />
 
                     {/* Grid Pattern Overlay */}
                     <div className="absolute inset-0 opacity-[0.03]"
@@ -134,8 +136,8 @@ const SolutionPage = () => {
                     />
 
                     {/* Radial Glows */}
-                    <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-brand-green-600/30 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '4s' }} />
-                    <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-teal-500/20 rounded-full blur-[100px] mix-blend-screen" />
+                    <div className={`absolute top-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full blur-[120px] mix-blend-screen animate-pulse ${theme === 'dark' ? 'bg-dark-accent/30' : 'bg-brand-green-600/30'}`} style={{ animationDuration: '4s' }} />
+                    <div className={`absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full blur-[100px] mix-blend-screen ${theme === 'dark' ? 'bg-amber-500/20' : 'bg-teal-500/20'}`} />
 
                     {/* Diagonal Light Streak */}
                     <div className="absolute top-0 right-0 w-[1000px] h-full bg-gradient-to-l from-white/5 to-transparent skew-x-12 blur-3xl opacity-30" />
@@ -149,17 +151,17 @@ const SolutionPage = () => {
             <FrostrekAdvantage features={solution.features} />
 
             {/* Bottom CTA */}
-            <section className="py-20 bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+            <section className={`py-20 text-white ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-gradient-to-r from-gray-900 to-gray-800'}`}>
                 <div className="container mx-auto px-4 md:px-6 text-center">
-                    <h2 className="text-3xl font-bold mb-6">See {solution.title} in Action</h2>
-                    <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+                    <h2 className={`text-3xl font-bold mb-6 ${theme === 'dark' ? 'text-dark-text' : ''}`}>See {solution.title} in Action</h2>
+                    <p className={`mb-8 max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-300'}`}>
                         Schedule a personalized walkthrough to see exactly how we can solve your specific challenges.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button size="lg" className="bg-brand-green-600 hover:bg-brand-green-700 text-white border-none shadow-lg shadow-brand-green-600/30">
+                        <Button size="lg" className={`border-none shadow-lg ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90 shadow-dark-accent/30' : 'bg-brand-green-600 hover:bg-brand-green-700 text-white shadow-brand-green-600/30'}`}>
                             Book Personalized Demo
                         </Button>
-                        <Button size="lg" variant="outline" className="border-gray-600 text-white hover:bg-gray-800 hover:text-white">
+                        <Button size="lg" variant="outline" className={`${theme === 'dark' ? 'border-dark-accent/50 text-dark-text hover:bg-dark-card hover:text-dark-text' : 'border-gray-600 text-white hover:bg-gray-800 hover:text-white'}`}>
                             View Case Studies
                         </Button>
                     </div>
@@ -170,3 +172,4 @@ const SolutionPage = () => {
 };
 
 export default SolutionPage;
+

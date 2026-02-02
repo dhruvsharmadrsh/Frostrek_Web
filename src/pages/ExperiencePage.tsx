@@ -3,12 +3,15 @@ import { Phone, MessageSquare, Sparkles, Zap, ArrowRight } from 'lucide-react';
 import VoiceCallWidget from '../components/experience/VoiceCallWidget';
 import ChatbotDemo from '../components/experience/ChatbotDemo';
 import CuteBackground from '../components/ui/CuteBackground';
+import { useTheme } from '../context/ThemeContext';
 
 const ExperiencePage = () => {
+    const { theme } = useTheme();
+
     return (
-        <div className="min-h-screen relative overflow-hidden">
+        <div className={`min-h-screen relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
             {/* Background */}
-            <CuteBackground />
+            {theme !== 'dark' && <CuteBackground />}
 
             {/* Hero Section */}
             <section className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8">
@@ -18,19 +21,19 @@ const ExperiencePage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green-50 border border-brand-green-100 mb-6">
-                            <Sparkles className="w-4 h-4 text-brand-green-600" />
-                            <span className="text-sm font-medium text-brand-green-700">Interactive Demo</span>
+                        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-brand-green-50 border-brand-green-100'}`}>
+                            <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
+                            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-700'}`}>Interactive Demo</span>
                         </div>
 
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 font-heading">
+                        <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 font-heading ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>
                             Experience{' '}
-                            <span className="bg-gradient-to-r from-brand-green-500 to-brand-green-700 bg-clip-text text-transparent">
+                            <span className={`bg-clip-text text-transparent ${theme === 'dark' ? 'bg-gradient-to-r from-dark-accent to-amber-400' : 'bg-gradient-to-r from-brand-green-500 to-brand-green-700'}`}>
                                 AI in Action
                             </span>
                         </h1>
 
-                        <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+                        <p className={`text-lg sm:text-xl max-w-2xl mx-auto mb-8 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                             Don't just read about our AI solutions — try them yourself.
                             Test our voice AI and chatbot live, right here.
                         </p>
@@ -50,23 +53,23 @@ const ExperiencePage = () => {
                             className="space-y-6"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-green-400 to-brand-green-600 flex items-center justify-center shadow-lg">
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${theme === 'dark' ? 'bg-gradient-to-br from-dark-accent to-amber-600' : 'bg-gradient-to-br from-brand-green-400 to-brand-green-600'}`}>
                                     <Phone className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-gray-800 font-heading">Voice AI Agent</h2>
-                                    <p className="text-sm text-gray-500">Real-time voice conversation</p>
+                                    <h2 className={`text-2xl font-bold font-heading ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>Voice AI Agent</h2>
+                                    <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>Real-time voice conversation</p>
                                 </div>
                             </div>
 
                             <VoiceCallWidget />
 
-                            <div className="bg-gradient-to-r from-brand-green-50 to-[#fdfbf7] rounded-2xl p-4 border border-brand-green-100">
-                                <h4 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                    <Zap className="w-4 h-4 text-brand-green-600" />
+                            <div className={`rounded-2xl p-4 border ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-gradient-to-r from-brand-green-50 to-[#fdfbf7] border-brand-green-100'}`}>
+                                <h4 className={`font-semibold mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
+                                    <Zap className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                                     What to try:
                                 </h4>
-                                <ul className="text-sm text-gray-600 space-y-1">
+                                <ul className={`text-sm space-y-1 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                                     <li>• Ask about Frostrek's services</li>
                                     <li>• Request a demo or quote</li>
                                     <li>• Inquire about AI solutions</li>
@@ -82,23 +85,23 @@ const ExperiencePage = () => {
                             className="space-y-6"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600 flex items-center justify-center shadow-lg">
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${theme === 'dark' ? 'bg-gradient-to-br from-amber-500 to-orange-600' : 'bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600'}`}>
                                     <MessageSquare className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-gray-800 font-heading">AI Chatbot</h2>
-                                    <p className="text-sm text-gray-500">Text & voice messaging</p>
+                                    <h2 className={`text-2xl font-bold font-heading ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>AI Chatbot</h2>
+                                    <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>Text & voice messaging</p>
                                 </div>
                             </div>
 
                             <ChatbotDemo />
 
-                            <div className="bg-gradient-to-r from-brand-yellow-50 to-[#fdfbf7] rounded-2xl p-4 border border-brand-yellow-100">
-                                <h4 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-brand-yellow-600" />
+                            <div className={`rounded-2xl p-4 border ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-gradient-to-r from-brand-yellow-50 to-[#fdfbf7] border-brand-yellow-100'}`}>
+                                <h4 className={`font-semibold mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
+                                    <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-yellow-600'}`} />
                                     Features:
                                 </h4>
-                                <ul className="text-sm text-gray-600 space-y-1">
+                                <ul className={`text-sm space-y-1 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                                     <li>• Natural language understanding</li>
                                     <li>• Voice message support</li>
                                     <li>• Context-aware responses</li>
@@ -117,23 +120,23 @@ const ExperiencePage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="relative bg-brand-green-600 rounded-3xl p-8 sm:p-12 text-center overflow-hidden"
+                        className={`relative rounded-3xl p-8 sm:p-12 text-center overflow-hidden ${theme === 'dark' ? 'bg-dark-card' : 'bg-brand-green-600'}`}
                     >
                         {/* Glow effects */}
-                        <div className="absolute top-0 left-1/4 w-64 h-64 bg-brand-green-500/20 rounded-full blur-3xl" />
-                        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-brand-yellow-500/20 rounded-full blur-3xl" />
+                        <div className={`absolute top-0 left-1/4 w-64 h-64 rounded-full blur-3xl ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-500/20'}`} />
+                        <div className={`absolute bottom-0 right-1/4 w-64 h-64 rounded-full blur-3xl ${theme === 'dark' ? 'bg-amber-500/20' : 'bg-brand-yellow-500/20'}`} />
 
                         <div className="relative z-10">
-                            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 font-heading">
+                            <h2 className={`text-3xl sm:text-4xl font-bold mb-4 font-heading ${theme === 'dark' ? 'text-dark-text' : 'text-white'}`}>
                                 Ready to Transform Your Business?
                             </h2>
-                            <p className="text-gray-300 mb-8 max-w-xl mx-auto">
+                            <p className={`mb-8 max-w-xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-300'}`}>
                                 Get a personalized demo and see how our AI solutions can
                                 automate your workflows and delight your customers.
                             </p>
                             <motion.a
                                 href="/schedule-demo"
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:from-brand-green-600 hover:to-brand-green-700 transition-all duration-300"
+                                className={`inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white hover:from-brand-green-600 hover:to-brand-green-700'}`}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -149,3 +152,4 @@ const ExperiencePage = () => {
 };
 
 export default ExperiencePage;
+

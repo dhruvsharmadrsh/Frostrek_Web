@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { Users, Brain, Code, Bot, Smartphone, Workflow, CheckCircle, ArrowRight } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
+import { useTheme } from '../context/ThemeContext';
 
 const ServicesPage = () => {
+    const { theme } = useTheme();
     const services = [
         {
             number: "01",
@@ -58,11 +60,11 @@ const ServicesPage = () => {
     ];
 
     return (
-        <div className="min-h-screen relative">
-            <CuteBackground />
+        <div className={`min-h-screen relative transition-colors ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
+            {theme !== 'dark' && <CuteBackground />}
 
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-background via-background-alt to-background">
+            <section className={`relative pt-32 pb-20 overflow-hidden ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-br from-background via-background-alt to-background'}`}>
                 <div className="container mx-auto px-4 md:px-6 relative z-10">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -71,25 +73,25 @@ const ServicesPage = () => {
                         className="max-w-4xl mx-auto text-center"
                     >
                         {/* Badge */}
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="inline-block mb-6"
                         >
-                            <div className="flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-sm border border-brand-green-200/50 rounded-full">
-                                <span className="w-2 h-2 bg-brand-green-600 rounded-full"></span>
-                                <span className="text-sm font-medium text-primary">AI SOLUTIONS</span>
+                            <div className={`flex items-center gap-2 px-4 py-2 backdrop-blur-sm border rounded-full ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-white/70 border-brand-green-200/50'}`}>
+                                <span className={`w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-600'}`}></span>
+                                <span className={`text-sm font-medium ${theme === 'dark' ? 'text-dark-accent' : 'text-primary'}`}>AI SOLUTIONS</span>
                             </div>
                         </motion.div>
 
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6">
-                            Our AI Business <span className="text-brand-green-500">Solutions</span>
+                        <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>
+                            Our AI Business <span className={theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-500'}>Solutions</span>
                         </h1>
-                        <p className="text-lg text-secondary leading-relaxed mb-8">
+                        <p className={`text-lg leading-relaxed mb-8 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-secondary'}`}>
                             At Frostrek AI, we believe that every organization has unique needs when it comes to building, deploying, and scaling intelligent systems. That's why we specialize in delivering customized AI and software solutions designed to align seamlessly with your business goals. Whether you are at the beginning of your AI journey or looking to enhance and operationalize existing systems, we partner with you end to end. Our services span AI model training, data workflows, agentic AI systems, and full-stack application development.
                         </p>
-                        <p className="text-base text-muted leading-relaxed">
+                        <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted/80' : 'text-muted'}`}>
                             From sourcing top AI talent and conducting 5,000+ training and evaluation sessions to building production-ready platforms, AI agents, and workflow automation, we ensure your solutions are not only innovative but also practical and scalable. With deep expertise in Reinforcement Learning from Human Feedback (RLHF) and strong engineering capabilities, we bring human insight and robust development together. This enables organizations to deploy reliable AI systems, integrate them into real-world operations, and adapt confidently in a rapidly evolving landscape.
                         </p>
                     </motion.div>
@@ -97,7 +99,7 @@ const ServicesPage = () => {
             </section>
 
             {/* Core Values Section */}
-            <section className="py-16 relative">
+            <section className={`py-16 relative ${theme === 'dark' ? 'bg-dark-card' : ''}`}>
                 <div className="container mx-auto px-4 md:px-6">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -106,10 +108,10 @@ const ServicesPage = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-12"
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>
                             We work as a family and you are part of it
                         </h2>
-                        <p className="text-xl text-secondary">We are committed to:</p>
+                        <p className={`text-xl ${theme === 'dark' ? 'text-dark-text-muted' : 'text-secondary'}`}>We are committed to:</p>
                     </motion.div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -120,9 +122,9 @@ const ServicesPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className="bg-white/70 backdrop-blur-md border-2 border-brand-green-200/50 rounded-xl p-8 text-center hover:border-brand-green-400/70 hover:shadow-lg hover:shadow-brand-green-500/10 transition-all duration-300"
+                                className={`backdrop-blur-md border-2 rounded-xl p-8 text-center transition-all duration-300 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30 hover:border-dark-accent' : 'bg-white/70 border-brand-green-200/50 hover:border-brand-green-400/70 hover:shadow-lg hover:shadow-brand-green-500/10'}`}
                             >
-                                <h3 className="text-2xl font-bold text-brand-green-600">{value}</h3>
+                                <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`}>{value}</h3>
                             </motion.div>
                         ))}
                     </div>
@@ -130,7 +132,7 @@ const ServicesPage = () => {
             </section>
 
             {/* Main Services Grid */}
-            <section className="py-20 relative">
+            <section className={`py-20 relative ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
                 <div className="container mx-auto px-4 md:px-6">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -139,7 +141,7 @@ const ServicesPage = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>
                             Our Services
                         </h2>
                     </motion.div>
@@ -154,17 +156,17 @@ const ServicesPage = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                                    className="group relative bg-white/70 backdrop-blur-md border-2 border-brand-green-200/50 rounded-xl p-6 hover:border-brand-green-400/70 hover:shadow-xl hover:shadow-brand-green-500/10 transition-all duration-300"
+                                    className={`group relative backdrop-blur-md border-2 rounded-xl p-6 transition-all duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20 hover:border-dark-accent' : 'bg-white/70 border-brand-green-200/50 hover:border-brand-green-400/70 hover:shadow-xl hover:shadow-brand-green-500/10'}`}
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-br from-brand-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl ${theme === 'dark' ? 'bg-gradient-to-br from-dark-accent/10 to-transparent' : 'bg-gradient-to-br from-brand-green-500/10 to-transparent'}`} />
 
                                     <div className="relative">
                                         <div className="flex items-start justify-between mb-4">
-                                            <span className="text-5xl font-bold text-brand-green-500/30">{service.number}</span>
-                                            <Icon className="w-8 h-8 text-brand-green-600" />
+                                            <span className={`text-5xl font-bold ${theme === 'dark' ? 'text-dark-accent/30' : 'text-brand-green-500/30'}`}>{service.number}</span>
+                                            <Icon className={`w-8 h-8 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                                         </div>
-                                        <h3 className="text-xl font-bold text-primary mb-3">{service.title}</h3>
-                                        <p className="text-secondary text-sm leading-relaxed">{service.description}</p>
+                                        <h3 className={`text-xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>{service.title}</h3>
+                                        <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-secondary'}`}>{service.description}</p>
                                     </div>
                                 </motion.div>
                             );
@@ -174,7 +176,7 @@ const ServicesPage = () => {
             </section>
 
             {/* Custom and Bespoke AI Solutions */}
-            <section className="py-20 relative">
+            <section className={`py-20 relative ${theme === 'dark' ? 'bg-dark-card' : ''}`}>
                 <div className="container mx-auto px-4 md:px-6">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -183,10 +185,10 @@ const ServicesPage = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-12"
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>
                             Custom and Bespoke AI Solutions
                         </h2>
-                        <p className="text-lg text-secondary max-w-3xl mx-auto">
+                        <p className={`text-lg max-w-3xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-secondary'}`}>
                             Frostrek AI offers tailored AI services designed to meet your specific business needs. From model creation to optimization, we ensure your AI solutions align with your goals.
                         </p>
                     </motion.div>
@@ -199,9 +201,9 @@ const ServicesPage = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                                className="bg-gradient-to-br from-brand-green-100/40 to-brand-yellow-100/30 border border-brand-green-300/50 rounded-lg p-4 text-center hover:border-brand-green-400/70 hover:shadow-lg hover:shadow-brand-green-500/10 transition-all duration-300"
+                                className={`border rounded-lg p-4 text-center transition-all duration-300 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30 hover:border-dark-accent' : 'bg-gradient-to-br from-brand-green-100/40 to-brand-yellow-100/30 border-brand-green-300/50 hover:border-brand-green-400/70 hover:shadow-lg hover:shadow-brand-green-500/10'}`}
                             >
-                                <p className="text-primary font-semibold text-sm">{solution}</p>
+                                <p className={`font-semibold text-sm ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>{solution}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -320,23 +322,23 @@ const ServicesPage = () => {
             </section>
 
             {/* CTA Section */}
-            <section className="py-20 relative">
+            <section className={`py-20 relative ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
                 <div className="container mx-auto px-4 md:px-6">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="bg-gradient-to-br from-brand-green-500/20 to-brand-yellow-500/10 border-2 border-brand-green-400/50 rounded-2xl p-12 text-center"
+                        className={`border-2 rounded-2xl p-12 text-center ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-gradient-to-br from-brand-green-500/20 to-brand-yellow-500/10 border-brand-green-400/50'}`}
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>
                             Ready to Transform Your Business?
                         </h2>
-                        <p className="text-secondary mb-8 max-w-2xl mx-auto">
+                        <p className={`mb-8 max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-secondary'}`}>
                             Let's discuss how Frostrek AI can help you build intelligent, scalable solutions tailored to your needs.
                         </p>
-                        <motion.button 
-                            className="px-8 py-4 bg-gradient-to-r from-brand-green-500 to-brand-green-600 hover:from-brand-green-600 hover:to-brand-green-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-brand-green-500/30 hover:shadow-brand-green-600/40 inline-flex items-center gap-2"
+                        <motion.button
+                            className={`px-8 py-4 font-semibold rounded-lg transition-all duration-300 shadow-lg inline-flex items-center gap-2 ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90 shadow-dark-accent/30' : 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 hover:from-brand-green-600 hover:to-brand-green-700 text-white shadow-brand-green-500/30 hover:shadow-brand-green-600/40'}`}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.98 }}
                         >

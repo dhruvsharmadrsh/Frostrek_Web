@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -113,6 +114,7 @@ const SOLUTIONS: Solution[] = [
 
 // Mini Demo Components
 const ChatDemo = () => {
+    const { theme } = useTheme();
     const messages = [
         { role: 'user', text: 'How can I track my order?' },
         { role: 'agent', text: 'I can help! Please share your order ID and I\'ll look that up.' },
@@ -120,10 +122,10 @@ const ChatDemo = () => {
     ];
 
     return (
-        <div className="rounded-xl p-4 h-[200px] overflow-hidden border border-gray-300" style={{ backgroundColor: '#f5ece4' }}>
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-300">
+        <div className={`rounded-xl p-4 h-[200px] overflow-hidden border transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}>
+            <div className={`flex items-center gap-2 mb-3 pb-2 border-b ${theme === 'dark' ? 'border-dark-accent/20' : 'border-gray-300'}`}>
                 <div className="w-2 h-2 rounded-full bg-[#B07552] animate-pulse" />
-                <span className="text-xs text-gray-600">Frosty AI Agent</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>Frosty AI Agent</span>
             </div>
             <div className="space-y-3">
                 {messages.map((msg, i) => (
@@ -135,7 +137,7 @@ const ChatDemo = () => {
                         <div
                             className={`max-w-[80%] px-3 py-2 rounded-xl text-xs animate-fade-in ${msg.role === 'user'
                                 ? 'bg-[#B07552] text-white rounded-br-sm'
-                                : 'bg-white text-gray-700 rounded-bl-sm border border-gray-200'
+                                : `${theme === 'dark' ? 'bg-dark-card text-dark-text border-dark-accent/20' : 'bg-white text-gray-700 border-gray-200'} rounded-bl-sm border`
                                 }`}
                             style={{ animationDelay: `${i * 0.8}s` }}
                         >
@@ -145,9 +147,9 @@ const ChatDemo = () => {
                 ))}
                 <div className="flex justify-start">
                     <div className="flex gap-1 px-3 py-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0s' }} />
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0.1s' }} />
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-dark-accent' : 'bg-gray-500'}`} style={{ animationDelay: '0s' }} />
+                        <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-dark-accent' : 'bg-gray-500'}`} style={{ animationDelay: '0.1s' }} />
+                        <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${theme === 'dark' ? 'bg-dark-accent' : 'bg-gray-500'}`} style={{ animationDelay: '0.2s' }} />
                     </div>
                 </div>
             </div>
@@ -156,8 +158,9 @@ const ChatDemo = () => {
 };
 
 const VoiceDemo = () => {
+    const { theme } = useTheme();
     return (
-        <div className="rounded-xl p-4 h-[200px] border border-gray-300 flex flex-col items-center justify-center" style={{ backgroundColor: '#f5ece4' }}>
+        <div className={`rounded-xl p-4 h-[200px] border flex flex-col items-center justify-center transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}>
             <div className="relative mb-4">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B07552] to-[#8A5A35] flex items-center justify-center animate-pulse">
                     <Volume2 className="w-8 h-8 text-white" />
@@ -177,12 +180,13 @@ const VoiceDemo = () => {
                     />
                 ))}
             </div>
-            <span className="text-xs text-gray-600">Voice AI responding...</span>
+            <span className={`text-xs ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>Voice AI responding...</span>
         </div>
     );
 };
 
 const SearchDemo = () => {
+    const { theme } = useTheme();
     const results = [
         { title: 'Q3 Financial Report', match: '94%' },
         { title: 'Employee Handbook', match: '87%' },
@@ -190,21 +194,21 @@ const SearchDemo = () => {
     ];
 
     return (
-        <div className="rounded-xl p-4 h-[200px] border border-gray-300" style={{ backgroundColor: '#f5ece4' }}>
-            <div className="flex items-center gap-2 bg-white rounded-lg px-3 py-2 mb-3 border border-gray-200">
-                <Search className="w-4 h-4 text-gray-600" />
-                <span className="text-sm text-gray-700">What were last quarter's revenue targets?</span>
+        <div className={`rounded-xl p-4 h-[200px] border transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}>
+            <div className={`flex items-center gap-2 rounded-lg px-3 py-2 mb-3 border ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-white border-gray-200'}`}>
+                <Search className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`} />
+                <span className={`text-sm ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>What were last quarter's revenue targets?</span>
             </div>
             <div className="space-y-2">
                 {results.map((result, i) => (
                     <div
                         key={i}
-                        className="flex items-center justify-between bg-white rounded-lg px-3 py-2 animate-fade-in border border-gray-200"
+                        className={`flex items-center justify-between rounded-lg px-3 py-2 animate-fade-in border ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-white border-gray-200'}`}
                         style={{ animationDelay: `${i * 0.5}s` }}
                     >
                         <div className="flex items-center gap-2">
                             <Database className="w-3 h-3 text-[#B07552]" />
-                            <span className="text-xs text-gray-700">{result.title}</span>
+                            <span className={`text-xs ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>{result.title}</span>
                         </div>
                         <span className="text-xs font-medium text-[#B07552]">{result.match}</span>
                     </div>
@@ -215,6 +219,7 @@ const SearchDemo = () => {
 };
 
 const WorkflowDemo = () => {
+    const { theme } = useTheme();
     const steps = ['Trigger', 'Process', 'Validate', 'Output'];
     const [isHovered, setIsHovered] = useState(false);
     const containerRef = useRef(null);
@@ -224,7 +229,7 @@ const WorkflowDemo = () => {
     useEffect(() => {
         if (isInView) {
             setAutoPlay(true);
-            const timer = setTimeout(() => setAutoPlay(false), 2400); // 4 steps * 0.6s
+            const timer = setTimeout(() => setAutoPlay(false), 2400);
             return () => clearTimeout(timer);
         }
     }, [isInView]);
@@ -234,8 +239,7 @@ const WorkflowDemo = () => {
     return (
         <div
             ref={containerRef}
-            className="rounded-xl p-4 h-[200px] border border-gray-300 flex items-center justify-center cursor-pointer overflow-hidden relative"
-            style={{ backgroundColor: '#f5ece4' }}
+            className={`rounded-xl p-4 h-[200px] border flex items-center justify-center cursor-pointer overflow-hidden relative transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -244,44 +248,44 @@ const WorkflowDemo = () => {
                     <div key={i} className="flex items-center">
                         <motion.div
                             className="relative flex flex-col items-center"
-                            initial={{ opacity: 1 }} // Show initially
+                            initial={{ opacity: 1 }}
                             animate={{
                                 scale: isActive ? [1, 1.1, 1] : 1,
                                 opacity: 1
                             }}
                             transition={{
                                 duration: 0.6,
-                                delay: i * 0.3, // Slow stagger
+                                delay: i * 0.3,
                                 ease: "easeInOut"
                             }}
                         >
                             <motion.div
                                 className={`w-12 h-12 rounded-lg flex items-center justify-center ${i === 0 ? 'bg-orange-500' :
                                     i === 3 ? 'bg-[#B07552]' :
-                                        'bg-gray-300'
+                                        theme === 'dark' ? 'bg-dark-card' : 'bg-gray-300'
                                     }`}
                                 animate={{
                                     backgroundColor: isActive
-                                        ? (i === 0 ? ['#f97316', '#d1d5db'] : i === 3 ? '#B07552' : '#d1d5db') // Trigger turns grey
-                                        : (i === 0 ? '#f97316' : i === 3 ? '#B07552' : '#d1d5db')
+                                        ? (i === 0 ? ['#f97316', theme === 'dark' ? '#373027' : '#d1d5db'] : i === 3 ? '#B07552' : theme === 'dark' ? '#373027' : '#d1d5db')
+                                        : (i === 0 ? '#f97316' : i === 3 ? '#B07552' : theme === 'dark' ? '#373027' : '#d1d5db')
                                 }}
                                 transition={{
                                     duration: 0.6,
-                                    times: i === 0 ? [0, 1] : undefined, // Immediate start for trigger
-                                    delay: i * 0.3, // Stagger effect
+                                    times: i === 0 ? [0, 1] : undefined,
+                                    delay: i * 0.3,
                                     ease: "easeInOut"
                                 }}
                             >
                                 {i === 0 && <Sparkles className="w-5 h-5 text-white" />}
-                                {i === 1 && <GitBranch className="w-5 h-5 text-white" />}
-                                {i === 2 && <CheckCircle2 className="w-5 h-5 text-white" />}
+                                {i === 1 && <GitBranch className={`w-5 h-5 ${theme === 'dark' ? 'text-dark-text' : 'text-white'}`} />}
+                                {i === 2 && <CheckCircle2 className={`w-5 h-5 ${theme === 'dark' ? 'text-dark-text' : 'text-white'}`} />}
                                 {i === 3 && <ArrowRight className="w-5 h-5 text-white" />}
                             </motion.div>
-                            <span className="text-[10px] text-gray-600 mt-1 font-medium">{step}</span>
+                            <span className={`text-[10px] mt-1 font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>{step}</span>
                         </motion.div>
 
                         {i < steps.length - 1 && (
-                            <div className="relative w-8 mx-1 h-0.5 bg-gray-300 overflow-hidden">
+                            <div className={`relative w-8 mx-1 h-0.5 overflow-hidden ${theme === 'dark' ? 'bg-dark-card' : 'bg-gray-300'}`}>
                                 <motion.div
                                     className="absolute inset-0 bg-[#B07552]"
                                     initial={{ x: '-100%' }}
@@ -299,7 +303,7 @@ const WorkflowDemo = () => {
             </div>
             {!isActive && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/5 backdrop-blur-[1px] opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                    <span className="bg-white/90 px-3 py-1 rounded-full text-xs font-medium text-gray-600 shadow-sm">Hover to play</span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium shadow-sm ${theme === 'dark' ? 'bg-dark-card text-dark-text' : 'bg-white/90 text-gray-600'}`}>Hover to play</span>
                 </div>
             )}
         </div>
@@ -307,6 +311,7 @@ const WorkflowDemo = () => {
 };
 
 const AnalyticsDemo = () => {
+    const { theme } = useTheme();
     const bars = [35, 55, 45, 70, 60, 80, 75];
     const [isHovered, setIsHovered] = useState(false);
     const containerRef = useRef(null);
@@ -316,7 +321,7 @@ const AnalyticsDemo = () => {
     useEffect(() => {
         if (isInView) {
             setAutoPlay(true);
-            const timer = setTimeout(() => setAutoPlay(false), 2000); // 1.2s duration + delay
+            const timer = setTimeout(() => setAutoPlay(false), 2000);
             return () => clearTimeout(timer);
         }
     }, [isInView]);
@@ -326,13 +331,12 @@ const AnalyticsDemo = () => {
     return (
         <div
             ref={containerRef}
-            className="rounded-xl p-4 h-[200px] border border-gray-300 cursor-pointer overflow-hidden relative"
-            style={{ backgroundColor: '#f5ece4' }}
+            className={`rounded-xl p-4 h-[200px] border cursor-pointer overflow-hidden relative transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
             <div className="flex items-center justify-between mb-3">
-                <span className="text-xs text-gray-600">Revenue Growth</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>Revenue Growth</span>
                 <motion.div
                     className="flex items-center gap-1 text-[#B07552]"
                     animate={{ scale: isActive ? [1, 1.1, 1] : 1 }}
@@ -348,18 +352,18 @@ const AnalyticsDemo = () => {
                         key={i}
                         className="flex-1 bg-gradient-to-t from-[#B07552] to-[#E6D0C6] rounded-t-sm"
                         initial={{ height: '0%' }}
-                        animate={{ height: isActive ? `${height}%` : '15%' }} // Keep a small visible height when not hovered
+                        animate={{ height: isActive ? `${height}%` : '15%' }}
                         transition={{
-                            duration: 1.2, // Slower duration
-                            delay: i * 0.15, // Smoother stagger
-                            ease: [0.34, 1.56, 0.64, 1] // Spring-like ease
+                            duration: 1.2,
+                            delay: i * 0.15,
+                            ease: [0.34, 1.56, 0.64, 1]
                         }}
                     />
                 ))}
             </div>
             <div className="flex justify-between mt-2">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                    <span key={day} className="text-[9px] text-gray-600 flex-1 text-center">{day}</span>
+                    <span key={day} className={`text-[9px] flex-1 text-center ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>{day}</span>
                 ))}
             </div>
         </div>
@@ -377,6 +381,7 @@ const DemoComponent = ({ type }: { type: SolutionDemo['type'] }) => {
 };
 
 const AISolutionsShowcase = () => {
+    const { theme } = useTheme();
     const [activeIndex, setActiveIndex] = useState(0);
     const sectionRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -473,7 +478,7 @@ const AISolutionsShowcase = () => {
     };
 
     return (
-        <section ref={sectionRef} className="relative py-16 overflow-hidden">
+        <section ref={sectionRef} className={`relative py-16 overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-transparent'}`}>
             {/* Decorative blur elements */}
             <div className="absolute top-20 right-10 w-64 h-64 bg-[#E6D0C6]/30 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-20 left-10 w-48 h-48 bg-[#B07552]/10 rounded-full blur-3xl pointer-events-none" />
@@ -481,19 +486,19 @@ const AISolutionsShowcase = () => {
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 {/* Header */}
                 <div ref={headerRef} className="text-center mb-12">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#fdfbf7] border border-[#E6D0C6] mb-3">
+                    <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-3 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-[#fdfbf7] border-[#E6D0C6]'}`}>
                         <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B07552]/60 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B07552]" />
+                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${theme === 'dark' ? 'bg-dark-accent/60' : 'bg-[#B07552]/60'}`} />
+                            <span className={`relative inline-flex rounded-full h-2 w-2 ${theme === 'dark' ? 'bg-dark-accent' : 'bg-[#B07552]'}`} />
                         </span>
-                        <span className="text-xs font-semibold text-[#8A5A35] uppercase tracking-wider">
+                        <span className={`text-xs font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-dark-accent' : 'text-[#8A5A35]'}`}>
                             AI Solutions
                         </span>
                     </div>
-                    <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3">
-                        Our AI Business <span className="text-[#B07552]">Solutions</span>
+                    <h2 className={`text-2xl md:text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                        Our AI Business <span className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}>Solutions</span>
                     </h2>
-                    <p className="text-base text-gray-600 max-w-2xl mx-auto">
+                    <p className={`text-base max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                         AI Agents and agentic workflows that embed AI where the value is.
                     </p>
                 </div>
@@ -515,18 +520,18 @@ const AISolutionsShowcase = () => {
                                             onClick={() => handleTabChange(index)}
                                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 group ${isActive
                                                 ? 'bg-gradient-to-r from-[#B07552] to-[#8A5A35] text-white shadow-lg shadow-[#B07552]/30'
-                                                : 'bg-white hover:bg-[#FDFBF7] text-gray-700 border border-gray-200 hover:border-[#E6D0C6]'
+                                                : `${theme === 'dark' ? 'bg-dark-card border-none hover:bg-dark-card/80 text-dark-text' : 'bg-white hover:bg-[#FDFBF7] text-gray-700 border border-gray-200 hover:border-[#E6D0C6]'}`
                                                 }`}
                                         >
                                             <div className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center transition-all duration-300 ${isActive
                                                 ? 'bg-white/10'
-                                                : 'bg-gray-100 group-hover:bg-[#E6D0C6]/30'
+                                                : `${theme === 'dark' ? 'bg-dark-bg group-hover:bg-dark-accent/20' : 'bg-gray-100 group-hover:bg-[#E6D0C6]/30'}`
                                                 }`}>
                                                 <Icon className={`w-5 h-5 transition-colors ${isActive ? 'text-white' : 'text-gray-600 group-hover:text-[#B07552]'
                                                     }`} />
                                             </div>
                                             <div className="flex-1">
-                                                <div className={`font-semibold text-sm ${isActive ? 'text-white' : 'text-gray-900'}`}>
+                                                <div className={`font-semibold text-sm ${isActive ? 'text-white' : theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                                                     {solution.title}
                                                 </div>
                                                 <div className={`text-xs ${isActive ? 'text-gray-300' : 'text-gray-500'}`}>
@@ -544,7 +549,7 @@ const AISolutionsShowcase = () => {
                             {/* View Ecosystem Link */}
                             <Link
                                 to="/products"
-                                className="mt-4 flex items-center gap-2 px-4 py-3 rounded-xl border border-dashed border-gray-300 text-gray-600 hover:border-[#B07552] hover:text-[#B07552] transition-all group"
+                                className={`mt-4 flex items-center gap-2 px-4 py-3 rounded-xl border border-dashed text-sm font-medium transition-all group ${theme === 'dark' ? 'border-dark-accent/30 text-dark-text-muted hover:border-dark-accent hover:text-dark-accent' : 'border-gray-300 text-gray-600 hover:border-[#B07552] hover:text-[#B07552]'}`}
                             >
                                 <Sparkles className="w-4 h-4" />
                                 <span className="text-sm font-medium">View Full AI Ecosystem</span>
@@ -554,18 +559,18 @@ const AISolutionsShowcase = () => {
 
                         {/* Right Panel - Content */}
                         <div ref={contentRef} className="lg:w-2/3">
-                            <div className="bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden">
+                            <div className={`rounded-2xl border shadow-xl overflow-hidden ${theme === 'dark' ? 'bg-dark-card border-dark-accent/10' : 'bg-white border-gray-200'}`}>
                                 {/* Content Header */}
-                                <div className="p-6 border-b border-gray-100">
+                                <div className={`p-6 border-b ${theme === 'dark' ? 'border-white/5' : 'border-gray-100'}`}>
                                     <div className="flex items-start gap-4">
                                         <div className={`w-14 h-14 shrink-0 rounded-full bg-gradient-to-br ${activeSolution.gradient} flex items-center justify-center shadow-lg`}>
                                             <activeSolution.icon className="w-7 h-7 text-white" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold text-gray-900 mb-1">
+                                            <h3 className={`text-xl font-bold mb-1 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                                                 AI for <span className="text-[#B07552]">{activeSolution.title}</span>
                                             </h3>
-                                            <p className="text-gray-600 text-sm leading-relaxed">
+                                            <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                                                 {activeSolution.description}
                                             </p>
                                         </div>
@@ -588,7 +593,7 @@ const AISolutionsShowcase = () => {
                                                 style={{ animationDelay: `${i * 0.1}s` }}
                                             >
                                                 <CheckCircle2 className="w-4 h-4 text-[#B07552] mt-0.5 flex-shrink-0" />
-                                                <span className="text-sm text-gray-600">{feature}</span>
+                                                <span className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>{feature}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -605,7 +610,7 @@ const AISolutionsShowcase = () => {
                                     </Link>
                                     <Link
                                         to="/contact"
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 border border-gray-300 hover:border-[#B07552] text-gray-700 hover:text-[#B07552] rounded-lg font-medium text-sm transition-all"
+                                        className={`inline-flex items-center gap-2 px-5 py-2.5 border rounded-lg font-medium text-sm transition-all ${theme === 'dark' ? 'border-dark-accent/50 text-dark-text hover:border-dark-accent hover:text-dark-accent' : 'border-gray-300 hover:border-[#B07552] text-gray-700 hover:text-[#B07552]'}`}
                                     >
                                         <MessageCircle className="w-4 h-4" />
                                         Book Demo

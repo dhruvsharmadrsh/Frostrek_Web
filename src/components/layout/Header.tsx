@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { NAV_ITEMS } from '../../utils/constants';
 import Button from '../ui/Button';
 import { cn } from '../../utils/cn';
 import MegaMenu from './MegaMenu';
+import { useTheme } from '../../context/ThemeContext';
+
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
+    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -25,9 +28,11 @@ const Header = () => {
         <header className={cn(
             "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
             isScrolled
-                ? "bg-[#B07552] h-16 shadow-[0_1px_0_rgba(176,117,82,0.15)]"
-                : "bg-[#B07552] h-20"
-
+                ? "h-16 shadow-[0_1px_0_rgba(176,117,82,0.15)]"
+                : "h-20",
+            theme === 'dark'
+                ? "bg-dark-navbar"
+                : "bg-[#B07552]"
         )}>
             <div className="container mx-auto px-4 md:px-6 h-full flex items-center justify-between">
                 {/* 1. Logo (Left) */}
@@ -49,8 +54,11 @@ const Header = () => {
                             <Link
                                 to={item.href}
                                 className={cn(
-                                    "flex items-center gap-1 text-sm font-semibold transition-colors py-2 text-background hover:text-primary",
-                                    location.pathname === item.href && "text-primary font-bold"
+                                    "flex items-center gap-1 text-sm font-semibold transition-colors py-2",
+                                    theme === 'dark'
+                                        ? "text-dark-text/80 hover:text-dark-accent"
+                                        : "text-background hover:text-primary",
+                                    location.pathname === item.href && (theme === 'dark' ? "text-dark-accent font-bold" : "text-primary font-bold")
                                 )}
                             >
                                 {item.label}
@@ -60,9 +68,7 @@ const Header = () => {
                             {/* Mega Menu */}
                             {item.megaMenu && (
                                 <div className="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 absolute left-1/2 -translate-x-1/2 top-full pt-4 w-[600px]">
-                                    <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
-                                        <MegaMenu sections={item.megaMenu} />
-                                    </div>
+                                    <MegaMenu sections={item.megaMenu} />
                                 </div>
                             )}
                         </div>
@@ -70,9 +76,34 @@ const Header = () => {
                 </nav>
 
                 {/* 3. CTAs (Right) */}
-                <div className="hidden lg:flex items-center justify-end min-w-[140px]">
+                <div className="hidden lg:flex items-center justify-end gap-4 min-w-[180px]">
+                    {/* Theme Toggle Button */}
+                    <button
+                        onClick={toggleTheme}
+                        className={cn(
+                            "p-2 rounded-full transition-all duration-300 hover:scale-110",
+                            theme === 'dark'
+                                ? "bg-dark-card text-dark-accent hover:bg-dark-accent/20"
+                                : "bg-white/20 text-background hover:bg-white/30"
+                        )}
+                        aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                    >
+                        <motion.div
+                            initial={false}
+                            animate={{ rotate: theme === 'dark' ? 180 : 0 }}
+                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        >
+                            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                        </motion.div>
+                    </button>
+
                     <Link to="/schedule-demo">
-                        <Button size="sm" className="px-6 bg-background text-[#B07552] rounded-md font-semibold border-none shadow-md">
+                        <Button size="sm" className={cn(
+                            "px-6 rounded-md font-semibold border-none shadow-md",
+                            theme === 'dark'
+                                ? "bg-dark-accent text-dark-bg hover:bg-dark-accent/90"
+                                : "bg-background text-[#B07552]"
+                        )}>
                             Request Demo
                         </Button>
                     </Link>
@@ -81,7 +112,8 @@ const Header = () => {
                 {/* Mobile Menu Toggle */}
                 <button
                     className={cn(
-                        "lg:hidden p-2 transition-colors text-primary"
+                        "lg:hidden p-2 transition-colors",
+                        theme === 'dark' ? "text-dark-text" : "text-primary"
                     )}
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
@@ -97,14 +129,20 @@ const Header = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.2 }}
-                        className="lg:hidden absolute top-full left-0 w-full bg-[#FDFBF7] border-b border-gray-100 shadow-xl z-50"
+                        className={cn(
+                            "lg:hidden absolute top-full left-0 w-full border-b shadow-xl z-50",
+                            theme === 'dark' ? "bg-dark-navbar border-dark-accent/20" : "bg-[#FDFBF7] border-gray-100"
+                        )}
                     >
                         <div className="container mx-auto px-6 py-8 flex flex-col gap-6 max-h-[85vh] overflow-y-auto">
                             {NAV_ITEMS.map((item) => (
                                 <div key={item.label}>
                                     <Link
                                         to={item.href}
-                                        className="text-primary font-medium block py-2 border-b border-gray-100 last:border-0"
+                                        className={cn(
+                                            "font-medium block py-2 border-b last:border-0",
+                                            theme === 'dark' ? "text-dark-text border-dark-accent/20 hover:text-dark-accent" : "text-primary border-gray-100"
+                                        )}
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
                                         {item.label}
@@ -113,7 +151,10 @@ const Header = () => {
                             ))}
                             <div className="mt-4">
                                 <Link to="/schedule-demo" onClick={() => setMobileMenuOpen(false)}>
-                                    <Button className="w-full justify-center bg-[#B07552] text-white">
+                                    <Button className={cn(
+                                        "w-full justify-center",
+                                        theme === 'dark' ? "bg-dark-accent text-dark-bg" : "bg-[#B07552] text-white"
+                                    )}>
                                         Request Demo
                                     </Button>
                                 </Link>
