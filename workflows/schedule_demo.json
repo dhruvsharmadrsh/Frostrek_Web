@@ -3,19 +3,65 @@
     "nodes": [
         {
             "parameters": {
-                "httpMethod": "POST",
-                "path": "schedule-demo",
-                "responseMode": "onReceived",
+                "sendTo": "={{ $('Webhook1').item.json.body.email }}",
+                "subject": "✅ Demo Scheduled – Google Meet Link Inside",
+                "message": "=<h3>Hi{{ $('Webhook1').item.json.body.name }} ,</h3>\n<p>Your demo has been successfully scheduled.</p>\n<p>\n  <b>🗓 Date:</b>{{ $('Webhook1').item.json.body.date }} <br>\n  <b>⏰ Time:</b> {{ $('Webhook1').item.json.body.time }}\n</p>\n<p>\n  <b>🔗 <a href=\"{{ $json.hangoutLink }}\">Click here to join the Google Meet</a></b>\n</p>\n<p>Looking forward to speaking with you!</p>\n<p>– Team Frostrek</p>",
                 "options": {}
             },
-            "name": "Webhook",
+            "name": "Gmail - Client",
+            "type": "n8n-nodes-base.gmail",
+            "typeVersion": 2,
+            "position": [
+                400,
+                32
+            ],
+            "id": "332be9b7-658c-4756-a023-b12a2436f219",
+            "webhookId": "ccb73739-e27d-48f1-aab2-c573ae43aae1",
+            "credentials": {
+                "gmailOAuth2": {
+                    "id": "PlrRZku0xAqe6edt",
+                    "name": "Gmail account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sendTo": "info@frostrek.com",
+                "subject": "📢 New Demo Scheduled",
+                "message": "=A new demo has been scheduled.\n\nName: {{ $('Webhook1').item.json.body.name }}\nEmail: {{ $('Webhook1').item.json.body.email }}\nDate: {{ $('Webhook1').item.json.body.date }}\nTime: {{ $('Webhook1').item.json.body.time }}\n\nMeet Link:\n{{$node[\"Google Calendar1\"].json[\"conferenceData\"][\"entryPoints\"][0][\"uri\"]}}",
+                "options": {}
+            },
+            "name": "Gmail - Internal Notify",
+            "type": "n8n-nodes-base.gmail",
+            "typeVersion": 2,
+            "position": [
+                400,
+                240
+            ],
+            "id": "dbeffa20-4105-429f-878b-29a6dc41491c",
+            "webhookId": "57133009-7dcb-4017-8713-b73af9570303",
+            "credentials": {
+                "gmailOAuth2": {
+                    "id": "PlrRZku0xAqe6edt",
+                    "name": "Gmail account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "schedule-demo",
+                "options": {}
+            },
+            "name": "Webhook1",
             "type": "n8n-nodes-base.webhook",
             "typeVersion": 1,
             "position": [
-                400,
-                300
+                -96,
+                112
             ],
-            "webhookId": "schedule-demo-webhook"
+            "webhookId": "schedule-demo-webhook",
+            "id": "65721682-c500-42c4-8ffe-cc2d1e41397c"
         },
         {
             "parameters": {
@@ -24,102 +70,58 @@
                     "mode": "list",
                     "value": "primary"
                 },
-                "start": "={{$json.date}}T{{$json.time}}:00",
-                "end": "={{new Date(new Date($json.date + 'T' + $json.time).getTime() + 30 * 60000).toISOString()}}",
+                "start": "={{$json.body.date}}T{{$json.body.time}}",
+                "end": "={{$json.body.date}}T{{$json.body.endTime}}",
                 "additionalFields": {
-                    "conferenceData": {
-                        "createRequest": {
-                            "requestId": "={{$execution.id}}"
+                    "attendees": [
+                        "={{ $json.body.email }}, info@frostrek.com"
+                    ],
+                    "conferenceDataUi": {
+                        "conferenceDataValues": {
+                            "conferenceSolution": "hangoutsMeet"
                         }
                     },
-                    "attendees": [
-                        "={{$json.email}}",
-                        "founder@frostrek.com"
-                    ],
-                    "summary": "Frostrek Demo – {{$json.name}}",
-                    "description": "Demo meeting with {{$json.name}}\n\nClient Email: {{$json.email}}\nNotes: {{$json.notes || 'N/A'}}"
-                },
-                "conferenceDataVersion": 1
+                    "description": "=Demo meeting with {{ $json.body.name }}|Client Email:{{ $json.body.email }} Notes: {{ $json.body.notes }}",
+                    "summary": "=Frostrek Demo – {{ $json.body.name }}"
+                }
             },
-            "name": "Google Calendar",
+            "name": "Google Calendar1",
             "type": "n8n-nodes-base.googleCalendar",
             "typeVersion": 1,
             "position": [
-                650,
-                300
+                160,
+                112
             ],
+            "id": "379c0190-814f-4987-9933-e502cebbcfeb",
             "credentials": {
                 "googleCalendarOAuth2Api": {
-                    "id": "YOUR_CALENDAR_CREDENTIAL_ID",
-                    "name": "Google Calendar Account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "resource": "message",
-                "toEmail": "={{$json.email}}",
-                "subject": "✅ Demo Scheduled – Google Meet Link Inside",
-                "message": "=Hi {{$json.name}},\n\nYour demo has been successfully scheduled.\n\n🗓 Date: {{$json.date}}\n⏰ Time: {{$json.time}}\n\n🔗 Google Meet Link:\n{{$node[\"Google Calendar\"].json[\"conferenceData\"][\"entryPoints\"][0][\"uri\"]}}\n\nLooking forward to speaking with you!\n\n– Team Frostrek"
-            },
-            "name": "Gmail - Client",
-            "type": "n8n-nodes-base.gmail",
-            "typeVersion": 2,
-            "position": [
-                900,
-                220
-            ],
-            "credentials": {
-                "gmailOAuth2": {
-                    "id": "YOUR_GMAIL_CREDENTIAL_ID",
-                    "name": "Gmail Account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "resource": "message",
-                "toEmail": "founder@frostrek.com",
-                "subject": "📢 New Demo Scheduled",
-                "message": "=A new demo has been scheduled.\n\nName: {{$json.name}}\nEmail: {{$json.email}}\nDate: {{$json.date}}\nTime: {{$json.time}}\n\nMeet Link:\n{{$node[\"Google Calendar\"].json[\"conferenceData\"][\"entryPoints\"][0][\"uri\"]}}"
-            },
-            "name": "Gmail - Internal Notify",
-            "type": "n8n-nodes-base.gmail",
-            "typeVersion": 2,
-            "position": [
-                900,
-                380
-            ],
-            "credentials": {
-                "gmailOAuth2": {
-                    "id": "YOUR_GMAIL_CREDENTIAL_ID",
-                    "name": "Gmail Account"
+                    "id": "4xkyAhUoM2ZlKF3C",
+                    "name": "Google Calendar account"
                 }
             }
         }
     ],
+    "pinData": {},
     "connections": {
-        "Webhook": {
+        "Webhook1": {
             "main": [
                 [
                     {
-                        "node": "Google Calendar",
+                        "node": "Google Calendar1",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Google Calendar": {
+        "Google Calendar1": {
             "main": [
                 [
                     {
                         "node": "Gmail - Client",
                         "type": "main",
                         "index": 0
-                    }
-                ],
-                [
+                    },
                     {
                         "node": "Gmail - Internal Notify",
                         "type": "main",
@@ -128,5 +130,20 @@
                 ]
             ]
         }
-    }
+    },
+    "active": true,
+    "settings": {
+        "executionOrder": "v1",
+        "availableInMCP": false,
+        "timeSavedMode": "fixed",
+        "callerPolicy": "workflowsFromSameOwner",
+        "executionTimeout": -1
+    },
+    "versionId": "2472fc2b-cd97-4b14-92d5-73b52d8cc805",
+    "meta": {
+        "templateCredsSetupCompleted": true,
+        "instanceId": "6ec043d85842cf22633b276d7ccbd6fb4f14ef38293d2727581b5ac3557a0751"
+    },
+    "id": "cC90Ea4YIRDO4nAILvxat",
+    "tags": []
 }

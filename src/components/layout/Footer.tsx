@@ -60,6 +60,15 @@ const Footer = () => {
 
   const footerRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
+
+  const handleLocationClick = () => {
+    window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(COMPANY_INFO.address), '_blank');
+  };
+
+  const handleLocationHover = (isHovering: boolean) => {
+    // Location widget hover logic can be implemented here if needed
+  };
 
 
   // Load saved language
