@@ -25,20 +25,20 @@ const Header = () => {
         <header className={cn(
             "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
             isScrolled
-                    ? "bg-[#B07552] h-16 shadow-[0_1px_0_rgba(176,117,82,0.15)]"
-                    : "bg-[#B07552] h-20"
+                ? "bg-[#B07552] h-16 shadow-[0_1px_0_rgba(176,117,82,0.15)]"
+                : "bg-[#B07552] h-20"
 
         )}>
             <div className="container mx-auto px-4 md:px-6 h-full flex items-center justify-between">
                 {/* 1. Logo (Left) */}
-                <Link to="/" className="flex items-center gap-2 group min-w-[140px]">
+                <Link to="/" className="flex items-center gap-0 group min-w-[140px]">
                     <img
                         src="/logo.png"
                         alt="Frostrek"
-                        className="h-12 w-auto object-contain"
+                        className="h-8 w-auto object-contain"
                     />
                     <span className="text-xl font-bold font-sans tracking-tight text-background">
-                        Frostrek
+                        frostrek
                     </span>
                 </Link>
 

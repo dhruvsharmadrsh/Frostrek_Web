@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { SOLUTION_DATA } from '../utils/solutionData';
 import Button from '../components/ui/Button';
-import Card from '../components/ui/Card';
 import CommonChallenges from '../components/solution/CommonChallenges';
+import FrostrekAdvantage from '../components/solution/FrostrekAdvantage';
 
 const SolutionPage = () => {
     const location = useLocation();
@@ -146,33 +146,7 @@ const SolutionPage = () => {
             <CommonChallenges challenges={solution.challenges} />
 
             {/* Features / Solution Grid */}
-            <section className="py-24 bg-white">
-                <div className="container mx-auto px-4 md:px-6">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">The Frostrek Advantage</h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">How our AI technology transforms your operations.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {solution.features.map((feature, idx) => (
-                            <Card
-                                key={idx}
-                                className="group p-8 border-brand-green-100 hover:bg-brand-green-600 hover:border-brand-green-600 hover:-translate-y-1 transition-all duration-300"
-                            >
-                                <div className="w-14 h-14 rounded-xl bg-brand-green-50 flex items-center justify-center mb-6 group-hover:bg-white transition-colors">
-                                    <feature.icon className="w-7 h-7 text-brand-green-600" />
-                                </div>
-                                <h3 className="text-xl font-bold mb-3 text-gray-900 group-hover:text-white transition-colors">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-gray-600 group-hover:text-brand-green-50 transition-colors leading-relaxed">
-                                    {feature.description}
-                                </p>
-                            </Card>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            <FrostrekAdvantage features={solution.features} />
 
             {/* Bottom CTA */}
             <section className="py-20 bg-gradient-to-r from-gray-900 to-gray-800 text-white">
