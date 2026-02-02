@@ -937,81 +937,37 @@ const About = () => {
 
     const offices = useMemo(() => [
         {
-            name: 'UK',
-            city: 'London',
-            country: 'United Kingdom (UK)',
-            flagImg: 'https://flagcdn.com/w40/gb.png',
-            image: 'https://images.unsplash.com/photo-1529655683826-aba9b3e77383?w=800&h=600&fit=crop',
-            companyName: 'Frostrek UK Ltd.',
-            address: '2 Minister Court London EC3R 7BB, UK',
-            phone: '+44 208 0575675',
-            mapUrl: 'https://maps.google.com/?q=London+UK'
-        },
-        {
-            name: 'Korea',
-            city: 'Seoul',
-            country: 'Korea',
-            flagImg: 'https://flagcdn.com/w40/kr.png',
-            image: 'https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=800&h=600&fit=crop',
-            companyName: 'Frostrek Korea Inc.',
-            address: '123 Gangnam-daero, Gangnam-gu, Seoul',
-            phone: '+82 2 1234 5678',
-            mapUrl: 'https://maps.google.com/?q=Seoul+Korea'
-        },
-        {
             name: 'India',
-            city: 'Hyderabad',
+            city: 'Gurugram',
             country: 'India',
             flagImg: 'https://flagcdn.com/w40/in.png',
-            image: 'https://images.unsplash.com/photo-1572204097183-e1ab140342ed?w=800&h=600&fit=crop',
-            companyName: 'Frostrek India Pvt. Ltd.',
-            address: 'Hi-Tech City, Hyderabad 500081, India',
-            phone: '+91 40 1234 5678',
-            mapUrl: 'https://maps.google.com/?q=Hyderabad+India'
-        },
-        {
-            name: 'Japan',
-            city: 'Tokyo',
-            country: 'Japan',
-            flagImg: 'https://flagcdn.com/w40/jp.png',
-            image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&h=600&fit=crop',
-            companyName: 'Frostrek Japan K.K.',
-            address: 'Shibuya-ku, Tokyo 150-0002, Japan',
-            phone: '+81 3 1234 5678',
-            mapUrl: 'https://maps.google.com/?q=Tokyo+Japan'
-        },
-        {
-            name: 'Germany',
-            city: 'Frankfurt',
-            country: 'Germany',
-            flagImg: 'https://flagcdn.com/w40/de.png',
-            image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&h=600&fit=crop',
-            companyName: 'Frostrek GmbH',
-            address: 'Frankfurt am Main, 60311, Germany',
-            phone: '+49 69 1234 5678',
-            mapUrl: 'https://maps.google.com/?q=Frankfurt+Germany'
+            image: '/Suncity-Success-Tower.jpg',
+            companyName: 'India Office',
+            address: '422, Suncity-Success-Tower, Golf Course Ext. Road, Sector - 65, Gurugram, Haryana, 122002',
+            phone: '+91 124 123 4567',
+            mapUrl: 'https://www.google.com/maps/search/?api=1&query=422+Suncity+Success+Tower+Golf+Course+Ext+Road+Gurugram+Haryana+122002'
         },
         {
             name: 'USA',
-            city: 'Orlando',
-            country: 'USA',
+            city: 'Austin',
+            country: 'United States',
             flagImg: 'https://flagcdn.com/w40/us.png',
-            image: 'https://images.unsplash.com/photo-1575089776834-8be34c8a652e?w=800&h=600&fit=crop',
-            companyName: 'Frostrek Inc.',
-            address: '123 Innovation Drive, Orlando, FL 32801',
-            phone: '+1 407 123 4567',
-            mapUrl: 'https://maps.google.com/?q=Orlando+Florida+USA'
+            image: '/701 Tillery St 12 3227, Austin, TX 78702, USA.jpg',
+            companyName: 'USA Office',
+            address: '701 Tillery Street Unit 12-3227, Austin, Texas 78702, United States',
+            phone: '+1 512 123 4567',
+            mapUrl: 'https://www.google.com/maps/search/?api=1&query=701+Tillery+Street+Unit+12-3227+Austin+Texas+78702'
         },
         {
-            name: 'UAE',
-            city: 'Dubai',
-            country: 'UAE',
-            flagImg: 'https://flagcdn.com/w40/ae.png',
-            image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop',
-            companyName: 'Frostrek DMCC',
-            address: 'DMCC Business Centre, Dubai, UAE',
-            phone: '+971 4 123 4567',
-            mapUrl: 'https://maps.google.com/?q=Dubai+UAE'
+            name: 'UK',
+            city: 'London',
+            country: 'United Kingdom',
+            flagImg: 'https://flagcdn.com/w40/gb.png',
+            image: '/24-26-Arcadia-Ave-London-Primary-Photo-1-LargeHighDefinition.jpg',
+            companyName: 'UK Office',
+            address: '24-26 Arcadia Avenue, Fin009/8701, London, United Kingdom, N3 2JU',
+            phone: '+44 208 057 5675',
+            mapUrl: 'https://www.google.com/maps/search/?api=1&query=24-26+Arcadia+Avenue+London+N3+2JU'
         },
     ], []);
 
@@ -1478,31 +1434,30 @@ const About = () => {
                         <p className={theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}>Worldwide enterprise support across 6 continents</p>
                     </div>
 
-                    <div className="max-w-6xl mx-auto">
-                        <div className="grid lg:grid-cols-12 gap-6 items-stretch">
-                            {/* Left - Location Tabs */}
-                            <div className="lg:col-span-3 space-y-2">
+                    <div className="max-w-[1600px] mx-auto">
+                        <div className="grid lg:grid-cols-3 gap-8 items-stretch">
+                            <div className="flex flex-col justify-center space-y-6">
                                 {offices.map((o, i) => (
                                     <motion.div
                                         key={i}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-300 ${activeOffice === i
-                                            ? 'bg-white shadow-lg border-l-4 border-brand-green-500'
-                                            : 'bg-white/60 hover:bg-white hover:shadow-md border-l-4 border-transparent'
+                                        className={`flex items-center gap-6 px-8 py-8 rounded-3xl cursor-pointer transition-all duration-300 ${activeOffice === i
+                                            ? 'bg-white shadow-xl border-l-8 border-brand-green-500'
+                                            : 'bg-white/60 hover:bg-white hover:shadow-lg border-l-8 border-transparent'
                                             }`}
                                         onClick={() => setActiveOffice(i)}
-                                        whileHover={{ x: 4 }}
+                                        whileHover={{ x: 6 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
                                         <img
                                             src={o.flagImg}
                                             alt={`${o.country} flag`}
-                                            className="w-8 h-6 object-cover rounded shadow-sm"
+                                            className="w-12 h-9 object-cover rounded shadow-sm"
                                         />
                                         <div>
-                                            <div className={`font-semibold transition-colors ${activeOffice === i ? 'text-brand-green-600' : 'text-gray-900'}`}>
+                                            <div className={`text-xl font-bold transition-colors ${activeOffice === i ? 'text-brand-green-600' : 'text-gray-900'}`}>
                                                 {o.city}
                                             </div>
-                                            <div className="text-xs text-gray-500">{o.country}</div>
+                                            <div className="text-base font-medium text-gray-500">{o.country}</div>
                                         </div>
                                         {activeOffice === i && (
                                             <motion.div
@@ -1517,9 +1472,9 @@ const About = () => {
                             </div>
 
                             {/* Center - Landmark Image */}
-                            <div className="lg:col-span-5">
+                            <div className="h-full min-h-[550px]">
                                 <motion.div
-                                    className="relative h-64 md:h-[480px] rounded-2xl overflow-hidden shadow-2xl"
+                                    className="relative h-full rounded-3xl overflow-hidden shadow-2xl"
                                     key={activeOffice}
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
@@ -1535,9 +1490,9 @@ const About = () => {
                             </div>
 
                             {/* Right - Office Info Card */}
-                            <div className="lg:col-span-4">
+                            <div>
                                 <motion.div
-                                    className="bg-white rounded-2xl p-6 shadow-xl h-full flex flex-col"
+                                    className="bg-white rounded-3xl p-8 shadow-xl h-full flex flex-col justify-between"
                                     key={`info-${activeOffice}`}
                                     initial={{ opacity: 0, x: 20 }}
                                     animate={{ opacity: 1, x: 0 }}
