@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
 import Button from '../components/ui/Button';
 import CuteBackground from '../components/ui/CuteBackground';
 
@@ -51,10 +51,97 @@ const ScheduleDemo = () => {
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+
+    // Production Webhook URL
+    const WEBHOOK_URL = 'https://frostysandy.app.n8n.cloud/webhook/schedule-demo';
+
+    const formatTimeForWebhook = (timeStr: string) => {
+        // Convert "09:00 AM" to "09:00:00"
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':');
+
+        if (hours === '12') {
+            hours = modifier === 'AM' ? '00' : '12';
+        } else if (modifier === 'PM') {
+            hours = String(parseInt(hours, 10) + 12);
+        }
+        return `${hours}:${minutes}:00`;
+    };
+
+    const getEndTime = (startTimeStr: string) => {
+        // Add 30 minutes for demo duration
+        const [time, modifier] = startTimeStr.split(' ');
+        let [hours, minutes] = time.split(':');
+
+        // Convert to minutes
+        let totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
+        if (modifier === 'PM' && hours !== '12') totalMinutes += 12 * 60;
+        if (modifier === 'AM' && hours === '12') totalMinutes = parseInt(minutes); // 00:xx
+
+        totalMinutes += 30; // Add duration
+
+        // Convert back
+        const newHours = Math.floor(totalMinutes / 60);
+        const newMinutes = totalMinutes % 60;
+
+        return `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}:00`;
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (selectedDate && selectedTime && formData.name && formData.email) {
+        setSubmitError(null);
+
+        if (!selectedDate || !selectedTime || !formData.name || !formData.email) {
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            // Format Date as YYYY-MM-DD
+            const year = selectedDate.getFullYear();
+            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(selectedDate.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
+
+            const timeStr = formatTimeForWebhook(selectedTime);
+            const endTimeStr = getEndTime(selectedTime);
+
+            const payload = {
+                name: formData.name,
+                email: formData.email,
+                notes: formData.notes,
+                date: dateStr,
+                time: timeStr,
+                endTime: endTimeStr
+            };
+
+            // Allow testing without a real URL by logging if it's the placeholder
+            if (WEBHOOK_URL === 'YOUR_WEBHOOK_URL_HERE') {
+                console.log('Mock Submission (Webhook URL not set):', payload);
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
+                setIsSubmitted(true);
+                return;
+            }
+
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to schedule demo. Please try again.');
+            }
+
             setIsSubmitted(true);
+        } catch (error) {
+            console.error('Booking Error:', error);
+            setSubmitError('Something went wrong. Please try again later.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -274,10 +361,21 @@ const ScheduleDemo = () => {
 
                                 <Button
                                     type="submit"
-                                    className="w-full bg-brand-green-600 hover:bg-brand-green-700 text-white py-3"
+                                    disabled={isLoading}
+                                    className="w-full bg-brand-green-600 hover:bg-brand-green-700 text-white py-3 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
-                                    Confirm Booking
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            Scheduling...
+                                        </>
+                                    ) : (
+                                        'Confirm Booking'
+                                    )}
                                 </Button>
+                                {submitError && (
+                                    <p className="text-red-500 text-sm text-center mt-2">{submitError}</p>
+                                )}
                             </form>
                         )}
                     </div>

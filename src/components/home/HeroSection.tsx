@@ -121,7 +121,7 @@ const HeroSection = () => {
 
                     {/* Right Column: 3D Robot */}
                     <div className="flex justify-center lg:justify-end relative mt-8 lg:mt-0">
-                        <div className="relative w-full max-w-[450px] lg:max-w-[550px] aspect-square flex items-center justify-center">
+                        <div className="relative w-full max-w-[450px] lg:max-w-[550px] aspect-[4/5] flex items-center justify-center">
                             {/* Subtle glow behind robot */}
                             <div className="absolute inset-0 bg-gradient-to-tr from-[#E6D0C6] to-transparent opacity-30 rounded-full blur-3xl transform scale-90" />
 

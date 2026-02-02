@@ -33,7 +33,7 @@ const HeroRobot = () => {
 
     return (
         <Canvas
-            camera={{ position: [0, 0.5, 3.5], fov: 40 }}
+            camera={{ position: [0, 0.5, 3.5], fov: 45 }}
             dpr={[1, 2]}
             frameloop="always"
             gl={{
@@ -128,10 +128,10 @@ const HeroRobot = () => {
             {/* Contact shadow for grounding */}
             {/* Contact shadow for grounding */}
             <ContactShadows
-                position={[0, -1.4, 0]}
-                opacity={0.7}
-                scale={20}
-                blur={2}
+                position={[0, -0.8, 0]}
+                opacity={0.55}
+                scale={35}
+                blur={2.5}
                 far={10}
                 resolution={512}
                 color="#3d2914"
@@ -140,7 +140,7 @@ const HeroRobot = () => {
             {/* Robot Model - moved higher */}
             <Suspense fallback={null}>
                 <RobotModel
-                    position={[0.3, 0.5, 0]}
+                    position={[0, 0.8, 0]}
                     scale={1.1}
                     isSpeaking={isSpeaking}
                 />

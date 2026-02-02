@@ -30,7 +30,7 @@ const NAV_ITEMS = [
 
 const COMPANY_INFO = {
   name: 'Frostrek Technologies',
-  address: 'Gurgaon, Haryana, India',
+  address: 'Sector 65, Success Suncity Tower, Gurgaon',
   contact: 'info@frostrek.com',
   socials: {
     linkedin: 'https://linkedin.com/company/frostrek',
@@ -55,12 +55,10 @@ const Footer = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [feedbackData, setFeedbackData] = useState({ type: 'Suggestion', message: '', email: '' });
   const [emailCopied, setEmailCopied] = useState(false);
-  const [locationWidgetOpen, setLocationWidgetOpen] = useState(false);
-  const [pinPulsed, setPinPulsed] = useState(false);
 
   const footerRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
-  const locationRef = useRef<HTMLDivElement>(null);
+
 
   // Load saved language
   useEffect(() => {
@@ -92,9 +90,7 @@ const Footer = () => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) {
         setLangOpen(false);
       }
-      if (locationRef.current && !locationRef.current.contains(e.target as Node)) {
-        setLocationWidgetOpen(false);
-      }
+
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
@@ -136,23 +132,7 @@ const Footer = () => {
     setTimeout(() => setEmailCopied(false), 2000);
   };
 
-  const handleLocationHover = (isHovering: boolean) => {
-    if (window.innerWidth >= 768) {
-      setLocationWidgetOpen(isHovering);
-      if (isHovering && !pinPulsed) {
-        setPinPulsed(true);
-      }
-    }
-  };
 
-  const handleLocationClick = () => {
-    if (window.innerWidth < 768) {
-      setLocationWidgetOpen(!locationWidgetOpen);
-      if (!pinPulsed) {
-        setPinPulsed(true);
-      }
-    }
-  };
 
   return (
     <>
@@ -244,25 +224,9 @@ const Footer = () => {
           }
         }
 
-        @keyframes locationWidgetAppear {
-          from {
-            opacity: 0;
-            transform: translateY(6px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
 
-        @keyframes pinPulse {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.15);
-          }
-        }
+
+
 
         .footer-revealed {
           animation: footerReveal 300ms ease-out forwards;
@@ -454,13 +418,9 @@ const Footer = () => {
           animation: copyPulse 200ms ease-out;
         }
 
-        .location-widget {
-          animation: locationWidgetAppear 180ms ease-out;
-        }
 
-        .location-pin.pulse-once {
-          animation: pinPulse 400ms ease-out;
-        }
+
+
 
         @media (prefers-reduced-motion: reduce) {
           *, *::before, *::after {
@@ -513,198 +473,190 @@ const Footer = () => {
       {/* Footer */}
       <footer
         ref={footerRef}
-        className={`bg-gradient-to-b from-white to-gray-50 border-t border-gray-200 py-16 ${isVisible ? 'footer-revealed' : 'opacity-0'}`}
+        className={`bg-gradient-to-b from-white to-gray-50 border-t border-gray-200 py-8 ${isVisible ? 'footer-revealed' : 'opacity-0'}`}
       >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
-            {/* Brand & Info */}
-            <div className="lg:col-span-2 space-y-6">
-              <a href="/" className="flex items-center gap-3 group">
-                <img
-                  src="/logo.png"
-                  alt="Frostrek Logo"
-                  className="h-10 w-10 transition-transform group-hover:scale-110"
-                />
-                <span className="text-2xl font-bold font-sans tracking-tight text-gray-900">
-                  Frostrek
-                </span>
-              </a>
-              <p className="text-gray-600 leading-relaxed max-w-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-8">
+            {/* Brand & Info - Takes 4 columns (compact) */}
+            <div className="lg:col-span-4 space-y-6">
+              <div>
+                <a href="/" className="flex items-center gap-2.5 group">
+                  <img
+                    src="/logo.png"
+                    alt="Frostrek Logo"
+                    className="h-9 w-9 transition-transform group-hover:scale-110"
+                  />
+                  <span className="text-xl font-bold font-sans tracking-tight text-gray-900">
+                    Frostrek
+                  </span>
+                </a>
+
+                {/* ISO Certifications */}
+                <div className="flex flex-wrap gap-2 pt-3">
+                  <div className="iso-badge px-2.5 py-1 bg-[#FDFBF7] border border-[#E6D0C6] rounded-full text-[10px] font-semibold text-[#8A5A35] cursor-pointer">
+                    ISO 27001:2022 Certified
+                  </div>
+                  <div className="iso-badge px-2.5 py-1 bg-[#FDFBF7] border border-[#E6D0C6] rounded-full text-[10px] font-semibold text-[#8A5A35] cursor-pointer">
+                    ISO 9001:2015 Certified
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-gray-600 text-sm leading-relaxed max-w-sm">
                 Empowering industries through AI, automation, and innovation - one intelligent solution at a time.
               </p>
 
-              {/* ISO Certifications */}
-              <div className="flex flex-wrap gap-3 pt-4">
-                <div className="iso-badge px-3 py-1.5 bg-[#FDFBF7] border border-[#E6D0C6] rounded-full text-xs font-semibold text-[#8A5A35] cursor-pointer">
-                  ISO 27001:2022 Certified
-                </div>
-                <div className="iso-badge px-3 py-1.5 bg-[#FDFBF7] border border-[#E6D0C6] rounded-full text-xs font-semibold text-[#8A5A35] cursor-pointer">
-                  ISO 9001:2015 Certified
-                </div>
-              </div>
+              <div className="space-y-4">
+                {/* Large Embedded Map (Replaces Address Text) */}
+                <div className="w-full h-40 rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-gray-100 relative group">
+                  <iframe
+                    title="Office Location"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    scrolling="no"
+                    marginHeight={0}
+                    marginWidth={0}
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=77.0%2C28.4%2C77.1%2C28.5&amp;layer=mapnik&amp;marker=28.4595%2C77.0266"
+                    style={{ border: 0 }}
+                    className="group-hover:opacity-80 transition-opacity duration-300"
+                  ></iframe>
 
-              <div className="space-y-3 pt-4">
-                {/* Location with Widget */}
-                <div
-                  ref={locationRef}
-                  className="relative"
-                  onMouseEnter={() => handleLocationHover(true)}
-                  onMouseLeave={() => handleLocationHover(false)}
-                >
-                  <div
-                    className="flex items-center gap-3 text-gray-600 cursor-pointer"
-                    onClick={handleLocationClick}
-                  >
-                    <MapPin size={18} className="text-[#B07552]" />
-                    <div>
-                      <div>{COMPANY_INFO.address}</div>
-                      <div className="text-sm text-gray-500 mt-1">🌍 Serving clients globally</div>
+                  {/* Address Tooltip */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-white/95 backdrop-blur-sm px-4 py-2.5 rounded-lg shadow-xl transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 border border-gray-100">
+                      <div className="flex items-start gap-2">
+                        <MapPin size={16} className="text-[#B07552] mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-xs font-bold text-gray-900 leading-tight">
+                            Frostrek HQ
+                          </p>
+                          <p className="text-[10px] text-gray-600 mt-0.5 font-medium leading-tight whitespace-nowrap">
+                            {COMPANY_INFO.address.split(',')[0]},<br />
+                            {COMPANY_INFO.address.split(',').slice(1).join(',')}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Location Widget */}
-                  {locationWidgetOpen && (
-                    <div className="location-widget absolute left-0 bottom-full mb-3 w-64 bg-gray-800 rounded-xl shadow-lg overflow-hidden z-30">
-                      {/* Static Map Preview */}
-                      <div className="relative h-32 bg-gradient-to-br from-[#8A5A35] to-[#B07552] overflow-hidden">
-                        {/* Simplified India Map */}
-                        <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 200 200" fill="none">
-                          <path d="M100 40 L110 50 L120 45 L125 55 L130 50 L135 60 L130 70 L125 75 L120 85 L115 95 L110 105 L105 115 L100 125 L95 130 L90 135 L85 130 L80 125 L75 120 L70 110 L65 100 L60 90 L55 80 L60 70 L65 60 L70 55 L75 50 L80 45 L85 40 L90 42 L95 40 Z" fill="currentColor" className="text-white" />
-                        </svg>
-
-                        {/* Location Pin */}
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                          <svg className={`w-8 h-8 text-red-500 ${pinPulsed ? 'pulse-once' : ''}`} viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                          </svg>
-                        </div>
-                      </div>
-
-                      {/* Text Content */}
-                      <div className="p-4 space-y-2">
-                        <div className="text-white font-semibold text-base">India</div>
-                        <div className="text-[#F3E9CD] text-sm">Serving clients globally</div>
-                        <div className="text-gray-300 text-xs font-medium pt-1">
-                          Frostrek HQ (Remote-First)
-                        </div>
-                        <div className="text-gray-500 text-xs pt-2 border-t border-gray-700">
-                          Location shown for business reference only
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                <div className="flex items-center gap-3 text-gray-600 email-container">
-                  <Mail size={18} className="text-[#B07552]" />
-                  <button
-                    onClick={copyEmail}
-                    className="email-shimmer hover:text-[#B07552] transition-colors flex items-center gap-2 group"
-                  >
-                    <span>{COMPANY_INFO.contact}</span>
-                    {emailCopied ? (
-                      <Check size={14} className="text-[#B07552] copy-notification" />
-                    ) : (
-                      <Copy size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                {/* Email & Language Switcher */}
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  {/* Email */}
+                  <div className="flex items-center gap-2.5 text-gray-600 email-container">
+                    <Mail size={16} className="text-[#B07552]" />
+                    <button
+                      onClick={copyEmail}
+                      className="email-shimmer hover:text-[#B07552] transition-colors flex items-center gap-2 group text-sm"
+                    >
+                      <span>{COMPANY_INFO.contact}</span>
+                      {emailCopied ? (
+                        <Check size={12} className="text-[#B07552] copy-notification" />
+                      ) : (
+                        <Copy size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Language Switcher */}
+                  <div className="relative" ref={langRef}>
+                    <button
+                      onClick={() => setLangOpen(!langOpen)}
+                      className="lang-switcher inline-flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-md hover:border-[#B07552] text-xs font-medium bg-white"
+                    >
+                      <Globe size={12} className="text-[#B07552]" />
+                      <span>{LANGUAGES.find(l => l.code === selectedLang)?.flag}</span>
+                      <span>{LANGUAGES.find(l => l.code === selectedLang)?.name}</span>
+                      <ChevronDown size={12} className="lang-arrow" />
+                    </button>
+                    {langOpen && (
+                      <div className="lang-dropdown absolute bottom-full mb-2 right-0 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-10 w-40">
+                        {LANGUAGES.map(lang => (
+                          <button
+                            key={lang.code}
+                            onClick={() => handleLangSelect(lang.code)}
+                            className="w-full px-3 py-2 hover:bg-gray-50 flex items-center gap-2 text-xs transition-colors"
+                          >
+                            <span>{lang.flag}</span>
+                            <span className="flex-grow text-left">{lang.name}</span>
+                            {selectedLang === lang.code && <Check size={12} className="text-[#B07552]" />}
+                          </button>
+                        ))}
+                      </div>
                     )}
-                  </button>
+                  </div>
                 </div>
-                {emailCopied && (
-                  <div className="text-xs text-[#B07552] font-medium copy-notification">
-                    ✓ Email copied to clipboard
-                  </div>
-                )}
-              </div>
-
-              {/* Language Switcher */}
-              <div className="relative pt-2" ref={langRef}>
-                <button
-                  onClick={() => setLangOpen(!langOpen)}
-                  className="lang-switcher flex items-center gap-2 px-4 py-2 border-2 border-gray-300 rounded-lg hover:border-[#B07552] text-sm font-medium"
-                >
-                  <Globe size={14} className="text-[#B07552]" />
-                  <span>{LANGUAGES.find(l => l.code === selectedLang)?.flag}</span>
-                  <span>{LANGUAGES.find(l => l.code === selectedLang)?.name}</span>
-                  <ChevronDown size={16} className="lang-arrow" />
-                </button>
-                {langOpen && (
-                  <div className="lang-dropdown absolute bottom-full mb-2 left-0 bg-white border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden z-10">
-                    {LANGUAGES.map(lang => (
-                      <button
-                        key={lang.code}
-                        onClick={() => handleLangSelect(lang.code)}
-                        className="w-full px-4 py-2 hover:bg-gray-50 flex items-center gap-3 text-sm transition-colors"
-                      >
-                        <span>{lang.flag}</span>
-                        <span className="flex-grow text-left">{lang.name}</span>
-                        {selectedLang === lang.code && <Check size={16} className="text-[#B07552]" />}
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
 
-            {/* Products */}
-            <div className="space-y-4">
-              <h4 className="section-title text-gray-900 font-semibold mb-4 text-lg">Products</h4>
-              <ul className="space-y-2">
-                {NAV_ITEMS.find(n => n.label === 'Products')?.megaMenu?.flatMap(s => s.items).slice(0, 5).map(item => (
-                  <li key={item.name}>
-                    <a href={item.href} className="footer-link text-gray-600 hover:text-[#B07552] text-sm">
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* Spacer - Takes 2 columns to push content right */}
+            <div className="hidden lg:block lg:col-span-2"></div>
 
-            {/* Solutions */}
-            <div className="space-y-4">
-              <h4 className="section-title text-gray-900 font-semibold mb-4 text-lg">Solutions</h4>
-              <ul className="space-y-2">
-                {NAV_ITEMS.find(n => n.label === 'Solutions')?.megaMenu?.flatMap(s => s.items).map(item => (
-                  <li key={item.name}>
-                    <a href={item.href} className="footer-link text-gray-600 hover:text-[#B07552] text-sm">
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* Links Section - Shifted Right */}
+            <div className="lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-8">
+              {/* Products */}
+              <div className="space-y-3">
+                <h4 className="section-title text-gray-900 font-semibold mb-3 text-sm">Products</h4>
+                <ul className="space-y-1.5">
+                  {NAV_ITEMS.find(n => n.label === 'Products')?.megaMenu?.flatMap(s => s.items).slice(0, 5).map(item => (
+                    <li key={item.name}>
+                      <a href={item.href} className="footer-link text-gray-600 hover:text-[#B07552] text-xs">
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-            {/* Company */}
-            <div className="space-y-4">
-              <h4 className="section-title text-gray-900 font-semibold mb-4 text-lg">Company</h4>
-              <ul className="space-y-2">
-                <li><a href="/about" className="footer-link text-gray-600 hover:text-[#B07552] text-sm">About Us</a></li>
-                <li><a href="/services" className="footer-link text-gray-600 hover:text-[#B07552] text-sm">Services</a></li>
-                <li><a href="/resources" className="footer-link text-gray-600 hover:text-[#B07552] text-sm">Resources</a></li>
-                <li><a href="/careers" className="footer-link text-gray-600 hover:text-[#B07552] text-sm">Careers</a></li>
-                <li><a href="/contact" className="footer-link text-gray-600 hover:text-[#B07552] text-sm">Contact</a></li>
-              </ul>
+              {/* Solutions */}
+              <div className="space-y-3">
+                <h4 className="section-title text-gray-900 font-semibold mb-3 text-sm">Solutions</h4>
+                <ul className="space-y-1.5">
+                  {NAV_ITEMS.find(n => n.label === 'Solutions')?.megaMenu?.flatMap(s => s.items).map(item => (
+                    <li key={item.name}>
+                      <a href={item.href} className="footer-link text-gray-600 hover:text-[#B07552] text-xs">
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Company */}
+              <div className="space-y-3">
+                <h4 className="section-title text-gray-900 font-semibold mb-3 text-sm">Company</h4>
+                <ul className="space-y-1.5">
+                  <li><a href="/about" className="footer-link text-gray-600 hover:text-[#B07552] text-xs">About Us</a></li>
+                  <li><a href="/services" className="footer-link text-gray-600 hover:text-[#B07552] text-xs">Services</a></li>
+                  <li><a href="/resources" className="footer-link text-gray-600 hover:text-[#B07552] text-xs">Resources</a></li>
+                  <li><a href="/careers" className="footer-link text-gray-600 hover:text-[#B07552] text-xs">Careers</a></li>
+                  <li><a href="/contact" className="footer-link text-gray-600 hover:text-[#B07552] text-xs">Contact</a></li>
+                </ul>
+              </div>
+
+              {/* Copyright & Socials (Moved inside grid to reduce height) */}
+              <div className="col-span-2 md:col-span-3 border-t border-gray-100 pt-4 mt-2 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p className="text-gray-500 text-xs text-center md:text-left">
+                  &copy; {currentYear} {COMPANY_INFO.name}. All rights reserved.
+                </p>
+
+                <div className="flex items-center gap-3">
+                  <a href={COMPANY_INFO.socials.linkedin} className="social-icon w-8 h-8 rounded-full bg-[#fdfbf7] flex items-center justify-center text-[#B07552] hover:bg-[#B07552] hover:text-white transition-colors">
+                    <Linkedin size={14} />
+                  </a>
+                  <a href={COMPANY_INFO.socials.twitter} className="social-icon w-8 h-8 rounded-full bg-[#fdfbf7] flex items-center justify-center text-[#B07552] hover:bg-[#B07552] hover:text-white transition-colors">
+                    <Twitter size={14} />
+                  </a>
+                  <a href={COMPANY_INFO.socials.facebook} className="social-icon w-8 h-8 rounded-full bg-[#fdfbf7] flex items-center justify-center text-[#B07552] hover:bg-[#B07552] hover:text-white transition-colors">
+                    <Facebook size={14} />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-gray-500 text-sm">
-              &copy; {currentYear} {COMPANY_INFO.name}. All rights reserved.
-            </p>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-4">
-              <a href={COMPANY_INFO.socials.linkedin} className="social-icon w-10 h-10 rounded-full bg-[#fdfbf7] flex items-center justify-center text-[#B07552] hover:bg-[#B07552] hover:text-white">
-                <Linkedin size={18} />
-              </a>
-              <a href={COMPANY_INFO.socials.twitter} className="social-icon w-10 h-10 rounded-full bg-[#fdfbf7] flex items-center justify-center text-[#B07552] hover:bg-[#B07552] hover:text-white">
-                <Twitter size={18} />
-              </a>
-              <a href={COMPANY_INFO.socials.facebook} className="social-icon w-10 h-10 rounded-full bg-[#fdfbf7] flex items-center justify-center text-[#B07552] hover:bg-[#B07552] hover:text-white">
-                <Facebook size={18} />
-              </a>
-            </div>
-          </div>
         </div>
       </footer>
 

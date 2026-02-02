@@ -1,0 +1,132 @@
+{
+    "name": "Frostrek Schedule Demo (Fixed)",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "schedule-demo",
+                "responseMode": "onReceived",
+                "options": {}
+            },
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                400,
+                300
+            ],
+            "webhookId": "schedule-demo-webhook"
+        },
+        {
+            "parameters": {
+                "calendar": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "primary"
+                },
+                "start": "={{$json.date}}T{{$json.time}}:00",
+                "end": "={{new Date(new Date($json.date + 'T' + $json.time).getTime() + 30 * 60000).toISOString()}}",
+                "additionalFields": {
+                    "conferenceData": {
+                        "createRequest": {
+                            "requestId": "={{$execution.id}}"
+                        }
+                    },
+                    "attendees": [
+                        "={{$json.email}}",
+                        "founder@frostrek.com"
+                    ],
+                    "summary": "Frostrek Demo – {{$json.name}}",
+                    "description": "Demo meeting with {{$json.name}}\n\nClient Email: {{$json.email}}\nNotes: {{$json.notes || 'N/A'}}"
+                },
+                "conferenceDataVersion": 1
+            },
+            "name": "Google Calendar",
+            "type": "n8n-nodes-base.googleCalendar",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ],
+            "credentials": {
+                "googleCalendarOAuth2Api": {
+                    "id": "YOUR_CALENDAR_CREDENTIAL_ID",
+                    "name": "Google Calendar Account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "toEmail": "={{$json.email}}",
+                "subject": "✅ Demo Scheduled – Google Meet Link Inside",
+                "message": "=Hi {{$json.name}},\n\nYour demo has been successfully scheduled.\n\n🗓 Date: {{$json.date}}\n⏰ Time: {{$json.time}}\n\n🔗 Google Meet Link:\n{{$node[\"Google Calendar\"].json[\"conferenceData\"][\"entryPoints\"][0][\"uri\"]}}\n\nLooking forward to speaking with you!\n\n– Team Frostrek"
+            },
+            "name": "Gmail - Client",
+            "type": "n8n-nodes-base.gmail",
+            "typeVersion": 2,
+            "position": [
+                900,
+                220
+            ],
+            "credentials": {
+                "gmailOAuth2": {
+                    "id": "YOUR_GMAIL_CREDENTIAL_ID",
+                    "name": "Gmail Account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "toEmail": "founder@frostrek.com",
+                "subject": "📢 New Demo Scheduled",
+                "message": "=A new demo has been scheduled.\n\nName: {{$json.name}}\nEmail: {{$json.email}}\nDate: {{$json.date}}\nTime: {{$json.time}}\n\nMeet Link:\n{{$node[\"Google Calendar\"].json[\"conferenceData\"][\"entryPoints\"][0][\"uri\"]}}"
+            },
+            "name": "Gmail - Internal Notify",
+            "type": "n8n-nodes-base.gmail",
+            "typeVersion": 2,
+            "position": [
+                900,
+                380
+            ],
+            "credentials": {
+                "gmailOAuth2": {
+                    "id": "YOUR_GMAIL_CREDENTIAL_ID",
+                    "name": "Gmail Account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Google Calendar",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Calendar": {
+            "main": [
+                [
+                    {
+                        "node": "Gmail - Client",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Gmail - Internal Notify",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
