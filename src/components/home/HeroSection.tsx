@@ -6,7 +6,7 @@ import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
-
+import Plasma from "./Plasma";
 // Lazy load 3D component to prevent blocking initial page load
 import HeroRobot from './HeroRobot';
 
@@ -63,6 +63,18 @@ const HeroSection = () => {
                 <div className="absolute bottom-[-20%] right-[-10%] w-[700px] h-[700px] rounded-full bg-[#F3E9CD]/15 blur-[120px]" />
             </div>
 
+            <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+                <div className="relative w-[100%] h-[100%] lg:w-[100%] lg:h-[100%] rounded-3xl overflow-hidden shadow-2xl pointer-events-auto">
+                    <Plasma
+                        color="#FDFBF7"
+                        speed={1}
+                        direction="forward"
+                        scale={2}
+                        opacity={0.8}
+                        mouseInteractive
+                    />
+                </div>
+            </div>
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-12 lg:gap-8 items-center">
 
@@ -115,9 +127,9 @@ const HeroSection = () => {
                             <Link to="/schedule-demo" className={`px-8 py-4 text-white rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105 w-full sm:w-auto text-center ${theme === 'dark' ? 'bg-dark-accent hover:bg-dark-accent/90 shadow-dark-accent/20' : 'bg-[#B07552] hover:bg-[#8A5A35] shadow-[#B07552]/20'}`}>
                                 Schedule a Demo
                             </Link>
-                            <button className={`px-8 py-4 bg-transparent border-2 rounded-xl font-semibold transition-all w-full sm:w-auto hover:scale-105 ${theme === 'dark' ? 'border-dark-accent text-dark-accent hover:bg-dark-accent/10' : 'border-[#B07552] text-[#B07552] hover:bg-[#B07552]/5 hover:text-[#8A5A35]'}`}>
+                            <Link to="/contact" className={`px-8 py-4 bg-transparent border-2 rounded-xl font-semibold transition-all w-full sm:w-auto hover:scale-105 text-center flex items-center justify-center ${theme === 'dark' ? 'border-dark-accent text-dark-accent hover:bg-dark-accent/10' : 'border-[#B07552] text-[#B07552] hover:bg-[#B07552]/5 hover:text-[#8A5A35]'}`}>
                                 Contact Sales
-                            </button>
+                            </Link>
                         </div>
                     </div>
 

@@ -120,14 +120,7 @@ const ScheduleDemo = () => {
                 endTime: endTimeStr
             };
 
-            // Allow testing without a real URL by logging if it's the placeholder
-            if (WEBHOOK_URL === 'YOUR_WEBHOOK_URL_HERE') {
-                console.log('Mock Submission (Webhook URL not set):', payload);
-                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
-                setIsSubmitted(true);
-                return;
-            }
-
+            // Send data to n8n webhook
             const response = await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

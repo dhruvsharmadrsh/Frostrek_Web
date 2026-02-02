@@ -124,12 +124,14 @@ const CTASection = () => {
                                 Schedule a demo
                             </button>
                         </Link>
-                        <button
-                            className="cta-button flex items-center px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-xl hover:bg-white/10 transition-all duration-300 transform hover:scale-105 group"
-                        >
-                            Contact Sales
-                            <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
-                        </button>
+                        <Link to="/contact">
+                            <button
+                                className="cta-button flex items-center px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-xl hover:bg-white/10 transition-all duration-300 transform hover:scale-105 group"
+                            >
+                                Contact Sales
+                                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

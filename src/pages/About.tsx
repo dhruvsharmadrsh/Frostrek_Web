@@ -1,4 +1,5 @@
 import { motion, useScroll, useTransform, useMotionValue, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Target, Award, Zap, Shield, Globe, MapPin, Phone, ArrowRight, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, MousePointer2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, ChevronDown, type LucideIcon } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useRef, useState, useEffect, useMemo, memo } from 'react';
@@ -1625,9 +1626,11 @@ const About = () => {
                             <MagneticButton variant="cta" className="px-8 py-4">
                                 <span className="flex items-center gap-2">Book a Demo <ArrowRight className="w-5 h-5" /></span>
                             </MagneticButton>
-                            <MagneticButton variant="secondary" className="px-8 py-4 !bg-transparent !border-white/50 !text-white hover:!bg-white/10">
-                                Contact Sales
-                            </MagneticButton>
+                            <Link to="/contact">
+                                <MagneticButton variant="secondary" className="px-8 py-4 !bg-transparent !border-white/50 !text-white hover:!bg-white/10">
+                                    Contact Sales
+                                </MagneticButton>
+                            </Link>
                         </div>
                     </motion.div>
                 </div>
