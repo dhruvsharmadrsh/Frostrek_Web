@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowUpRight, Sparkles, Zap, CheckCircle2, MousePointer2 } from 'lucide-react';
+import { Sparkles, Zap, CheckCircle2, MousePointer2 } from 'lucide-react';
 import type { Challenge } from '../../utils/solutionData';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -58,9 +58,6 @@ const MobileCard = ({ challenge, index, total, theme }: { challenge: Challenge; 
                     <div className="text-center"><p className={`text-lg font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`}>24/7</p><p className={`text-[10px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>Uptime</p></div>
                     <div className="text-center"><p className={`text-lg font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`}>&lt;1s</p><p className={`text-[10px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>Response</p></div>
                 </div>
-                <button className={`w-full mt-3 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-[#B07552] text-white'}`}>
-                    <span>Explore</span><ArrowUpRight size={14} />
-                </button>
             </div>
         </div>
     </div>
@@ -107,11 +104,6 @@ const DesktopCard = ({ challenge, index, total, theme }: { challenge: Challenge;
                         <div><p className={`text-xl font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`}>60%</p><p className={`text-[10px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>Cost Cut</p></div>
                         <div><p className={`text-xl font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`}>24/7</p><p className={`text-[10px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>Uptime</p></div>
                         <div><p className={`text-xl font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`}>&lt;1s</p><p className={`text-[10px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>Response</p></div>
-                    </div>
-                    <div className="mt-auto flex justify-end">
-                        <button className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all shadow-md group/btn ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-[#B07552] text-white hover:bg-[#8A5A35]'}`}>
-                            <span>Explore</span><ArrowUpRight size={14} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                        </button>
                     </div>
                 </div>
             </div>

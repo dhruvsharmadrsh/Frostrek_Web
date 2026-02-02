@@ -209,41 +209,34 @@ const TypewriterText = memo(({ texts }: { texts: string[] }) => {
     );
 });
 
-// ============ MAGNETIC INTERACTIVE BUTTON ============
+// ============ INTERACTIVE BUTTON (NO MAGNETIC EFFECT) ============
 const MagneticButton = memo(({ children, className, onClick, variant = 'primary' }: {
     children: React.ReactNode;
     className?: string;
     onClick?: () => void;
     variant?: 'primary' | 'secondary' | 'cta'
 }) => {
-    const ref = useRef<HTMLButtonElement>(null);
+    const { theme } = useTheme();
     const [hover, setHover] = useState(false);
     const [press, setPress] = useState(false);
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
 
-    const handleMouse = (e: React.MouseEvent) => {
-        if (!ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        x.set((e.clientX - rect.left - rect.width / 2) * 0.15);
-        y.set((e.clientY - rect.top - rect.height / 2) * 0.15);
-    };
-
-    const reset = () => { x.set(0); y.set(0); setHover(false); };
-
-    const baseStyles = variant === 'primary'
-        ? 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white shadow-lg shadow-brand-green-500/25'
-        : variant === 'cta'
-            ? 'bg-white text-brand-green-600 shadow-xl'
-            : 'bg-white/90 border-2 border-brand-green-500/40 text-brand-green-600';
+    // Dark mode uses #bf8440 (dark-accent), light mode uses brand-green gradient
+    const baseStyles = theme === 'dark'
+        ? variant === 'primary'
+            ? 'bg-[#bf8440] text-dark-bg shadow-lg shadow-[#bf8440]/25'
+            : variant === 'cta'
+                ? 'bg-[#bf8440] text-dark-bg shadow-xl'
+                : 'bg-dark-card border-2 border-[#bf8440]/40 text-[#bf8440]'
+        : variant === 'primary'
+            ? 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white shadow-lg shadow-brand-green-500/25'
+            : variant === 'cta'
+                ? 'bg-white text-brand-green-600 shadow-xl'
+                : 'bg-white/90 border-2 border-brand-green-500/40 text-brand-green-600';
 
     return (
         <motion.button
-            ref={ref}
-            style={{ x, y }}
-            onMouseMove={handleMouse}
             onMouseEnter={() => setHover(true)}
-            onMouseLeave={reset}
+            onMouseLeave={() => setHover(false)}
             onMouseDown={() => setPress(true)}
             onMouseUp={() => setPress(false)}
             onClick={onClick}
@@ -1047,7 +1040,7 @@ const About = () => {
                             className={`text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 leading-tight ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}
                         >
                             Revolutionizing AI Solutions with{' '}
-                            <span className="text-brand-green-500 relative inline-block">
+                            <span className={`relative inline-block ${theme === 'dark' ? 'text-[#bf8441]' : 'text-brand-green-500'}`}>
                                 <TypewriterText texts={texts} />
                                 <motion.span
                                     className="absolute -bottom-2 left-0 h-1.5 bg-gradient-to-r from-brand-green-400 to-brand-yellow-400 rounded-full"
@@ -1178,11 +1171,11 @@ const About = () => {
                                 <div className="absolute bottom-0 left-[-1px] w-[1px] h-8 bg-black"></div>
 
                                 <div className="flex flex-wrap gap-4">
-                                    <MagneticButton variant="primary" className="!bg-gray-950 !text-white hover:!bg-brand-green-600 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase">
-                                        <span className="flex items-center gap-2">VIEW OUR AGENT PLATFORM <span className="text-brand-green-400">•</span></span>
+                                    <MagneticButton variant="primary" className={`px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase ${theme === 'dark' ? '!bg-[#bf8441] !text-dark-bg hover:!bg-[#bf8441]/90' : '!bg-gray-950 !text-white hover:!bg-brand-green-600'}`}>
+                                        <span className="flex items-center gap-2">VIEW OUR AGENT PLATFORM <span className={theme === 'dark' ? 'text-dark-bg' : 'text-brand-green-400'}>•</span></span>
                                     </MagneticButton>
 
-                                    <MagneticButton variant="secondary" className="!bg-transparent !border-gray-900 !text-gray-900 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase hover:!bg-gray-50">
+                                    <MagneticButton variant="secondary" className="px-8 py-4 font-bold text-xs tracking-widest uppercase">
                                         CONTACT US
                                     </MagneticButton>
                                 </div>
@@ -1215,7 +1208,7 @@ const About = () => {
                                 >
                                     <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50">
                                         <div className="text-2xl font-bold tracking-tight text-gray-900">
-                                            Frostrek<span className="text-brand-green-500">.ai</span>
+                                            Frostrek<span className={theme === 'dark' ? 'text-[#bf8441]' : 'text-brand-green-500'}>.ai</span>
                                         </div>
                                     </div>
                                 </motion.div>

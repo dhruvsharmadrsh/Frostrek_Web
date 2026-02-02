@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
 import type { ProductStatistic } from '../../utils/productData';
 import { LayoutDashboard, BarChart3, PieChart, Settings, ArrowUpRight, Activity } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 // Reusable Circular Progress for Percentages
-const CircularProgress = ({ value, label, delay }: { value: string, label: string, delay: number }) => {
+const CircularProgress = ({ value, label, delay, theme }: { value: string, label: string, delay: number, theme: string }) => {
     const numValue = parseFloat(value.replace(/[^0-9.]/g, ''));
     const isPercentage = value.includes('%');
     const displayValue = isPercentage ? numValue : 100;
@@ -12,7 +13,7 @@ const CircularProgress = ({ value, label, delay }: { value: string, label: strin
         <div className="flex flex-col items-center justify-center h-full p-4 relative group">
             <div className="relative w-28 h-28 mb-3">
                 <svg className="w-full h-full transform -rotate-90">
-                    <circle cx="56" cy="56" r="50" stroke="#F2E8DF" strokeWidth="8" fill="transparent" />
+                    <circle cx="56" cy="56" r="50" stroke={theme === 'dark' ? '#3a3025' : '#F2E8DF'} strokeWidth="8" fill="transparent" />
                     <motion.circle
                         cx="56" cy="56" r="50"
                         stroke="#B07552"
@@ -26,21 +27,21 @@ const CircularProgress = ({ value, label, delay }: { value: string, label: strin
                     />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-gray-900">{value}</span>
+                    <span className={`text-2xl font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>{value}</span>
                 </div>
             </div>
-            <p className="text-gray-500 font-medium text-sm text-center">{label}</p>
+            <p className={`font-medium text-sm text-center ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>{label}</p>
         </div>
     );
 };
 
 // Bar Chart
-const BarChart = ({ value, label, delay }: { value: string, label: string, delay: number }) => {
+const BarChart = ({ value, label, delay, theme }: { value: string, label: string, delay: number, theme: string }) => {
     return (
         <div className="flex flex-col justify-end h-full p-4 relative group">
             <div className="flex items-end justify-center gap-3 h-28 mb-3 w-full px-2">
                 <motion.div
-                    className="w-8 bg-gray-100 rounded-t-lg"
+                    className={`w-8 rounded-t-lg ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gray-100'}`}
                     initial={{ height: 0 }}
                     whileInView={{ height: '30%' }}
                     viewport={{ once: true }}
@@ -57,19 +58,19 @@ const BarChart = ({ value, label, delay }: { value: string, label: string, delay
                         initial={{ opacity: 0, scale: 0 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ delay: delay + 1 }}
-                        className="absolute -top-8 left-1/2 -translate-x-1/2 text-lg font-bold text-brand-yellow-600 bg-white/80 backdrop-blur px-2 rounded-md shadow-sm whitespace-nowrap"
+                        className={`absolute -top-8 left-1/2 -translate-x-1/2 text-lg font-bold text-brand-yellow-600 px-2 rounded-md shadow-sm whitespace-nowrap ${theme === 'dark' ? 'bg-dark-card' : 'bg-white/80 backdrop-blur'}`}
                     >
                         {value}
                     </motion.div>
                 </motion.div>
             </div>
-            <p className="text-gray-500 font-medium text-sm text-center">{label}</p>
+            <p className={`font-medium text-sm text-center ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>{label}</p>
         </div>
     );
 };
 
 // Trend Line
-const TrendChart = ({ value, label, delay }: { value: string, label: string, delay: number }) => {
+const TrendChart = ({ value, label, delay, theme }: { value: string, label: string, delay: number, theme: string }) => {
     return (
         <div className="flex flex-col items-center justify-center h-full p-4 relative group">
             <div className="relative w-full h-28 mb-3 flex items-center justify-center">
@@ -100,15 +101,15 @@ const TrendChart = ({ value, label, delay }: { value: string, label: string, del
                     </defs>
                 </svg>
                 <div className="absolute top-0 right-0">
-                    <span className="text-xl font-bold text-gray-900 bg-white/80 backdrop-blur px-1.5 rounded-md">{value}</span>
+                    <span className={`text-xl font-bold px-1.5 rounded-md ${theme === 'dark' ? 'text-dark-text bg-dark-card' : 'text-gray-900 bg-white/80 backdrop-blur'}`}>{value}</span>
                 </div>
             </div>
-            <p className="text-gray-500 font-medium text-sm text-center">{label}</p>
+            <p className={`font-medium text-sm text-center ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>{label}</p>
         </div>
     );
 };
 
-const DashboardWidget = ({ stat, index }: { stat: ProductStatistic, index: number }) => {
+const DashboardWidget = ({ stat, index, theme }: { stat: ProductStatistic, index: number, theme: string }) => {
     const isPercentage = stat.value.includes('%');
     const isMultiplier = stat.value.toLowerCase().includes('x');
     const isHighPercentage = isPercentage && parseFloat(stat.value) > 90;
@@ -118,20 +119,22 @@ const DashboardWidget = ({ stat, index }: { stat: ProductStatistic, index: numbe
     else if (isMultiplier) Content = BarChart;
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-2 hover:shadow-md transition-shadow duration-300">
+        <div className={`rounded-2xl border shadow-sm p-2 hover:shadow-md transition-shadow duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-white border-gray-100'}`}>
             {/* Widget Header */}
-            <div className="flex items-center justify-between px-3 py-2 border-b border-gray-50 mb-1">
-                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{stat.label.split(' ')[0]} METRIC</span>
-                <ArrowUpRight className="w-3 h-3 text-gray-300" />
+            <div className={`flex items-center justify-between px-3 py-2 border-b mb-1 ${theme === 'dark' ? 'border-dark-accent/10' : 'border-gray-50'}`}>
+                <span className={`text-[10px] font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-400'}`}>{stat.label.split(' ')[0]} METRIC</span>
+                <ArrowUpRight className={`w-3 h-3 ${theme === 'dark' ? 'text-dark-accent/50' : 'text-gray-300'}`} />
             </div>
             <div className="h-40">
-                <Content value={stat.value} label={stat.label} delay={index * 0.15} />
+                <Content value={stat.value} label={stat.label} delay={index * 0.15} theme={theme} />
             </div>
         </div>
     );
 };
 
 export const ImpactMetrics = ({ statistics }: { statistics: ProductStatistic[] }) => {
+    const { theme } = useTheme();
+
     return (
         <div className="max-w-5xl mx-auto">
             {/* Dashboard Container */}
@@ -140,36 +143,36 @@ export const ImpactMetrics = ({ statistics }: { statistics: ProductStatistic[] }
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-2xl overflow-hidden flex"
+                className={`rounded-3xl border shadow-2xl overflow-hidden flex ${theme === 'dark' ? 'bg-dark-navbar/80 backdrop-blur-xl border-dark-accent/20' : 'bg-white/80 backdrop-blur-xl border-white/50'}`}
             >
                 {/* 1. Fake Sidebar */}
-                <div className="w-16 md:w-20 bg-gray-50/50 border-r border-gray-100 flex flex-col items-center py-6 gap-6 hidden sm:flex">
-                    <div className="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-xs">F</div>
+                <div className={`w-16 md:w-20 border-r flex flex-col items-center py-6 gap-6 hidden sm:flex ${theme === 'dark' ? 'bg-dark-bg/50 border-dark-accent/20' : 'bg-gray-50/50 border-gray-100'}`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${theme === 'dark' ? 'bg-dark-accent text-dark-bg' : 'bg-gray-900 text-white'}`}>F</div>
                     <div className="flex flex-col gap-4 mt-4 w-full px-4">
-                        <div className="p-2 rounded-lg bg-white shadow-sm text-brand-green-600"><LayoutDashboard className="w-5 h-5" /></div>
-                        <div className="p-2 rounded-lg hover:bg-white/50 text-gray-400 transition-colors"><BarChart3 className="w-5 h-5" /></div>
-                        <div className="p-2 rounded-lg hover:bg-white/50 text-gray-400 transition-colors"><PieChart className="w-5 h-5" /></div>
+                        <div className={`p-2 rounded-lg shadow-sm ${theme === 'dark' ? 'bg-dark-card text-dark-accent' : 'bg-white text-brand-green-600'}`}><LayoutDashboard className="w-5 h-5" /></div>
+                        <div className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-dark-card text-dark-text-muted' : 'hover:bg-white/50 text-gray-400'}`}><BarChart3 className="w-5 h-5" /></div>
+                        <div className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-dark-card text-dark-text-muted' : 'hover:bg-white/50 text-gray-400'}`}><PieChart className="w-5 h-5" /></div>
                     </div>
-                    <div className="mt-auto p-2 rounded-lg hover:bg-white/50 text-gray-400 cursor-pointer"><Settings className="w-5 h-5" /></div>
+                    <div className={`mt-auto p-2 rounded-lg cursor-pointer ${theme === 'dark' ? 'hover:bg-dark-card text-dark-text-muted' : 'hover:bg-white/50 text-gray-400'}`}><Settings className="w-5 h-5" /></div>
                 </div>
 
                 {/* 2. Main Dashboard Area */}
-                <div className="flex-1 p-6 md:p-8 bg-gradient-to-br from-white via-gray-50/30 to-white">
+                <div className={`flex-1 p-6 md:p-8 ${theme === 'dark' ? 'bg-gradient-to-br from-dark-navbar via-dark-bg/30 to-dark-navbar' : 'bg-gradient-to-br from-white via-gray-50/30 to-white'}`}>
                     {/* Header */}
                     <div className="flex items-center justify-between mb-8">
                         <div>
-                            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                            <h3 className={`text-xl font-bold flex items-center gap-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                                 Performance Overview
                                 <span className="flex h-2 w-2 relative">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                                 </span>
                             </h3>
-                            <p className="text-sm text-gray-500">Live data from enterprise deployments</p>
+                            <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>Live data from enterprise deployments</p>
                         </div>
                         <div className="hidden md:flex items-center gap-3">
-                            <div className="px-3 py-1 rounded-full bg-white border border-gray-200 text-xs font-medium text-gray-600 shadow-sm">Last 30 Days</div>
-                            <div className="px-3 py-1 rounded-full bg-brand-green-50 border border-brand-green-100 text-xs font-semibold text-brand-green-700 shadow-sm flex items-center gap-2">
+                            <div className={`px-3 py-1 rounded-full border text-xs font-medium shadow-sm ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20 text-dark-text-muted' : 'bg-white border-gray-200 text-gray-600'}`}>Last 30 Days</div>
+                            <div className={`px-3 py-1 rounded-full border text-xs font-semibold shadow-sm flex items-center gap-2 ${theme === 'dark' ? 'bg-dark-accent/10 border-dark-accent/30 text-dark-accent' : 'bg-brand-green-50 border-brand-green-100 text-brand-green-700'}`}>
                                 <Activity className="w-3 h-3" />
                                 +24% YoY
                             </div>
@@ -179,7 +182,7 @@ export const ImpactMetrics = ({ statistics }: { statistics: ProductStatistic[] }
                     {/* Metrics Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         {statistics.map((stat, idx) => (
-                            <DashboardWidget key={idx} stat={stat} index={idx} />
+                            <DashboardWidget key={idx} stat={stat} index={idx} theme={theme} />
                         ))}
                     </div>
                 </div>

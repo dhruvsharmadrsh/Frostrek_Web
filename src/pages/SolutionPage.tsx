@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { SOLUTION_DATA } from '../utils/solutionData';
@@ -58,10 +58,12 @@ const SolutionPage = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
                             >
-                                <Button size="lg" className={`shadow-xl border-none ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-white text-brand-green-900 hover:bg-gray-100'}`}>
-                                    Book a Demo
-                                    <ArrowRight className="ml-2 w-5 h-5" />
-                                </Button>
+                                <Link to="/schedule-demo">
+                                    <Button size="lg" className={`shadow-xl border-none ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-white text-brand-green-900 hover:bg-gray-100'}`}>
+                                        Book a Demo
+                                        <ArrowRight className="ml-2 w-5 h-5" />
+                                    </Button>
+                                </Link>
                             </motion.div>
                         </div>
 
@@ -158,12 +160,16 @@ const SolutionPage = () => {
                         Schedule a personalized walkthrough to see exactly how we can solve your specific challenges.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button size="lg" className={`border-none shadow-lg ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90 shadow-dark-accent/30' : 'bg-brand-green-600 hover:bg-brand-green-700 text-white shadow-brand-green-600/30'}`}>
-                            Book Personalized Demo
-                        </Button>
-                        <Button size="lg" variant="outline" className={`${theme === 'dark' ? 'border-dark-accent/50 text-dark-text hover:bg-dark-card hover:text-dark-text' : 'border-gray-600 text-white hover:bg-gray-800 hover:text-white'}`}>
-                            View Case Studies
-                        </Button>
+                        <Link to="/schedule-demo">
+                            <Button size="lg" className={`border-none shadow-lg ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90 shadow-dark-accent/30' : 'bg-brand-green-600 hover:bg-brand-green-700 text-white shadow-brand-green-600/30'}`}>
+                                Book Personalized Demo
+                            </Button>
+                        </Link>
+                        <Link to="/resources">
+                            <Button size="lg" variant="outline" className={`${theme === 'dark' ? 'border-dark-accent/50 text-dark-text hover:bg-dark-card hover:text-dark-text' : 'border-gray-600 text-white hover:bg-gray-800 hover:text-white'}`}>
+                                View Case Studies
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </section>

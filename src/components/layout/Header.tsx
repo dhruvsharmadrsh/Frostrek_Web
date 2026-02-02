@@ -149,7 +149,28 @@ const Header = () => {
                                     </Link>
                                 </div>
                             ))}
-                            <div className="mt-4">
+                            <div className="mt-4 flex flex-col gap-3">
+                                {/* Mobile Theme Toggle */}
+                                <button
+                                    onClick={toggleTheme}
+                                    className={cn(
+                                        "w-full flex items-center justify-center gap-2 py-3 rounded-lg transition-all duration-300",
+                                        theme === 'dark'
+                                            ? "bg-dark-card text-dark-accent hover:bg-dark-accent/20"
+                                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                    )}
+                                    aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                                >
+                                    <motion.div
+                                        initial={false}
+                                        animate={{ rotate: theme === 'dark' ? 180 : 0 }}
+                                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                    >
+                                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                                    </motion.div>
+                                    <span className="font-medium">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                                </button>
+
                                 <Link to="/schedule-demo" onClick={() => setMobileMenuOpen(false)}>
                                     <Button className={cn(
                                         "w-full justify-center",
