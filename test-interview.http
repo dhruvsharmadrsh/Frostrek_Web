@@ -1,0 +1,64 @@
+### AI Interview Workflow Tests
+### Use VS Code REST Client extension to run these tests
+
+### 1. Start Interview
+POST http://localhost:5678/webhook/start-interview
+Content-Type: application/json
+
+{
+  "name": "John Doe"
+}
+
+###
+
+### 2. Submit First Answer
+# Replace session_xxxxx with actual session_id from Step 1 response
+POST http://localhost:5678/webhook/submit-answer
+Content-Type: application/json
+
+{
+  "session_id": "session_xxxxx",
+  "answer": "I'm a frontend developer with 5 years of experience in React, Vue.js, and JavaScript. I've built numerous web applications and have strong skills in HTML, CSS, and modern JavaScript ES6+."
+}
+
+###
+
+### 3. Submit Second Answer
+# Use same session_id
+POST http://localhost:5678/webhook/submit-answer
+Content-Type: application/json
+
+{
+  "session_id": "session_xxxxx",
+  "answer": "I have experience with REST APIs, GraphQL, state management using Redux and Vuex, and building responsive, accessible user interfaces. I'm also familiar with testing frameworks like Jest and Cypress."
+}
+
+###
+
+### 4. Submit Third Answer
+# Use same session_id
+POST http://localhost:5678/webhook/submit-answer
+Content-Type: application/json
+
+{
+  "session_id": "session_xxxxx",
+  "answer": "Yes, I've worked on performance optimization, code splitting, lazy loading, and implementing best practices for SEO and web vitals. I'm comfortable with build tools like Webpack and Vite."
+}
+
+###
+
+### 5. View Interview Transcript
+# Replace session_xxxxx with actual session_id
+GET http://localhost:5678/webhook/ai-interview-transcripts/session_xxxxx
+
+###
+
+### 6. Test with Different Candidate
+POST http://localhost:5678/webhook/start-interview
+Content-Type: application/json
+
+{
+  "name": "Jane Smith"
+}
+
+###
