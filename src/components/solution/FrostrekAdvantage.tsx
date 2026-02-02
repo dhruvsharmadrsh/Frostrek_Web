@@ -6,6 +6,7 @@ import {
     RotateCcw, ChevronRight, Workflow,
     PartyPopper, Rocket, Star
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 interface FrostrekAdvantageProps {
     features?: any[];
@@ -81,6 +82,7 @@ const Confetti = () => (
 );
 
 const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
+    const { theme } = useTheme();
     const [processedIds, setProcessedIds] = useState<string[]>([]);
     const [processingId, setProcessingId] = useState<string | null>(null);
     const [showConfetti, setShowConfetti] = useState(false);
@@ -116,7 +118,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
     const isActive = processedIds.length > 0 || processingId;
 
     return (
-        <section className="py-16 md:py-24 bg-gradient-to-b from-[#FDFBF7] via-[#FAF6F3] to-[#FDFBF7] overflow-hidden">
+        <section className={`py-16 md:py-24 overflow-hidden ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-[#FDFBF7] via-[#FAF6F3] to-[#FDFBF7]'}`}>
             <div className="container mx-auto px-4 md:px-6">
 
                 {/* Header with Animated Badge */}
@@ -143,7 +145,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-2xl md:text-4xl font-bold text-[#2D241E] mb-3"
+                        className={`text-2xl md:text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-[#2D241E]'}`}
                     >
                         The Frostrek <span className="bg-gradient-to-r from-[#B07552] to-[#8A5A35] bg-clip-text text-transparent">Advantage</span>
                     </motion.h2>
@@ -153,7 +155,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-[#5D5046] text-sm md:text-base"
+                        className={`text-sm md:text-base ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#5D5046]'}`}
                     >
                         Click any challenge card to watch our AI transform it into a solution ✨
                     </motion.p>
@@ -168,11 +170,11 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                 >
                     {showConfetti && <Confetti />}
 
-                    <div className="bg-white rounded-2xl border border-[#E6D0C6] shadow-2xl shadow-[#B07552]/10 overflow-hidden">
+                    <div className={`rounded-2xl shadow-2xl shadow-[#B07552]/10 overflow-hidden ${theme === 'dark' ? 'bg-dark-card border border-dark-accent/30' : 'bg-white border border-[#E6D0C6]'}`}>
                         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px_1fr]">
 
                             {/* LEFT: Input Challenges */}
-                            <div className="p-5 md:p-6 bg-gradient-to-br from-[#FAF6F3] to-[#F5EDE6]">
+                            <div className={`p-5 md:p-6 ${theme === 'dark' ? 'bg-dark-card' : 'bg-gradient-to-br from-[#FAF6F3] to-[#F5EDE6]'}`}>
                                 <div className="flex items-center gap-2 mb-5">
                                     <motion.div
                                         className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#B07552] to-[#8A5A35] flex items-center justify-center shadow-lg"
@@ -181,8 +183,8 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                         <Layers size={16} className="text-white" />
                                     </motion.div>
                                     <div>
-                                        <h3 className="text-sm font-bold text-[#2D241E]">Challenges</h3>
-                                        <p className="text-[10px] text-[#8C7E72]">Click to process</p>
+                                        <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-[#2D241E]'}`}>Challenges</h3>
+                                        <p className={`text-[10px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>Click to process</p>
                                     </div>
                                 </div>
 
@@ -208,10 +210,10 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                                 className={`
                                                     relative w-full p-4 rounded-xl border-2 text-left transition-all duration-300 overflow-hidden group
                                                     ${isProcessed
-                                                        ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-300'
+                                                        ? theme === 'dark' ? 'bg-green-900/30 border-green-500' : 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-300'
                                                         : isProcessing
-                                                            ? 'bg-gradient-to-r from-[#B07552]/5 to-[#B07552]/10 border-[#B07552] shadow-lg'
-                                                            : 'bg-white border-[#E6D0C6] hover:border-[#B07552] cursor-pointer'}
+                                                            ? theme === 'dark' ? 'bg-dark-accent/20 border-dark-accent shadow-lg' : 'bg-gradient-to-r from-[#B07552]/5 to-[#B07552]/10 border-[#B07552] shadow-lg'
+                                                            : theme === 'dark' ? 'bg-dark-bg border-dark-accent/30 hover:border-dark-accent cursor-pointer' : 'bg-white border-[#E6D0C6] hover:border-[#B07552] cursor-pointer'}
                                                 `}
                                             >
                                                 {/* Shimmer Effect on Hover */}
@@ -251,8 +253,8 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                                     </motion.div>
 
                                                     <div className="flex-1 min-w-0">
-                                                        <h4 className="font-bold text-[#2D241E] text-sm">{step.title}</h4>
-                                                        <p className="text-[11px] text-[#8C7E72]">{step.subtitle}</p>
+                                                        <h4 className={`font-bold text-sm ${theme === 'dark' ? 'text-dark-text' : 'text-[#2D241E]'}`}>{step.title}</h4>
+                                                        <p className={`text-[11px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>{step.subtitle}</p>
                                                     </div>
 
                                                     {!isProcessed && !isProcessing && (
@@ -303,7 +305,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                             </div>
 
                             {/* CENTER: AI Core */}
-                            <div className="relative flex items-center justify-center py-10 lg:py-0 bg-white border-y lg:border-y-0 lg:border-x border-[#E6D0C6]/30">
+                            <div className={`relative flex items-center justify-center py-10 lg:py-0 border-y lg:border-y-0 lg:border-x ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-white border-[#E6D0C6]/30'}`}>
                                 {/* Floating Particles */}
                                 {isActive && (
                                     <div className="absolute inset-0 flex items-center justify-center">
@@ -327,8 +329,8 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                     className={`
                                         relative w-36 h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center
                                         ${allProcessed
-                                            ? 'bg-gradient-to-br from-green-100 to-emerald-50 border-2 border-green-300'
-                                            : 'bg-gradient-to-br from-[#FAF6F3] to-white border-2 border-[#E6D0C6]'}
+                                            ? theme === 'dark' ? 'bg-gradient-to-br from-green-800/50 to-emerald-900/30 border-2 border-green-500' : 'bg-gradient-to-br from-green-100 to-emerald-50 border-2 border-green-300'
+                                            : theme === 'dark' ? 'bg-gradient-to-br from-dark-card to-dark-bg border-2 border-dark-accent/50' : 'bg-gradient-to-br from-[#FAF6F3] to-white border-2 border-[#E6D0C6]'}
                                     `}
                                 >
                                     {/* Spinner */}
@@ -372,7 +374,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                             )}
                                         </motion.div>
 
-                                        <h4 className="font-bold text-[#2D241E] text-xs">
+                                        <h4 className={`font-bold text-xs ${theme === 'dark' ? 'text-dark-text' : 'text-[#2D241E]'}`}>
                                             {allProcessed ? 'Complete!' : processingId ? 'Processing' : 'AI Core'}
                                         </h4>
 
@@ -410,7 +412,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                             </div>
 
                             {/* RIGHT: Outcomes */}
-                            <div className="p-5 md:p-6 bg-gradient-to-bl from-[#FAF6F3] to-[#F5EDE6]">
+                            <div className={`p-5 md:p-6 ${theme === 'dark' ? 'bg-dark-card' : 'bg-gradient-to-bl from-[#FAF6F3] to-[#F5EDE6]'}`}>
                                 <div className="flex items-center gap-2 mb-5">
                                     <motion.div
                                         className="w-8 h-8 rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg"
@@ -419,8 +421,8 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                         <BarChart3 size={16} className="text-white" />
                                     </motion.div>
                                     <div>
-                                        <h3 className="text-sm font-bold text-[#2D241E]">AI Outcomes</h3>
-                                        <p className="text-[10px] text-[#8C7E72]">{processedIds.length} solutions generated</p>
+                                        <h3 className={`text-sm font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-[#2D241E]'}`}>AI Outcomes</h3>
+                                        <p className={`text-[10px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>{processedIds.length} solutions generated</p>
                                     </div>
                                 </div>
 
@@ -438,7 +440,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                                     exit={{ opacity: 0, scale: 0.8 }}
                                                     transition={{ type: 'spring', stiffness: 300, damping: 25, delay: idx * 0.05 }}
                                                     whileHover={{ scale: 1.02, y: -2 }}
-                                                    className="bg-white p-4 rounded-xl border-2 border-green-200 shadow-md hover:shadow-lg transition-shadow"
+                                                    className={`p-4 rounded-xl border-2 shadow-md hover:shadow-lg transition-shadow ${theme === 'dark' ? 'bg-dark-bg border-green-500/50' : 'bg-white border-green-200'}`}
                                                 >
                                                     <div className="flex items-start gap-3">
                                                         <motion.div
@@ -450,8 +452,8 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                                             <Zap size={18} className="text-green-600" />
                                                         </motion.div>
                                                         <div className="flex-1">
-                                                            <h4 className="font-bold text-[#2D241E] text-sm">{item.outcome.title}</h4>
-                                                            <p className="text-[11px] text-[#5D5046] mt-0.5">{item.outcome.desc}</p>
+                                                            <h4 className={`font-bold text-sm ${theme === 'dark' ? 'text-dark-text' : 'text-[#2D241E]'}`}>{item.outcome.title}</h4>
+                                                            <p className={`text-[11px] mt-0.5 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#5D5046]'}`}>{item.outcome.desc}</p>
                                                             <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-gradient-to-r from-[#B07552]/10 to-[#B07552]/5 border border-[#B07552]/20">
                                                                 <span className="text-sm font-bold text-[#B07552]">{item.outcome.stat}</span>
                                                                 <span className="text-[10px] text-[#8C7E72]">{item.outcome.statLabel}</span>
@@ -468,7 +470,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                         <motion.div
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
-                                            className="h-[220px] flex items-center justify-center rounded-xl border-2 border-dashed border-[#E6D0C6] bg-white/30"
+                                            className={`h-[220px] flex items-center justify-center rounded-xl border-2 border-dashed ${theme === 'dark' ? 'border-dark-accent/50 bg-dark-bg/50' : 'border-[#E6D0C6] bg-white/30'}`}
                                         >
                                             <div className="text-center">
                                                 <motion.div
@@ -478,8 +480,8 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                                 >
                                                     <Rocket className="text-[#B07552]/50" size={20} />
                                                 </motion.div>
-                                                <p className="text-xs text-[#8C7E72] font-medium">Ready to launch</p>
-                                                <p className="text-[10px] text-[#A89A8E] mt-0.5">Click a challenge to begin</p>
+                                                <p className={`text-xs font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>Ready to launch</p>
+                                                <p className={`text-[10px] mt-0.5 ${theme === 'dark' ? 'text-dark-text-muted/70' : 'text-[#A89A8E]'}`}>Click a challenge to begin</p>
                                             </div>
                                         </motion.div>
                                     )}
@@ -489,7 +491,7 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                         <motion.div
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
-                                            className="h-[220px] flex items-center justify-center rounded-xl border-2 border-[#B07552]/30 bg-gradient-to-br from-[#B07552]/5 to-transparent"
+                                            className={`h-[220px] flex items-center justify-center rounded-xl border-2 ${theme === 'dark' ? 'border-dark-accent/50 bg-dark-accent/10' : 'border-[#B07552]/30 bg-gradient-to-br from-[#B07552]/5 to-transparent'}`}
                                         >
                                             <div className="text-center">
                                                 <motion.div
@@ -525,12 +527,12 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                 className="text-center flex items-center gap-3"
                                 whileHover={{ scale: 1.05 }}
                             >
-                                <div className="w-10 h-10 rounded-xl bg-[#B07552]/10 flex items-center justify-center">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-[#B07552]/10'}`}>
                                     <stat.icon size={18} className="text-[#B07552]" />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-lg md:text-xl font-bold text-[#2D241E]">{stat.value}</p>
-                                    <p className="text-[10px] text-[#8C7E72] uppercase tracking-wider">{stat.label}</p>
+                                    <p className={`text-lg md:text-xl font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-[#2D241E]'}`}>{stat.value}</p>
+                                    <p className={`text-[10px] uppercase tracking-wider ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>{stat.label}</p>
                                 </div>
                             </motion.div>
                         ))}

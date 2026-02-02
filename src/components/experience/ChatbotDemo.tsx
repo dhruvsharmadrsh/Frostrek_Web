@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Sparkles, Mic, Square, Loader2, MessageSquare } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
 
@@ -10,6 +11,7 @@ interface Message {
 }
 
 const ChatbotDemo: React.FC = () => {
+    const { theme } = useTheme();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<Message[]>([
         { type: 'bot', content: "Hello! 👋 I'm your AI assistant from Frostrek.\nHow can I help you innovate today?" }
@@ -151,24 +153,24 @@ const ChatbotDemo: React.FC = () => {
 
     return (
         <motion.div
-            className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden flex flex-col h-[500px]"
+            className={`rounded-3xl shadow-xl border overflow-hidden flex flex-col h-[500px] ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-white border-gray-100'}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
         >
             {/* Header */}
-            <div className="p-4 bg-gradient-to-r from-brand-green-600 to-brand-green-500 text-white flex items-center gap-3">
+            <div className={`p-4 text-white flex items-center gap-3 ${theme === 'dark' ? 'bg-gradient-to-r from-dark-accent to-amber-600' : 'bg-gradient-to-r from-brand-green-600 to-brand-green-500'}`}>
                 <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
                     <MessageSquare className="w-5 h-5" />
                 </div>
                 <div>
                     <h3 className="font-bold text-sm">Chat with Frosty</h3>
-                    <p className="text-xs text-brand-green-100 opacity-90">AI-powered assistant</p>
+                    <p className={`text-xs opacity-90 ${theme === 'dark' ? 'text-amber-100' : 'text-brand-green-100'}`}>AI-powered assistant</p>
                 </div>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-3">
+            <div className={`flex-1 overflow-y-auto p-4 flex flex-col gap-3 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gray-50'}`}>
                 {messages.map((msg, idx) => (
                     <motion.div
                         key={idx}
@@ -176,17 +178,19 @@ const ChatbotDemo: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex gap-2 max-w-[85%] ${msg.type === 'user' ? 'self-end flex-row-reverse' : ''}`}
                     >
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${msg.type === 'user' ? 'bg-gray-200' : 'bg-brand-green-100 border border-brand-green-200'
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${msg.type === 'user'
+                            ? (theme === 'dark' ? 'bg-dark-card' : 'bg-gray-200')
+                            : (theme === 'dark' ? 'bg-dark-accent/20 border border-dark-accent/30' : 'bg-brand-green-100 border border-brand-green-200')
                             }`}>
                             {msg.type === 'user' ? (
-                                <span className="text-[10px] font-bold text-gray-600">You</span>
+                                <span className={`text-[10px] font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-600'}`}>You</span>
                             ) : (
-                                <Sparkles className="w-4 h-4 text-brand-green-600" />
+                                <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                             )}
                         </div>
                         <div className={`p-3 rounded-2xl shadow-sm text-sm leading-relaxed whitespace-pre-wrap ${msg.type === 'user'
-                            ? 'bg-brand-green-500 text-white rounded-tr-none'
-                            : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none'
+                            ? (theme === 'dark' ? 'bg-dark-accent text-dark-bg rounded-tr-none' : 'bg-brand-green-500 text-white rounded-tr-none')
+                            : (theme === 'dark' ? 'bg-dark-card text-dark-text border border-dark-accent/20 rounded-tl-none' : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none')
                             }`}>
                             {msg.content}
                         </div>
@@ -195,11 +199,11 @@ const ChatbotDemo: React.FC = () => {
 
                 {isLoading && (
                     <div className="flex gap-2 max-w-[85%]">
-                        <div className="w-7 h-7 rounded-full bg-brand-green-100 flex items-center justify-center flex-shrink-0 border border-brand-green-200">
-                            <Sparkles className="w-4 h-4 text-brand-green-600" />
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${theme === 'dark' ? 'bg-dark-accent/20 border border-dark-accent/30' : 'bg-brand-green-100 border border-brand-green-200'}`}>
+                            <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                         </div>
-                        <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
-                            <Loader2 className="w-4 h-4 animate-spin text-brand-green-500" />
+                        <div className={`p-3 rounded-2xl rounded-tl-none shadow-sm ${theme === 'dark' ? 'bg-dark-card border border-dark-accent/20' : 'bg-white border border-gray-100'}`}>
+                            <Loader2 className={`w-4 h-4 animate-spin ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-500'}`} />
                         </div>
                     </div>
                 )}
@@ -207,14 +211,14 @@ const ChatbotDemo: React.FC = () => {
             </div>
 
             {/* Input */}
-            <div className="p-3 bg-white border-t border-gray-100">
+            <div className={`p-3 border-t ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-white border-gray-100'}`}>
                 <form onSubmit={onSubmit} className="relative flex items-center gap-2">
                     <button
                         type="button"
                         onClick={isRecording ? stopRecording : startRecording}
                         className={`p-2.5 rounded-xl transition-all duration-200 ${isRecording
-                            ? 'bg-red-50 text-red-500 animate-pulse ring-2 ring-red-500/20'
-                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700'
+                            ? 'bg-red-500/20 text-red-400 animate-pulse ring-2 ring-red-500/20'
+                            : (theme === 'dark' ? 'bg-dark-bg text-dark-text-muted hover:bg-dark-accent/20 hover:text-dark-accent' : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700')
                             }`}
                         title={isRecording ? "Stop Recording" : "Start Recording"}
                     >
@@ -226,12 +230,12 @@ const ChatbotDemo: React.FC = () => {
                         onChange={(e) => setMessage(e.target.value)}
                         placeholder={isRecording ? "Listening..." : "Type a message..."}
                         disabled={isRecording || isLoading}
-                        className="w-full pl-3 pr-10 py-2.5 bg-gray-100 border-transparent focus:bg-white focus:border-brand-green-500 focus:ring-2 focus:ring-brand-green-500/20 rounded-xl text-sm transition-all duration-200 outline-none disabled:opacity-60"
+                        className={`w-full pl-3 pr-10 py-2.5 border-transparent rounded-xl text-sm transition-all duration-200 outline-none disabled:opacity-60 ${theme === 'dark' ? 'bg-dark-bg text-dark-text placeholder-dark-text-muted/60 focus:bg-dark-bg focus:border-dark-accent focus:ring-2 focus:ring-dark-accent/20' : 'bg-gray-100 focus:bg-white focus:border-brand-green-500 focus:ring-2 focus:ring-brand-green-500/20'}`}
                     />
                     <button
                         type="submit"
                         disabled={!message.trim() || isLoading || isRecording}
-                        className="absolute right-2 p-1.5 bg-brand-green-500 text-white rounded-lg hover:bg-brand-green-600 disabled:opacity-50 disabled:hover:bg-brand-green-500 transition-colors"
+                        className={`absolute right-2 p-1.5 rounded-lg transition-colors disabled:opacity-50 ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90 disabled:hover:bg-dark-accent' : 'bg-brand-green-500 text-white hover:bg-brand-green-600 disabled:hover:bg-brand-green-500'}`}
                     >
                         <Send className="w-4 h-4" />
                     </button>

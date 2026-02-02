@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,6 +8,14 @@ export default {
     theme: {
         extend: {
             colors: {
+                // Dark theme colors (from reference design)
+                'dark-bg': '#322d27',        // Hero section background
+                'dark-navbar': '#2a2622',    // Navbar background
+                'dark-card': '#373027',      // Card/bubble background
+                'dark-accent': '#bf8440',    // Button/accent color (golden)
+                'dark-text': '#f9fafb',      // Primary text
+                'dark-text-muted': '#A89A8A', // Muted text
+
                 // Brown/Bronze Earthy Theme
                 background: '#FDFBF7', // Warm Eggshell
                 'background-alt': '#F7F5F0', // Slightly darker warm gray

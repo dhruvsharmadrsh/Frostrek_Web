@@ -5,6 +5,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
 
 // Lazy load 3D component to prevent blocking initial page load
 import HeroRobot from './HeroRobot';
@@ -26,6 +27,7 @@ const HeroSection = () => {
     const [index, setIndex] = useState(0);
     const [messageIndex, setMessageIndex] = useState(0);
     const [showMessage, setShowMessage] = useState(true);
+    const { theme } = useTheme();
 
     // Text Rotation Interval
     useEffect(() => {
@@ -48,7 +50,7 @@ const HeroSection = () => {
     }, []);
 
     return (
-        <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-24 lg:pt-32 pb-8 bg-[#FDFBF7]">
+        <section className={`relative min-h-[90vh] flex items-center overflow-hidden pt-24 lg:pt-32 pb-8 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-[#FDFBF7]'}`}>
             {/* Decorative Elements - Bronze Theme (matching TestimonialsSection) */}
             <div className="absolute top-10 left-10 w-32 h-32 rounded-full border-4 border-[#B07552]/20 opacity-60" />
             <div className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-to-br from-[#E6D0C6] to-[#B07552] opacity-20" />
@@ -67,7 +69,7 @@ const HeroSection = () => {
                     {/* Left Column: Text Content */}
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full mx-auto lg:mx-0">
                         {/* Transforming */}
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.15] text-primary tracking-tight mb-8 w-full flex flex-col items-center lg:items-start">
+                        <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.15] tracking-tight mb-8 w-full flex flex-col items-center lg:items-start transition-colors duration-300 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>
                             <span className="block">Transforming</span>
 
                             {/* Line 2: Animated Part 1 */}
@@ -79,7 +81,7 @@ const HeroSection = () => {
                                         animate={{ y: 0, opacity: 1 }}
                                         exit={{ y: -50, opacity: 0 }}
                                         transition={{ duration: 0.6, ease: "easeOut" }}
-                                        className="block whitespace-nowrap text-[#B07552] pb-1"
+                                        className={`block whitespace-nowrap pb-1 ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`}
                                     >
                                         {ROTATING_TEXTS[index].part1}
                                     </motion.span>
@@ -97,7 +99,7 @@ const HeroSection = () => {
                                         animate={{ y: 0, opacity: 1 }}
                                         exit={{ y: -50, opacity: 0 }}
                                         transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-                                        className="block whitespace-nowrap text-[#B07552] pb-1"
+                                        className={`block whitespace-nowrap pb-1 ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`}
                                     >
                                         {ROTATING_TEXTS[index].part2}
                                     </motion.span>
@@ -105,15 +107,15 @@ const HeroSection = () => {
                             </div>
                         </h1>
 
-                        <p className="text-lg sm:text-xl text-muted mb-10 max-w-[600px] lg:max-w-lg leading-relaxed">
+                        <p className={`text-lg sm:text-xl mb-10 max-w-[600px] lg:max-w-lg leading-relaxed transition-colors duration-300 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-muted'}`}>
                             Harness the power of AI to enhance productivity, streamline workflows, and foster a more engaged workforce across your enterprise.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                            <Link to="/schedule-demo" className="px-8 py-4 bg-[#B07552] hover:bg-[#8A5A35] text-white rounded-xl font-semibold shadow-lg shadow-[#B07552]/20 transition-all transform hover:scale-105 w-full sm:w-auto text-center">
+                            <Link to="/schedule-demo" className={`px-8 py-4 text-white rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105 w-full sm:w-auto text-center ${theme === 'dark' ? 'bg-dark-accent hover:bg-dark-accent/90 shadow-dark-accent/20' : 'bg-[#B07552] hover:bg-[#8A5A35] shadow-[#B07552]/20'}`}>
                                 Schedule a Demo
                             </Link>
-                            <button className="px-8 py-4 bg-transparent border-2 border-[#B07552] text-[#B07552] hover:bg-[#B07552]/5 hover:text-[#8A5A35] rounded-xl font-semibold transition-all w-full sm:w-auto hover:scale-105 transition-all">
+                            <button className={`px-8 py-4 bg-transparent border-2 rounded-xl font-semibold transition-all w-full sm:w-auto hover:scale-105 ${theme === 'dark' ? 'border-dark-accent text-dark-accent hover:bg-dark-accent/10' : 'border-[#B07552] text-[#B07552] hover:bg-[#B07552]/5 hover:text-[#8A5A35]'}`}>
                                 Contact Sales
                             </button>
                         </div>
@@ -136,13 +138,13 @@ const HeroSection = () => {
                                         className="absolute top-[-5%] left-1/2 -translate-x-1/2 z-50"
                                         style={{ fontFamily: 'Quicksand, sans-serif' }}
                                     >
-                                        <div className="relative bg-gradient-to-br from-white to-[#FDF8F3] backdrop-blur-md px-6 py-3 rounded-2xl shadow-[0_8px_32px_rgba(176,117,82,0.25)] border-2 border-[#B07552]/30">
-                                            <span className="text-[#5c3d2e] font-semibold text-lg whitespace-nowrap">
+                                        <div className={`relative backdrop-blur-md px-6 py-3 rounded-2xl shadow-[0_8px_32px_rgba(176,117,82,0.25)] border-2 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-gradient-to-br from-white to-[#FDF8F3] border-[#B07552]/30'}`}>
+                                            <span className={`font-semibold text-lg whitespace-nowrap transition-colors duration-300 ${theme === 'dark' ? 'text-dark-text' : 'text-[#5c3d2e]'}`}>
                                                 {ROBOT_MESSAGES[messageIndex]}
                                             </span>
                                             {/* Speech bubble arrow pointing down to robot */}
                                             <div
-                                                className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-gradient-to-br from-white to-[#FDF8F3] rotate-45 border-r-2 border-b-2 border-[#B07552]/30"
+                                                className={`absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 border-r-2 border-b-2 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-gradient-to-br from-white to-[#FDF8F3] border-[#B07552]/30'}`}
                                                 style={{ boxShadow: '2px 2px 4px rgba(176,117,82,0.15)' }}
                                             />
                                         </div>

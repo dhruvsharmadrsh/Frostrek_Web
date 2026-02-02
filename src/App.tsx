@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import SmoothScrollProvider from './components/providers/SmoothScrollProvider';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Lazy load pages to split code chunks and reduce initial bundle size
 const Home = lazy(() => import('./pages/Home'));
@@ -36,32 +37,34 @@ const PageLoader = () => (
 function App() {
   return (
     <Router>
-      <SmoothScrollProvider>
-        <div className="min-h-screen text-primary flex flex-col font-body">
-          <Header />
-          <main className="flex-grow">
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/schedule-demo" element={<ScheduleDemo />} />
-                <Route path="/products/*" element={<ProductPage />} />
-                <Route path="/solutions/*" element={<SolutionPage />} />
-                <Route path="/services" element={<ServicesPage />} />
-                <Route path="/resources" element={<ResourcesPage />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/experience" element={<ExperiencePage />} />
-                <Route path="/careers" element={<PlaceholderPage title="Careers" />} />
-                <Route path="/contact" element={<PlaceholderPage title="Contact Us" />} />
-                <Route path="*" element={<PlaceholderPage title="Page Not Found" />} />
-              </Routes>
+      <ThemeProvider>
+        <SmoothScrollProvider>
+          <div className="min-h-screen text-primary flex flex-col font-body">
+            <Header />
+            <main className="flex-grow">
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/schedule-demo" element={<ScheduleDemo />} />
+                  <Route path="/products/*" element={<ProductPage />} />
+                  <Route path="/solutions/*" element={<SolutionPage />} />
+                  <Route path="/services" element={<ServicesPage />} />
+                  <Route path="/resources" element={<ResourcesPage />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/experience" element={<ExperiencePage />} />
+                  <Route path="/careers" element={<PlaceholderPage title="Careers" />} />
+                  <Route path="/contact" element={<PlaceholderPage title="Contact Us" />} />
+                  <Route path="*" element={<PlaceholderPage title="Page Not Found" />} />
+                </Routes>
+              </Suspense>
+            </main>
+            <Footer />
+            <Suspense fallback={null}>
+              <Chatbot />
             </Suspense>
-          </main>
-          <Footer />
-          <Suspense fallback={null}>
-            <Chatbot />
-          </Suspense>
-        </div>
-      </SmoothScrollProvider>
+          </div>
+        </SmoothScrollProvider>
+      </ThemeProvider>
     </Router>
   );
 }

@@ -4,6 +4,7 @@ import CuteBackground from '../components/ui/CuteBackground';
 import { useRef, useState, useEffect, useMemo, memo } from 'react';
 import { TIMELINE_DATA } from '../utils/aboutData';
 import InnovationProcess from '../components/about/InnovationProcess';
+import { useTheme } from '../context/ThemeContext';
 // Extracted constant for optimization
 const HEADLINE_WORDS = ['Accelerate', 'growth', 'at', 'the', 'new', 'speed', 'of', 'business'];
 
@@ -208,41 +209,34 @@ const TypewriterText = memo(({ texts }: { texts: string[] }) => {
     );
 });
 
-// ============ MAGNETIC INTERACTIVE BUTTON ============
+// ============ INTERACTIVE BUTTON (NO MAGNETIC EFFECT) ============
 const MagneticButton = memo(({ children, className, onClick, variant = 'primary' }: {
     children: React.ReactNode;
     className?: string;
     onClick?: () => void;
     variant?: 'primary' | 'secondary' | 'cta'
 }) => {
-    const ref = useRef<HTMLButtonElement>(null);
+    const { theme } = useTheme();
     const [hover, setHover] = useState(false);
     const [press, setPress] = useState(false);
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
 
-    const handleMouse = (e: React.MouseEvent) => {
-        if (!ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        x.set((e.clientX - rect.left - rect.width / 2) * 0.15);
-        y.set((e.clientY - rect.top - rect.height / 2) * 0.15);
-    };
-
-    const reset = () => { x.set(0); y.set(0); setHover(false); };
-
-    const baseStyles = variant === 'primary'
-        ? 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white shadow-lg shadow-brand-green-500/25'
-        : variant === 'cta'
-            ? 'bg-white text-brand-green-600 shadow-xl'
-            : 'bg-white/90 border-2 border-brand-green-500/40 text-brand-green-600';
+    // Dark mode uses #bf8440 (dark-accent), light mode uses brand-green gradient
+    const baseStyles = theme === 'dark'
+        ? variant === 'primary'
+            ? 'bg-[#bf8440] text-dark-bg shadow-lg shadow-[#bf8440]/25'
+            : variant === 'cta'
+                ? 'bg-[#bf8440] text-dark-bg shadow-xl'
+                : 'bg-dark-card border-2 border-[#bf8440]/40 text-[#bf8440]'
+        : variant === 'primary'
+            ? 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white shadow-lg shadow-brand-green-500/25'
+            : variant === 'cta'
+                ? 'bg-white text-brand-green-600 shadow-xl'
+                : 'bg-white/90 border-2 border-brand-green-500/40 text-brand-green-600';
 
     return (
         <motion.button
-            ref={ref}
-            style={{ x, y }}
-            onMouseMove={handleMouse}
             onMouseEnter={() => setHover(true)}
-            onMouseLeave={reset}
+            onMouseLeave={() => setHover(false)}
             onMouseDown={() => setPress(true)}
             onMouseUp={() => setPress(false)}
             onClick={onClick}
@@ -915,6 +909,7 @@ const fadeUp = { hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0, tra
 
 // ============ MAIN COMPONENT ============
 const About = () => {
+    const { theme } = useTheme();
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: ref });
     const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
@@ -1029,8 +1024,8 @@ const About = () => {
     ], []);
 
     return (
-        <div ref={ref} className="min-h-screen relative overflow-hidden">
-            <CuteBackground />
+        <div ref={ref} className={`min-h-screen relative overflow-hidden ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
+            {theme !== 'dark' && <CuteBackground />}
 
             {/* ===== HERO ===== */}
             <motion.section style={{ y: bgY, opacity }} className="relative min-h-[50vh] md:min-h-[85vh] flex items-center py-10 md:py-20 pt-20 md:pt-32">
@@ -1042,10 +1037,10 @@ const About = () => {
                         className="max-w-4xl mx-auto text-center"
                     >
                         <motion.h1
-                            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 text-gray-900 leading-tight"
+                            className={`text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 leading-tight ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}
                         >
                             Revolutionizing AI Solutions with{' '}
-                            <span className="text-brand-green-500 relative inline-block">
+                            <span className={`relative inline-block ${theme === 'dark' ? 'text-[#bf8441]' : 'text-brand-green-500'}`}>
                                 <TypewriterText texts={texts} />
                                 <motion.span
                                     className="absolute -bottom-2 left-0 h-1.5 bg-gradient-to-r from-brand-green-400 to-brand-yellow-400 rounded-full"
@@ -1060,7 +1055,7 @@ const About = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto"
+                            className={`text-lg md:text-xl mb-10 max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}
                         >
                             We specialize in AI model training, agentic AI systems, and end-to-end software development that transforms businesses.
                         </motion.p>
@@ -1096,7 +1091,7 @@ const About = () => {
             <section id="stats" className="py-12 md:py-20">
                 <div className="container mx-auto px-4">
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
-                        <motion.p variants={fadeUp} className="text-center text-gray-600 mb-12 text-lg">
+                        <motion.p variants={fadeUp} className={`text-center mb-12 text-lg ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                             Building AI systems that transform how organizations operate.
                         </motion.p>
 
@@ -1137,7 +1132,7 @@ const About = () => {
                                 visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
                             }}
                         >
-                            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-gray-900 leading-[1.1] mb-8">
+                            <h2 className={`text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] mb-8 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                                 {HEADLINE_WORDS.map((word, i) => (
                                     <span key={i} className="inline-block whitespace-pre">
                                         <motion.span
@@ -1156,14 +1151,14 @@ const About = () => {
 
                             <motion.p
                                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                                className="text-xl text-slate-700 mb-8 leading-relaxed font-medium"
+                                className={`text-xl mb-8 leading-relaxed font-medium ${theme === 'dark' ? 'text-dark-text' : 'text-slate-700'}`}
                             >
                                 We work with enterprises to reimagine business with our AI Agent Platform, AI Solutions for Work, Service and Process, and Agent Marketplace.
                             </motion.p>
 
                             <motion.p
                                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                                className="text-lg text-gray-500 mb-12 leading-relaxed"
+                                className={`text-lg mb-12 leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}
                             >
                                 With Frostrek, customers get a standardized approach to developing, deploying, and orchestrating AI agents across the enterprise with speed, control, and flexibility. We help you keep up with the rapid pace of the AI industry.
                             </motion.p>
@@ -1176,11 +1171,11 @@ const About = () => {
                                 <div className="absolute bottom-0 left-[-1px] w-[1px] h-8 bg-black"></div>
 
                                 <div className="flex flex-wrap gap-4">
-                                    <MagneticButton variant="primary" className="!bg-gray-950 !text-white hover:!bg-brand-green-600 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase">
-                                        <span className="flex items-center gap-2">VIEW OUR AGENT PLATFORM <span className="text-brand-green-400">•</span></span>
+                                    <MagneticButton variant="primary" className={`px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase ${theme === 'dark' ? '!bg-[#bf8441] !text-dark-bg hover:!bg-[#bf8441]/90' : '!bg-gray-950 !text-white hover:!bg-brand-green-600'}`}>
+                                        <span className="flex items-center gap-2">VIEW OUR AGENT PLATFORM <span className={theme === 'dark' ? 'text-dark-bg' : 'text-brand-green-400'}>•</span></span>
                                     </MagneticButton>
 
-                                    <MagneticButton variant="secondary" className="!bg-transparent !border-gray-900 !text-gray-900 px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase hover:!bg-gray-50">
+                                    <MagneticButton variant="secondary" className="px-8 py-4 font-bold text-xs tracking-widest uppercase">
                                         CONTACT US
                                     </MagneticButton>
                                 </div>
@@ -1213,7 +1208,7 @@ const About = () => {
                                 >
                                     <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50">
                                         <div className="text-2xl font-bold tracking-tight text-gray-900">
-                                            Frostrek<span className="text-brand-green-500">.ai</span>
+                                            Frostrek<span className={theme === 'dark' ? 'text-[#bf8441]' : 'text-brand-green-500'}>.ai</span>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -1235,7 +1230,7 @@ const About = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
+                            className={`text-4xl md:text-5xl font-bold mb-6 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}
                         >
                             Our Journey
                         </motion.h2>
@@ -1244,7 +1239,7 @@ const About = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="text-xl text-gray-600 max-w-2xl mx-auto"
+                            className={`text-xl max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}
                         >
                             From a bold idea to a global leader in Agentic AI.
                         </motion.p>
@@ -1333,14 +1328,14 @@ const About = () => {
             </section>
 
             {/* ===== INNOVATION ENGINE ===== */}
-            <section className="py-16 md:py-24 bg-gradient-to-b from-slate-50/50 to-white">
+            <section className={`py-16 md:py-24 ${theme === 'dark' ? 'bg-dark-card' : 'bg-gradient-to-b from-slate-50/50 to-white'}`}>
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <motion.span
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="inline-block px-4 py-2 bg-gradient-to-r from-brand-green-100 to-brand-green-200 text-brand-green-700 rounded-full text-sm font-semibold mb-4"
+                            className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${theme === 'dark' ? 'bg-dark-accent/20 text-dark-accent' : 'bg-gradient-to-r from-brand-green-100 to-brand-green-200 text-brand-green-700'}`}
                         >
                             How We Work
                         </motion.span>
@@ -1348,7 +1343,7 @@ const About = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+                            className={`text-4xl md:text-5xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}
                         >
                             Our Innovation Engine
                         </motion.h2>
@@ -1357,7 +1352,7 @@ const About = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="text-xl text-gray-600 max-w-2xl mx-auto"
+                            className={`text-xl max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}
                         >
                             A proven methodology that transforms ideas into enterprise-grade AI solutions.
                         </motion.p>
@@ -1375,14 +1370,14 @@ const About = () => {
             </section>
 
             {/* ===== TEAM / LEADERSHIP ===== */}
-            <section className="py-16 md:py-24 bg-gradient-to-b from-white via-slate-50/50 to-white">
+            <section className={`py-16 md:py-24 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-white via-slate-50/50 to-white'}`}>
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <motion.span
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="inline-block px-4 py-2 bg-brand-green-100 text-brand-green-700 rounded-full text-sm font-semibold mb-4"
+                            className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${theme === 'dark' ? 'bg-dark-accent/20 text-dark-accent' : 'bg-brand-green-100 text-brand-green-700'}`}
                         >
                             Meet the Team
                         </motion.span>
@@ -1390,7 +1385,7 @@ const About = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+                            className={`text-4xl md:text-5xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}
                         >
                             Leadership That Drives Innovation
                         </motion.h2>
@@ -1399,7 +1394,7 @@ const About = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="text-xl text-gray-600 max-w-2xl mx-auto"
+                            className={`text-xl max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}
                         >
                             World-class experts united by a mission to make AI accessible and impactful.
                         </motion.p>
@@ -1417,8 +1412,8 @@ const About = () => {
             <section className="py-12 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Core Values</h2>
-                        <p className="text-gray-600">The principles that guide us</p>
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Core Values</h2>
+                        <p className={theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}>The principles that guide us</p>
                     </div>
 
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
@@ -1446,8 +1441,8 @@ const About = () => {
             <section className="py-12 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Why Frostrek?</h2>
-                        <p className="text-gray-600">Experience the difference</p>
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Why Frostrek?</h2>
+                        <p className={theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}>Experience the difference</p>
                     </div>
 
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -1475,11 +1470,11 @@ const About = () => {
             </section>
 
             {/* ===== GLOBAL PRESENCE ===== */}
-            <section className="py-12 md:py-20 bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50">
+            <section className={`py-12 md:py-20 ${theme === 'dark' ? 'bg-dark-card' : 'bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50'}`}>
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Global Presence</h2>
-                        <p className="text-gray-600">Worldwide enterprise support across 6 continents</p>
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Global Presence</h2>
+                        <p className={theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}>Worldwide enterprise support across 6 continents</p>
                     </div>
 
                     <div className="max-w-6xl mx-auto">

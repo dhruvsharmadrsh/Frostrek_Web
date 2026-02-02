@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
 import Button from '../components/ui/Button';
 import CuteBackground from '../components/ui/CuteBackground';
+import { useTheme } from '../context/ThemeContext';
 
 const ScheduleDemo = () => {
+    const { theme } = useTheme();
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [formData, setFormData] = useState({ name: '', email: '', notes: '' });
@@ -154,25 +156,25 @@ const ScheduleDemo = () => {
 
     if (isSubmitted) {
         return (
-            <div className="min-h-screen pt-20 relative">
-                <CuteBackground />
+            <div className={`min-h-screen pt-20 relative ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
+                {theme !== 'dark' && <CuteBackground />}
                 <div className="container mx-auto px-4 py-20 relative z-10">
-                    <div className="max-w-2xl mx-auto text-center bg-white rounded-2xl shadow-2xl p-12">
-                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <Check className="w-10 h-10 text-brand-green-600" />
+                    <div className={`max-w-2xl mx-auto text-center rounded-2xl shadow-2xl p-12 ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}>
+                        <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-green-100'}`}>
+                            <Check className={`w-10 h-10 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Demo Scheduled!</h1>
-                        <p className="text-gray-600 mb-6">
+                        <h1 className={`text-3xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Demo Scheduled!</h1>
+                        <p className={`mb-6 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                             Thank you, {formData.name}! We've sent a confirmation email to {formData.email}.
                         </p>
-                        <div className="bg-green-50 border border-brand-green-200 rounded-lg p-6 mb-8">
-                            <p className="text-sm text-gray-600 mb-2">Your meeting is scheduled for:</p>
-                            <p className="text-xl font-bold text-brand-green-700">
+                        <div className={`border rounded-lg p-6 mb-8 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-green-50 border-brand-green-200'}`}>
+                            <p className={`text-sm mb-2 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>Your meeting is scheduled for:</p>
+                            <p className={`text-xl font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-700'}`}>
                                 {selectedDate?.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                             </p>
-                            <p className="text-lg text-brand-green-600 mt-2">{selectedTime}</p>
+                            <p className={`text-lg mt-2 ${theme === 'dark' ? 'text-dark-accent/80' : 'text-brand-green-600'}`}>{selectedTime}</p>
                         </div>
-                        <Button onClick={() => window.location.href = '/'} className="bg-brand-green-600 hover:bg-brand-green-700">
+                        <Button onClick={() => window.location.href = '/'} className={theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-brand-green-600 hover:bg-brand-green-700'}>
                             Back to Home
                         </Button>
                     </div>
@@ -182,52 +184,52 @@ const ScheduleDemo = () => {
     }
 
     return (
-        <div className="min-h-screen pt-20 relative">
-            <CuteBackground />
+        <div className={`min-h-screen pt-20 relative ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
+            {theme !== 'dark' && <CuteBackground />}
             <div className="container mx-auto px-4 py-12 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
                     {/* Left Column - Company Info */}
-                    <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
+                    <div className={`rounded-2xl shadow-xl p-8 lg:p-12 ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}>
                         <div className="mb-8">
-                            <div className="inline-block px-3 py-1 bg-brand-green-100 text-brand-green-700 rounded-full text-sm font-semibold mb-4">
+                            <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold mb-4 ${theme === 'dark' ? 'bg-dark-accent/20 text-dark-accent' : 'bg-brand-green-100 text-brand-green-700'}`}>
                                 FROSTREK
                             </div>
-                            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                            <h1 className={`text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                                 Schedule a Demo
                             </h1>
-                            <p className="text-lg text-gray-600 mb-8">
+                            <p className={`text-lg mb-8 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                                 Meet with our team to discover how Frostrek can transform your business with AI-powered automation.
                             </p>
                         </div>
 
                         <div className="space-y-6">
                             <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 bg-brand-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <Clock className="w-6 h-6 text-brand-green-600" />
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-100'}`}>
+                                    <Clock className={`w-6 h-6 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-gray-900 mb-1">Meeting Duration</h3>
-                                    <p className="text-gray-600">30 minutes</p>
+                                    <h3 className={`font-bold mb-1 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Meeting Duration</h3>
+                                    <p className={theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}>30 minutes</p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 bg-brand-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <MapPin className="w-6 h-6 text-brand-green-600" />
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-100'}`}>
+                                    <MapPin className={`w-6 h-6 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-gray-900 mb-1">Meeting Location</h3>
-                                    <p className="text-gray-600">Microsoft Teams / Google Meet</p>
+                                    <h3 className={`font-bold mb-1 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Meeting Location</h3>
+                                    <p className={theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}>Microsoft Teams / Google Meet</p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 bg-brand-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <Calendar className="w-6 h-6 text-brand-green-600" />
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-100'}`}>
+                                    <Calendar className={`w-6 h-6 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-gray-900 mb-1">What to Expect</h3>
-                                    <ul className="text-gray-600 space-y-1">
+                                    <h3 className={`font-bold mb-1 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>What to Expect</h3>
+                                    <ul className={`space-y-1 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                                         <li>• Product walkthrough</li>
                                         <li>• Q&A session</li>
                                         <li>• Custom solution discussion</li>
@@ -238,25 +240,25 @@ const ScheduleDemo = () => {
                     </div>
 
                     {/* Right Column - Booking Interface */}
-                    <div className="bg-white rounded-2xl shadow-xl p-8">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Date & Time</h2>
+                    <div className={`rounded-2xl shadow-xl p-8 ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}>
+                        <h2 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Select Date & Time</h2>
 
                         {/* Calendar */}
                         <div className="mb-8">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-bold text-gray-900">
+                                <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                                     {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                                 </h3>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handlePrevMonth}
-                                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                        className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-dark-bg text-dark-text' : 'hover:bg-gray-100'}`}
                                     >
                                         <ChevronLeft className="w-5 h-5" />
                                     </button>
                                     <button
                                         onClick={handleNextMonth}
-                                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                        className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-dark-bg text-dark-text' : 'hover:bg-gray-100'}`}
                                     >
                                         <ChevronRight className="w-5 h-5" />
                                     </button>
@@ -265,7 +267,7 @@ const ScheduleDemo = () => {
 
                             <div className="grid grid-cols-7 gap-2 mb-2">
                                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                                    <div key={day} className="text-center text-xs font-semibold text-gray-500 py-2">
+                                    <div key={day} className={`text-center text-xs font-semibold py-2 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
                                         {day}
                                     </div>
                                 ))}
@@ -280,10 +282,10 @@ const ScheduleDemo = () => {
                                         className={`
                                             aspect-square rounded-lg text-sm font-medium transition-all
                                             ${!date ? 'invisible' : ''}
-                                            ${isDateDisabled(date) ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-brand-green-100 cursor-pointer'}
+                                            ${isDateDisabled(date) ? `${theme === 'dark' ? 'text-dark-text-muted/30' : 'text-gray-300'} cursor-not-allowed` : `${theme === 'dark' ? 'hover:bg-dark-accent/20' : 'hover:bg-brand-green-100'} cursor-pointer`}
                                             ${selectedDate && date && selectedDate.toDateString() === date.toDateString()
-                                                ? 'bg-brand-green-600 text-white hover:bg-brand-green-700'
-                                                : 'text-gray-700'}
+                                                ? `${theme === 'dark' ? 'bg-dark-accent text-dark-bg' : 'bg-brand-green-600 text-white hover:bg-brand-green-700'}`
+                                                : theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}
                                         `}
                                     >
                                         {date?.getDate()}
@@ -295,7 +297,7 @@ const ScheduleDemo = () => {
                         {/* Time Slots */}
                         {selectedDate && (
                             <div className="mb-8">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4">Available Times</h3>
+                                <h3 className={`text-lg font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Available Times</h3>
                                 <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
                                     {timeSlots.map(time => (
                                         <button
@@ -304,8 +306,8 @@ const ScheduleDemo = () => {
                                             className={`
                                                 py-2 px-3 rounded-lg text-sm font-medium transition-all
                                                 ${selectedTime === time
-                                                    ? 'bg-brand-green-600 text-white'
-                                                    : 'bg-gray-50 text-gray-700 hover:bg-brand-green-100'}
+                                                    ? theme === 'dark' ? 'bg-dark-accent text-dark-bg' : 'bg-brand-green-600 text-white'
+                                                    : theme === 'dark' ? 'bg-dark-bg text-dark-text hover:bg-dark-accent/20' : 'bg-gray-50 text-gray-700 hover:bg-brand-green-100'}
                                             `}
                                         >
                                             {time}
@@ -319,7 +321,7 @@ const ScheduleDemo = () => {
                         {selectedDate && selectedTime && (
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
                                         Full Name *
                                     </label>
                                     <input
@@ -327,13 +329,13 @@ const ScheduleDemo = () => {
                                         required
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green-500 focus:border-transparent"
+                                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30 text-dark-text focus:ring-dark-accent focus:border-transparent placeholder:text-dark-text-muted/50' : 'border-gray-300 focus:ring-brand-green-500 focus:border-transparent'}`}
                                         placeholder="John Doe"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
                                         Email Address *
                                     </label>
                                     <input
@@ -341,20 +343,20 @@ const ScheduleDemo = () => {
                                         required
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green-500 focus:border-transparent"
+                                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30 text-dark-text focus:ring-dark-accent focus:border-transparent placeholder:text-dark-text-muted/50' : 'border-gray-300 focus:ring-brand-green-500 focus:border-transparent'}`}
                                         placeholder="john@company.com"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
                                         Additional Notes (Optional)
                                     </label>
                                     <textarea
                                         value={formData.notes}
                                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                                         rows={3}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green-500 focus:border-transparent"
+                                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30 text-dark-text focus:ring-dark-accent focus:border-transparent placeholder:text-dark-text-muted/50' : 'border-gray-300 focus:ring-brand-green-500 focus:border-transparent'}`}
                                         placeholder="Tell us about your needs..."
                                     />
                                 </div>
@@ -362,7 +364,7 @@ const ScheduleDemo = () => {
                                 <Button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full bg-brand-green-600 hover:bg-brand-green-700 text-white py-3 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    className={`w-full py-3 ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-brand-green-600 hover:bg-brand-green-700 text-white'}`}
                                 >
                                     {isLoading ? (
                                         <>

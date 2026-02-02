@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
+import { useTheme } from '../../context/ThemeContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const CTASection = () => {
+    const { theme } = useTheme();
     const sectionRef = useRef<HTMLElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const buttonsRef = useRef<HTMLDivElement>(null);
@@ -90,7 +91,7 @@ const CTASection = () => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="py-16 relative overflow-hidden bg-gradient-to-br from-[#8A5A35] via-[#B07552] to-[#8A5A35]">
+        <section ref={sectionRef} className={`py-16 relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-gradient-to-br from-dark-navbar via-dark-bg to-dark-navbar' : 'bg-gradient-to-br from-[#8A5A35] via-[#B07552] to-[#8A5A35]'}`}>
             {/* Animated dot pattern */}
             <div
                 ref={patternRef}

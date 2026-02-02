@@ -3,38 +3,45 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Shield, Server, Brain, Activity, Lock, Zap, Database } from 'lucide-react';
 import type { ProductFeature } from '../../utils/productData';
+import { useTheme } from '../../context/ThemeContext';
 
 const FeatureNode = ({
     feature,
     isActive,
     index,
-    onHover
+    onHover,
+    theme
 }: {
     feature: ProductFeature,
     isActive: boolean,
     index: number,
-    onHover: (idx: number) => void
+    onHover: (idx: number) => void,
+    theme: string
 }) => {
     return (
         <motion.div
             onHoverStart={() => onHover(index)}
             className={`relative p-6 rounded-2xl border transition-all duration-300 cursor-pointer group w-full ${isActive
-                ? 'bg-white border-brand-green-200 shadow-xl shadow-brand-green-100 z-10'
-                : 'bg-white/50 border-gray-100 hover:bg-white hover:border-brand-green-100'
+                ? theme === 'dark' ? 'bg-dark-card border-dark-accent shadow-xl shadow-dark-accent/20 z-10' : 'bg-white border-brand-green-200 shadow-xl shadow-brand-green-100 z-10'
+                : theme === 'dark' ? 'bg-dark-bg/50 border-dark-accent/30 hover:bg-dark-card hover:border-dark-accent/50' : 'bg-white/50 border-gray-100 hover:bg-white hover:border-brand-green-100'
                 }`}
             whileHover={{ x: 10 }}
         >
             <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-300 ${isActive ? 'bg-brand-green-600 text-white' : 'bg-brand-green-50 text-brand-green-600'
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-300 ${isActive
+                    ? 'bg-brand-green-600 text-white'
+                    : theme === 'dark' ? 'bg-dark-accent/30 text-dark-accent' : 'bg-brand-green-50 text-brand-green-600'
                     }`}>
                     {feature.icon && <feature.icon className="w-6 h-6" />}
                 </div>
                 <div>
-                    <h4 className={`text-lg font-bold mb-1 transition-colors ${isActive ? 'text-gray-900' : 'text-gray-600'
+                    <h4 className={`text-lg font-bold mb-1 transition-colors ${isActive
+                        ? theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
+                        : theme === 'dark' ? 'text-dark-text/80' : 'text-gray-600'
                         }`}>
                         {feature.title}
                     </h4>
-                    <p className="text-sm text-gray-500 leading-relaxed">
+                    <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
                         {feature.description}
                     </p>
                 </div>
@@ -50,7 +57,7 @@ const FeatureNode = ({
     );
 };
 
-const CoreEngine = ({ activeIndex }: { activeIndex: number }) => {
+const CoreEngine = ({ activeIndex, theme }: { activeIndex: number, theme: string }) => {
     // Satellite positions
     const satellites = [
         { x: -120, y: -80, icon: Database, bg: 'bg-blue-100', text: 'text-blue-600' },
@@ -66,7 +73,7 @@ const CoreEngine = ({ activeIndex }: { activeIndex: number }) => {
             {/* Background Grid */}
             <div className="absolute inset-0 opacity-[0.3]"
                 style={{
-                    backgroundImage: 'radial-gradient(#B07552 1px, transparent 1px)',
+                    backgroundImage: theme === 'dark' ? 'radial-gradient(#bf8440 1px, transparent 1px)' : 'radial-gradient(#B07552 1px, transparent 1px)',
                     backgroundSize: '30px 30px'
                 }}
             />
@@ -98,7 +105,7 @@ const CoreEngine = ({ activeIndex }: { activeIndex: number }) => {
                     ]
                 }}
                 transition={{ duration: 3, repeat: Infinity }}
-                className="relative z-20 w-32 h-32 bg-white rounded-full border-4 border-brand-green-100 flex items-center justify-center shadow-2xl"
+                className={`relative z-20 w-32 h-32 rounded-full border-4 flex items-center justify-center shadow-2xl ${theme === 'dark' ? 'bg-dark-card border-dark-accent/50' : 'bg-white border-brand-green-100'}`}
             >
                 <div className="absolute inset-2 bg-gradient-to-br from-brand-green-500 to-brand-green-700 rounded-full flex items-center justify-center text-white text-center p-2 shadow-inner">
                     <Brain className="w-12 h-12 text-white/90" />
@@ -121,7 +128,7 @@ const CoreEngine = ({ activeIndex }: { activeIndex: number }) => {
             {satellites.map((sat, i) => (
                 <motion.div
                     key={i}
-                    className={`absolute z-20 w-12 h-12 rounded-xl ${sat.bg} flex items-center justify-center shadow-sm border border-white`}
+                    className={`absolute z-20 w-12 h-12 rounded-xl ${sat.bg} flex items-center justify-center shadow-sm border ${theme === 'dark' ? 'border-dark-accent/30' : 'border-white'}`}
                     style={{ x: sat.x, y: sat.y }}
                     animate={{
                         scale: activeIndex % satellites.length === i ? 1.2 : 1,
@@ -133,7 +140,7 @@ const CoreEngine = ({ activeIndex }: { activeIndex: number }) => {
             ))}
 
             {/* Status Pill */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur px-4 py-1.5 rounded-full border border-gray-200 text-xs font-semibold text-gray-500 flex items-center gap-2 shadow-sm">
+            <div className={`absolute bottom-10 left-1/2 -translate-x-1/2 backdrop-blur px-4 py-1.5 rounded-full border text-xs font-semibold flex items-center gap-2 shadow-sm ${theme === 'dark' ? 'bg-dark-card/80 border-dark-accent/30 text-dark-text-muted' : 'bg-white/80 border-gray-200 text-gray-500'}`}>
                 <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                 SYSTEM OPERATIONAL
             </div>
@@ -142,6 +149,7 @@ const CoreEngine = ({ activeIndex }: { activeIndex: number }) => {
 };
 
 export const CapabilitiesSystem = ({ features }: { features: ProductFeature[] }) => {
+    const { theme } = useTheme();
     const [activeIndex, setActiveIndex] = useState(0);
 
     return (
@@ -155,6 +163,7 @@ export const CapabilitiesSystem = ({ features }: { features: ProductFeature[] })
                         feature={feature}
                         isActive={activeIndex === idx}
                         onHover={setActiveIndex}
+                        theme={theme}
                     />
                 ))}
             </div>
@@ -162,9 +171,9 @@ export const CapabilitiesSystem = ({ features }: { features: ProductFeature[] })
             {/* Right Column - Visualizer */}
             <div className="w-full lg:w-7/12 relative">
                 {/* Visualizer Container */}
-                <div className="relative bg-white/50 rounded-[3rem] border border-white shadow-2xl backdrop-blur-xl overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-brand-green-50/50 to-transparent" />
-                    <CoreEngine activeIndex={activeIndex} />
+                <div className={`relative rounded-[3rem] border shadow-2xl backdrop-blur-xl overflow-hidden ${theme === 'dark' ? 'bg-dark-card/50 border-dark-accent/30' : 'bg-white/50 border-white'}`}>
+                    <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-gradient-to-br from-dark-accent/10 to-transparent' : 'bg-gradient-to-br from-brand-green-50/50 to-transparent'}`} />
+                    <CoreEngine activeIndex={activeIndex} theme={theme} />
                 </div>
 
                 {/* Decorative Elements */}

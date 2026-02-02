@@ -10,8 +10,10 @@ import { ImpactMetrics } from '../components/product/ImpactMetrics';
 import { WorkflowBuilder } from '../components/product/WorkflowBuilder';
 import { CapabilitiesSystem } from '../components/product/CapabilitiesSystem';
 import ProductHero from '../components/product/ProductHero';
+import { useTheme } from '../context/ThemeContext';
 
 const ProductPage = () => {
+    const { theme } = useTheme();
     const location = useLocation();
     const product = PRODUCT_DATA[location.pathname] || PRODUCT_DATA['generic'];
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
@@ -23,9 +25,9 @@ const ProductPage = () => {
     if (!product) return null;
 
     return (
-        <div className="relative min-h-screen">
+        <div className={`relative min-h-screen transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
             {/* CuteBackground - placed at root level with proper z-indexing */}
-            <CuteBackground />
+            {theme !== 'dark' && <CuteBackground />}
 
             {/* 1. Hero Section - Premium Dark */}
             <ProductHero
@@ -35,12 +37,12 @@ const ProductPage = () => {
             />
 
             {/* 2. Stats Section - "Turn Efficiency into Profit" */}
-            <section className="py-24 bg-brand-green-50">
+            <section className={`py-24 transition-colors ${theme === 'dark' ? 'bg-dark-card' : 'bg-brand-green-50'}`}>
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="text-center mb-16">
-                        <span className="text-brand-green-600 font-bold tracking-widest uppercase text-sm mb-4 block">Impact</span>
-                        <h2 className="text-4xl md:text-5xl font-sans font-bold text-gray-900 mb-6">Turn Efficiency into Profit</h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto text-lg">Real results from companies that switched to {product.title}.</p>
+                        <span className={`font-bold tracking-widest uppercase text-sm mb-4 block ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`}>Impact</span>
+                        <h2 className={`text-4xl md:text-5xl font-sans font-bold mb-6 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Turn Efficiency into Profit</h2>
+                        <p className={`max-w-2xl mx-auto text-lg ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>Real results from companies that switched to {product.title}.</p>
                     </div>
 
                     <div className="mt-12">
@@ -50,12 +52,12 @@ const ProductPage = () => {
             </section>
 
             {/* 3. Workflow / Process Section - SIMPLIFY YOUR WORKFLOW */}
-            <section className="py-24 bg-white relative overflow-hidden">
+            <section className={`py-24 relative overflow-hidden transition-colors ${theme === 'dark' ? 'bg-dark-bg' : 'bg-white'}`}>
                 <div className="container mx-auto px-4 md:px-6 relative z-10">
                     <div className="text-center mb-16">
-                        <span className="text-brand-green-600 font-bold tracking-widest uppercase text-sm mb-4 block">Workflow</span>
-                        <h2 className="text-4xl md:text-5xl font-sans font-bold text-gray-900 mb-6">Simplify Your Workflow</h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto text-lg">From concept to execution, we streamline every step.</p>
+                        <span className={`font-bold tracking-widest uppercase text-sm mb-4 block ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`}>Workflow</span>
+                        <h2 className={`text-4xl md:text-5xl font-sans font-bold mb-6 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Simplify Your Workflow</h2>
+                        <p className={`max-w-2xl mx-auto text-lg ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>From concept to execution, we streamline every step.</p>
                     </div>
 
                     <WorkflowBuilder steps={product.process || []} />
@@ -63,13 +65,13 @@ const ProductPage = () => {
             </section>
 
             {/* 4. Experience Zone / Capabilities */}
-            <section className="py-24 bg-brand-green-50/30 overflow-hidden">
+            <section className={`py-24 overflow-hidden transition-colors ${theme === 'dark' ? 'bg-dark-card' : 'bg-brand-green-50/30'}`}>
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="mb-16">
-                        <span className="text-brand-green-600 font-bold tracking-widest uppercase text-sm mb-4 block">Capabilities</span>
-                        <h2 className="text-4xl md:text-5xl font-serif text-gray-900 leading-tight">
+                        <span className={`font-bold tracking-widest uppercase text-sm mb-4 block ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`}>Capabilities</span>
+                        <h2 className={`text-4xl md:text-5xl font-serif leading-tight ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                             Everything you need to <br className="hidden md:block" />
-                            <span className="text-brand-green-600 italic">scale effortlessly.</span>
+                            <span className={`italic ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`}>scale effortlessly.</span>
                         </h2>
                     </div>
 
@@ -80,20 +82,20 @@ const ProductPage = () => {
             {/* 5. Use Cases Section */}
             {
                 product.useCases && product.useCases.length > 0 && (
-                    <section className="py-24 bg-white">
+                    <section className={`py-24 transition-colors ${theme === 'dark' ? 'bg-dark-bg' : 'bg-white'}`}>
                         <div className="container mx-auto px-4 md:px-6">
                             <div className="text-center mb-16">
-                                <h2 className="text-3xl md:text-4xl font-sans font-bold text-gray-900 mb-4">Built for Your Industry</h2>
-                                <p className="text-gray-600 text-lg">See how {product.title} adapts to your specific needs.</p>
+                                <h2 className={`text-3xl md:text-4xl font-sans font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Built for Your Industry</h2>
+                                <p className={`text-lg ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>See how {product.title} adapts to your specific needs.</p>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 {product.useCases.map((useCase, idx) => (
-                                    <Card key={idx} className="p-8 border border-gray-100 hover:border-gray-300 transition-all hover:-translate-y-1">
+                                    <Card key={idx} className={`p-8 border transition-all hover:-translate-y-1 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20 hover:border-dark-accent' : 'border-gray-100 hover:border-gray-300'}`}>
                                         <div className="mb-6">
-                                            {useCase.icon && <useCase.icon className="w-10 h-10 text-gray-900" />}
+                                            {useCase.icon && <useCase.icon className={`w-10 h-10 ${theme === 'dark' ? 'text-dark-accent' : 'text-gray-900'}`} />}
                                         </div>
-                                        <h3 className="text-xl font-bold text-gray-900 mb-3">{useCase.title}</h3>
-                                        <p className="text-gray-600">{useCase.description}</p>
+                                        <h3 className={`text-xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>{useCase.title}</h3>
+                                        <p className={theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}>{useCase.description}</p>
                                     </Card>
                                 ))}
                             </div>
@@ -105,21 +107,21 @@ const ProductPage = () => {
             {/* 6. FAQ Section */}
             {
                 product.faq && product.faq.length > 0 && (
-                    <section className="py-24 bg-gray-50">
+                    <section className={`py-24 transition-colors ${theme === 'dark' ? 'bg-dark-card' : 'bg-gray-50'}`}>
                         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-                            <h2 className="text-3xl md:text-4xl font-sans font-bold text-gray-900 mb-12 text-center">Frequently Asked Questions</h2>
+                            <h2 className={`text-3xl md:text-4xl font-sans font-bold mb-12 text-center ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Frequently Asked Questions</h2>
                             <div className="space-y-4">
                                 {product.faq.map((item, idx) => (
-                                    <div key={idx} className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                                    <div key={idx} className={`rounded-2xl border overflow-hidden ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/20' : 'bg-white border-gray-200'}`}>
                                         <button
                                             onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                                            className="w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors"
+                                            className={`w-full text-left p-6 flex justify-between items-center transition-colors ${theme === 'dark' ? 'hover:bg-dark-card' : 'hover:bg-gray-50'}`}
                                         >
-                                            <span className="text-lg font-bold text-gray-900">{item.question}</span>
+                                            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>{item.question}</span>
                                             {openFaqIndex === idx ? (
-                                                <Minus className="w-5 h-5 text-gray-400" />
+                                                <Minus className={`w-5 h-5 ${theme === 'dark' ? 'text-dark-accent' : 'text-gray-400'}`} />
                                             ) : (
-                                                <Plus className="w-5 h-5 text-gray-400" />
+                                                <Plus className={`w-5 h-5 ${theme === 'dark' ? 'text-dark-accent' : 'text-gray-400'}`} />
                                             )}
                                         </button>
                                         <AnimatePresence>
@@ -130,7 +132,7 @@ const ProductPage = () => {
                                                     exit={{ height: 0, opacity: 0 }}
                                                     transition={{ duration: 0.3 }}
                                                 >
-                                                    <div className="p-6 pt-0 text-gray-600 leading-relaxed border-t border-gray-50">
+                                                    <div className={`p-6 pt-0 leading-relaxed border-t ${theme === 'dark' ? 'text-dark-text-muted border-dark-accent/10' : 'text-gray-600 border-gray-50'}`}>
                                                         {item.answer}
                                                     </div>
                                                 </motion.div>
@@ -145,16 +147,16 @@ const ProductPage = () => {
             }
 
             {/* 7. Final Call to Action */}
-            <section className="py-32 bg-brand-green-600 text-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-green-500/40 via-brand-green-600 to-brand-green-700" />
+            <section className={`py-32 text-center relative overflow-hidden ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-brand-green-600'}`}>
+                <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-dark-accent/20 via-dark-navbar to-dark-bg' : 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-green-500/40 via-brand-green-600 to-brand-green-700'}`} />
                 <div className="container mx-auto px-4 relative z-10">
-                    <h2 className="text-4xl md:text-6xl font-sans font-bold text-white mb-8">Ready to transform your business?</h2>
-                    <p className="text-xl text-brand-green-50 mb-12 max-w-2xl mx-auto">
+                    <h2 className={`text-4xl md:text-6xl font-sans font-bold mb-8 ${theme === 'dark' ? 'text-dark-text' : 'text-white'}`}>Ready to transform your business?</h2>
+                    <p className={`text-xl mb-12 max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-brand-green-50'}`}>
                         Join 500+ companies using Frostrek to automate operations and drive growth.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
                         <Link to="/contact">
-                            <Button size="lg" className="bg-brand-green-500 hover:bg-brand-green-400 text-white rounded-full px-12 h-16 text-xl font-bold">
+                            <Button size="lg" className={`rounded-full px-12 h-16 text-xl font-bold ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-brand-green-500 hover:bg-brand-green-400 text-white'}`}>
                                 Get Started Now
                             </Button>
                         </Link>
@@ -166,3 +168,4 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+
