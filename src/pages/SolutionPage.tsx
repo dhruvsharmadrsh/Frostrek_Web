@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, XCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { SOLUTION_DATA } from '../utils/solutionData';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
