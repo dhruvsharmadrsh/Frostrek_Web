@@ -7,6 +7,7 @@ import Button from '../components/ui/Button';
 import CommonChallenges from '../components/solution/CommonChallenges';
 import FrostrekAdvantage from '../components/solution/FrostrekAdvantage';
 import { useTheme } from '../context/ThemeContext';
+import CTASection from '../components/home/CTASection';
 
 const SolutionPage = () => {
     const { theme } = useTheme();
@@ -153,26 +154,7 @@ const SolutionPage = () => {
             <FrostrekAdvantage features={solution.features} />
 
             {/* Bottom CTA */}
-            <section className={`py-20 text-white ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-gradient-to-r from-gray-900 to-gray-800'}`}>
-                <div className="container mx-auto px-4 md:px-6 text-center">
-                    <h2 className={`text-3xl font-bold mb-6 ${theme === 'dark' ? 'text-dark-text' : ''}`}>See {solution.title} in Action</h2>
-                    <p className={`mb-8 max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-300'}`}>
-                        Schedule a personalized walkthrough to see exactly how we can solve your specific challenges.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link to="/schedule-demo">
-                            <Button size="lg" className={`border-none shadow-lg ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90 shadow-dark-accent/30' : 'bg-brand-green-600 hover:bg-brand-green-700 text-white shadow-brand-green-600/30'}`}>
-                                Book Personalized Demo
-                            </Button>
-                        </Link>
-                        <Link to="/resources">
-                            <Button size="lg" variant="outline" className={`${theme === 'dark' ? 'border-dark-accent/50 text-dark-text hover:bg-dark-card hover:text-dark-text' : 'border-gray-600 text-white hover:bg-gray-800 hover:text-white'}`}>
-                                View Case Studies
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            <CTASection />
         </div>
     );
 };
