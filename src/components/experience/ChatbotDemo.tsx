@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Sparkles, Mic, Square, Loader2, MessageSquare } from 'lucide-react';
+import { Send, Sparkles, Mic, Square, MessageSquare } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
@@ -8,6 +7,7 @@ const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9a
 interface Message {
     type: 'user' | 'bot';
     content: string;
+    image?: string;
 }
 
 const ChatbotDemo: React.FC = () => {
@@ -22,15 +22,6 @@ const ChatbotDemo: React.FC = () => {
     const [isRecording, setIsRecording] = useState(false);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
-
-    // Session ID Management
-    const [sessionId] = useState(() => {
-        const stored = sessionStorage.getItem('chatDemoSessionId');
-        if (stored) return stored;
-        const newId = crypto.randomUUID?.() || Math.random().toString(36).substring(2) + Date.now().toString(36);
-        sessionStorage.setItem('chatDemoSessionId', newId);
-        return newId;
-    });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -91,14 +82,15 @@ const ChatbotDemo: React.FC = () => {
 
         try {
             const formData = new FormData();
-            formData.append('sessionId', sessionId);
 
             if (textInput) {
                 formData.append('chatInput', textInput);
+                formData.append('Type', 'text');
             }
 
             if (audioBlob) {
-                formData.append('audio', audioBlob, 'recording.webm');
+                formData.append('voice', audioBlob, 'recording.webm');
+                formData.append('Type', 'voice');
                 if (!textInput) formData.append('chatInput', 'Voice message');
             }
 
@@ -118,6 +110,10 @@ const ChatbotDemo: React.FC = () => {
 
                 setMessages(prev => [...prev, { type: 'bot', content: '🎤 (Playing Audio Response...)' }]);
                 audio.play().catch(e => console.error("Audio play failed", e));
+            } else if (contentType && contentType.includes('image')) {
+                const imageBlob = await response.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                setMessages(prev => [...prev, { type: 'bot', content: 'Here is the generated image:', image: imageUrl }]);
             } else {
                 const data = await response.json();
 
@@ -193,6 +189,11 @@ const ChatbotDemo: React.FC = () => {
                             : (theme === 'dark' ? 'bg-dark-card text-dark-text border border-dark-accent/20 rounded-tl-none' : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none')
                             }`}>
                             {msg.content}
+                            {msg.image && (
+                                <div className="mt-2 rounded-lg overflow-hidden border border-gray-200">
+                                    <img src={msg.image} alt="Generated" className="w-full h-auto" />
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 ))}
@@ -202,8 +203,24 @@ const ChatbotDemo: React.FC = () => {
                         <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${theme === 'dark' ? 'bg-dark-accent/20 border border-dark-accent/30' : 'bg-brand-green-100 border border-brand-green-200'}`}>
                             <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                         </div>
-                        <div className={`p-3 rounded-2xl rounded-tl-none shadow-sm ${theme === 'dark' ? 'bg-dark-card border border-dark-accent/20' : 'bg-white border border-gray-100'}`}>
-                            <Loader2 className={`w-4 h-4 animate-spin ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-500'}`} />
+                        <div className={`p-3 rounded-2xl rounded-tl-none shadow-sm flex items-center ${theme === 'dark' ? 'bg-dark-card border border-dark-accent/20' : 'bg-white border border-gray-100'}`}>
+                            <div className="flex gap-1">
+                                <motion.div
+                                    className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
+                                    animate={{ opacity: [0.4, 1, 0.4] }}
+                                    transition={{ duration: 1.4, repeat: Infinity, times: [0, 0.5, 1] }}
+                                />
+                                <motion.div
+                                    className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
+                                    animate={{ opacity: [0.4, 1, 0.4] }}
+                                    transition={{ duration: 1.4, delay: 0.2, repeat: Infinity, times: [0, 0.5, 1] }}
+                                />
+                                <motion.div
+                                    className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
+                                    animate={{ opacity: [0.4, 1, 0.4] }}
+                                    transition={{ duration: 1.4, delay: 0.4, repeat: Infinity, times: [0, 0.5, 1] }}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}

@@ -62,8 +62,8 @@ const FAQSection = () => {
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             className={`rounded-2xl border transition-all duration-300 ${theme === 'dark'
-                                    ? `bg-white/5 border-white/10 hover:border-[#B07552]/50 ${activeIndex === index ? 'border-[#B07552]' : ''}`
-                                    : `bg-white border-gray-200 hover:border-[#B07552]/50 ${activeIndex === index ? 'border-[#B07552] shadow-lg' : 'shadow-sm'}`
+                                ? `bg-white/5 border-white/10 hover:border-[#B07552]/50 ${activeIndex === index ? 'border-[#B07552]' : ''}`
+                                : `bg-white border-gray-200 hover:border-[#B07552]/50 ${activeIndex === index ? 'border-[#B07552] shadow-lg' : 'shadow-sm'}`
                                 }`}
                         >
                             <button

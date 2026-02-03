@@ -209,8 +209,8 @@ const VoiceCallWidget: React.FC<VoiceCallWidgetProps> = ({ onCallStateChange }) 
 
         try {
             const formData = new FormData();
-            formData.append('sessionId', sessionId);
-            formData.append('audio', audioBlob, 'recording.webm');
+            formData.append('voice', audioBlob, 'recording.webm');
+            formData.append('Type', 'voice');
             formData.append('chatInput', 'Voice message');
 
             const response = await fetch(WEBHOOK_URL, {

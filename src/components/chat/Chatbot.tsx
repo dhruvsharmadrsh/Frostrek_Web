@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Sparkles, Mic, Square, Loader2, Paperclip } from 'lucide-react';
+import { X, Send, Sparkles, Mic, Square, Paperclip } from 'lucide-react';
 
 // Webhook URL
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
@@ -21,7 +21,7 @@ const COLORS = {
 const Chatbot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string }>>([]);
+    const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string, image?: string }>>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -30,16 +30,6 @@ const Chatbot: React.FC = () => {
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-    // Session ID Management
-    const [sessionId] = useState(() => {
-        const stored = localStorage.getItem('chatSessionId');
-        if (stored && stored.startsWith('session_')) return stored;
-
-        const newId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-        localStorage.setItem('chatSessionId', newId);
-        return newId;
-    });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -116,35 +106,35 @@ const Chatbot: React.FC = () => {
             let response;
 
             if (audioBlob) {
-                // Audio: Send 'audio' key only (no sessionId, no message)
+                // Audio: Send 'voice' key, Type: 'voice'
                 const formData = new FormData();
-                formData.append('audio', audioBlob, 'recording.webm');
+                formData.append('voice', audioBlob, 'recording.webm');
+                formData.append('Type', 'voice');
 
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     body: formData,
                 });
             } else if (selectedFile) {
-                // Image: Send 'image' key only (no sessionId, no message)
+                // Image: Send 'image' key, Type: 'text' (as per user requirement)
                 const formData = new FormData();
                 formData.append('image', selectedFile);
+                formData.append('Type', 'text');
 
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     body: formData,
                 });
             } else {
-                // Use JSON for text-only messages (as requested)
-                console.log('Sending JSON payload:', { message: textInput, sessionId });
+                // Use FormData for text-only messages to be consistent with n8n webhook
+                const formData = new FormData();
+                formData.append('chatInput', textInput || '');
+                formData.append('Type', 'text');
+
+                console.log('Sending FormData payload:', { chatInput: textInput, Type: 'text' });
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: textInput,
-                        sessionId: sessionId
-                    }),
+                    body: formData,
                 });
             }
 
@@ -188,6 +178,16 @@ const Chatbot: React.FC = () => {
                 }
 
                 return;
+            } else if (contentType.includes('image/')) {
+                const imageBlob = await response.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+
+                setMessages(prev => [
+                    ...prev,
+                    { type: 'bot', content: 'Here is the generated image:', image: imageUrl }
+                ]);
+
+                return;
             }
             else {
                 const rawText = await response.text();
@@ -196,7 +196,7 @@ const Chatbot: React.FC = () => {
                 if (!rawText) {
                     setMessages(prev => [
                         ...prev,
-                        { type: 'bot', content: '✅ Voice received. Processing…' }
+                        { type: 'bot', content: textInput ? '✅ Message received.' : '✅ Voice received. Processing…' }
                     ]);
                     return;
                 }
@@ -454,10 +454,54 @@ const Chatbot: React.FC = () => {
                                                 borderColor: msg.type === 'user' ? 'transparent' : '#e0e0e0',
                                             }}
                                         >
-                                            {msg.content}
+                                            {msg.content && (
+                                                <div className="whitespace-pre-wrap">
+                                                    {msg.content.split(/(https?:\/\/[^\s]+)/g).map((part, i) => {
+                                                        if (part.match(/https?:\/\/[^\s]+/)) {
+                                                            return (
+                                                                <a
+                                                                    key={i}
+                                                                    href={part}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={`underline hover:opacity-80 break-all ${msg.type === 'user' ? 'text-white' : 'text-blue-600'}`}
+                                                                    onClick={(e) => e.stopPropagation()}
+                                                                >
+                                                                    {part}
+                                                                </a>
+                                                            );
+                                                        }
+                                                        return part;
+                                                    })}
+                                                </div>
+                                            )}
+                                            {msg.image && (
+                                                <div className="mt-2 rounded-lg overflow-hidden border border-gray-200">
+                                                    <img src={msg.image} alt="Generated" className="w-full h-auto" />
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
+
+                                {/* Typing Indicator Style */}
+                                <style>{`
+                                        @keyframes blink {
+                                            0% { opacity: 0.2; }
+                                            20% { opacity: 1; }
+                                            100% { opacity: 0.2; }
+                                        }
+                                        .typing-dot {
+                                            animation: blink 1.4s infinite both;
+                                            height: 6px;
+                                            width: 6px;
+                                            border-radius: 50%;
+                                            background-color: ${COLORS.primary};
+                                            display: inline-block;
+                                        }
+                                        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+                                        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+                                    `}</style>
 
                                 {isLoading && (
                                     <div className="flex gap-3 max-w-[85%]">
@@ -470,8 +514,12 @@ const Chatbot: React.FC = () => {
                                         >
                                             <Sparkles className="w-4 h-4" style={{ color: COLORS.accent }} />
                                         </div>
-                                        <div className="p-4 rounded-2xl rounded-tl-none shadow-sm border" style={{ backgroundColor: COLORS.white, borderColor: '#e0e0e0' }}>
-                                            <Loader2 className="w-5 h-5 animate-spin" style={{ color: COLORS.primary }} />
+                                        <div className="p-4 rounded-2xl rounded-tl-none shadow-sm border flex items-center" style={{ backgroundColor: COLORS.white, borderColor: '#e0e0e0' }}>
+                                            <div className="flex gap-1">
+                                                <span className="typing-dot"></span>
+                                                <span className="typing-dot"></span>
+                                                <span className="typing-dot"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
