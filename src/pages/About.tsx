@@ -884,6 +884,7 @@ const About = () => {
     const opacity = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
 
     const [activeOffice, setActiveOffice] = useState<number>(0);
+    const [flippedCard, setFlippedCard] = useState<number | null>(null);
 
 
     const texts = useMemo(() => ['Intelligent Systems', 'Agentic AI', 'Machine Learning', 'Neural Networks'], []);
@@ -896,10 +897,38 @@ const About = () => {
     ], []);
 
     const features = useMemo(() => [
-        { num: '01', title: 'Trusted Expertise', desc: 'World-class AI research team', stat: '5000+ Sessions' },
-        { num: '02', title: 'Innovation-Driven', desc: 'Pushing technology boundaries', stat: 'Cutting-Edge' },
-        { num: '03', title: 'Client-Centered', desc: 'Your success is our priority', stat: 'Tailored' },
-        { num: '04', title: 'Production-Ready', desc: 'Scale without limits', stat: 'Enterprise' },
+        { 
+            num: '01', 
+            title: 'Trusted Expertise', 
+            desc: 'World-class AI research team with proven track record in enterprise AI deployments. Our experts bring decades of experience ensuring robust solutions.', 
+            stat: '5000+ Sessions',
+            details: 'Former researchers from Google, Meta, and DeepMind with 15+ years in AI/ML. Successfully deployed solutions serving millions worldwide.',
+            highlights: ['PhD-level researchers', '200+ published papers', 'Enterprise solutions']
+        },
+        { 
+            num: '02', 
+            title: 'Innovation-Driven', 
+            desc: 'Pushing technology boundaries with cutting-edge research in LLMs and autonomous agents. We invest heavily in R&D to deliver next-gen AI capabilities.', 
+            stat: 'Cutting-Edge',
+            details: 'We invest 30% of resources in R&D, staying ahead with latest advancements in LLMs, autonomous agents, and neural networks.',
+            highlights: ['Latest LLM technology', 'Real-time processing', 'Custom model training']
+        },
+        { 
+            num: '03', 
+            title: 'Client-Centered', 
+            desc: 'Your success is our priority with dedicated support and customized solutions. We deliver tailored AI systems that integrate seamlessly with workflows.', 
+            stat: 'Tailored',
+            details: 'Every solution customized to your unique needs. Dedicated support ensures 99.9% uptime with 24/7 monitoring and assistance.',
+            highlights: ['24/7 dedicated support', '99.9% uptime SLA', 'Custom integrations']
+        },
+        { 
+            num: '04', 
+            title: 'Production-Ready', 
+            desc: 'Scale without limits on cloud-native infrastructure handling billions of requests. Battle-tested architecture ensures zero downtime and automatic scaling.', 
+            stat: 'Enterprise',
+            details: 'Cloud-native architecture handling billions of requests. Infrastructure scales automatically to meet growing demands with zero downtime.',
+            highlights: ['Auto-scaling infrastructure', 'Billions of requests', 'Zero-downtime deploys']
+        },
     ], []);
 
     const offices = useMemo(() => [
@@ -1365,22 +1394,136 @@ const About = () => {
 
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                         {features.map((f, i) => (
-                            <motion.div key={i} variants={fadeUp}>
-                                <TiltCard color={i % 2 === 0 ? 'brand-green' : 'brand-yellow'}>
-                                    <div className="p-6 flex gap-5">
-                                        <motion.span
-                                            className={`text-4xl font-bold ${i % 2 === 0 ? 'text-brand-green-500' : 'text-brand-yellow-500'}`}
-                                            whileHover={{ scale: 1.2, rotate: -5 }}
+                            <motion.div key={i} variants={fadeUp} className="perspective-1000" style={{ height: '280px' }}>
+                                <div 
+                                    className="relative w-full h-full cursor-pointer"
+                                    style={{ transformStyle: 'preserve-3d' }}
+                                    onClick={() => setFlippedCard(flippedCard === i ? null : i)}
+                                >
+                                    <motion.div
+                                        className="w-full h-full"
+                                        animate={{ rotateY: flippedCard === i ? 180 : 0 }}
+                                        transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+                                        style={{ transformStyle: 'preserve-3d' }}
+                                    >
+                                        {/* Front Side */}
+                                        <div 
+                                            className={`absolute inset-0 w-full h-full rounded-lg shadow-lg border transition-shadow duration-300 hover:shadow-xl overflow-hidden ${
+                                                theme === 'dark'
+                                                    ? i % 2 === 0 
+                                                        ? 'bg-dark-card border-brand-green-500/30'
+                                                        : 'bg-dark-card border-brand-yellow-500/30'
+                                                    : i % 2 === 0
+                                                        ? 'bg-white border-brand-green-100'
+                                                        : 'bg-white border-brand-yellow-100'
+                                            }`}
+                                            style={{ 
+                                                backfaceVisibility: 'hidden',
+                                                WebkitBackfaceVisibility: 'hidden'
+                                            }}
                                         >
-                                            {f.num}
-                                        </motion.span>
-                                        <div>
-                                            <h3 className="font-bold text-gray-900 mb-1">{f.title}</h3>
-                                            <p className="text-gray-600 text-sm mb-2">{f.desc}</p>
-                                            <span className={`text-xs font-semibold ${i % 2 === 0 ? 'text-brand-green-600' : 'text-brand-yellow-600'}`}>{f.stat} →</span>
+                                            {/* Decorative gradient background */}
+                                            <div className={`absolute inset-0 opacity-5 ${
+                                                i % 2 === 0 
+                                                    ? 'bg-gradient-to-br from-brand-green-500 via-transparent to-brand-green-500/30'
+                                                    : 'bg-gradient-to-br from-brand-yellow-500 via-transparent to-brand-yellow-500/30'
+                                            }`} />
+                                            
+                                            {/* Decorative pattern */}
+                                            <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                                                <div className={`absolute inset-0 ${i % 2 === 0 ? 'bg-brand-green-500' : 'bg-brand-yellow-500'}`} 
+                                                     style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }} />
+                                            </div>
+                                            
+                                            <div className="relative p-6 pb-8 flex flex-col h-full">
+                                                {/* Number badge */}
+                                                <div className="flex items-start gap-4 mb-4">
+                                                    <motion.div
+                                                        className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg ${
+                                                            i % 2 === 0 
+                                                                ? theme === 'dark'
+                                                                    ? 'bg-brand-green-500/20 text-brand-green-400 border border-brand-green-500/30'
+                                                                    : 'bg-gradient-to-br from-brand-green-400 to-brand-green-600 text-white'
+                                                                : theme === 'dark'
+                                                                    ? 'bg-brand-yellow-500/20 text-brand-yellow-400 border border-brand-yellow-500/30'
+                                                                    : 'bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600 text-white'
+                                                        }`}
+                                                        whileHover={{ scale: 1.05, rotate: 5 }}
+                                                    >
+                                                        {f.num}
+                                                    </motion.div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <h3 className={`font-bold text-lg mb-1 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>{f.title}</h3>
+                                                        <div className={`h-1 w-12 rounded-full ${i % 2 === 0 ? 'bg-brand-green-500' : 'bg-brand-yellow-500'}`} />
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Description */}
+                                                <p className={`text-sm leading-relaxed flex-1 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                                                    {f.desc}
+                                                </p>
+                                                
+                                                {/* Footer with stat */}
+                                                <div className={`flex items-center justify-between pt-5 mt-4 mb-1 border-t ${
+                                                    theme === 'dark'
+                                                        ? i % 2 === 0 ? 'border-brand-green-500/20' : 'border-brand-yellow-500/20'
+                                                        : i % 2 === 0 ? 'border-brand-green-100' : 'border-brand-yellow-100'
+                                                }`}>
+                                                    <span className={`text-xs font-semibold ${i % 2 === 0 ? 'text-brand-green-600' : 'text-brand-yellow-600'}`}>
+                                                        {f.stat}
+                                                    </span>
+                                                    <motion.div
+                                                        className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                                            i % 2 === 0 
+                                                                ? 'bg-brand-green-100 text-brand-green-600' 
+                                                                : 'bg-brand-yellow-100 text-brand-yellow-600'
+                                                        }`}
+                                                        whileHover={{ scale: 1.1, rotate: 90 }}
+                                                    >
+                                                        →
+                                                    </motion.div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </TiltCard>
+
+                                        {/* Back Side */}
+                                        <div 
+                                            className={`absolute inset-0 w-full h-full rounded-lg shadow-lg border overflow-hidden ${
+                                                theme === 'dark'
+                                                    ? i % 2 === 0 
+                                                        ? 'bg-dark-card border-brand-green-500/30'
+                                                        : 'bg-dark-card border-brand-yellow-500/30'
+                                                    : i % 2 === 0
+                                                        ? 'bg-white border-brand-green-100'
+                                                        : 'bg-white border-brand-yellow-100'
+                                            }`}
+                                            style={{ 
+                                                backfaceVisibility: 'hidden',
+                                                WebkitBackfaceVisibility: 'hidden',
+                                                transform: 'rotateY(180deg)'
+                                            }}
+                                        >
+                                            <div className="p-5 h-full flex flex-col overflow-y-auto">
+                                                <div className="flex items-center justify-between mb-2 flex-shrink-0">
+                                                    <h3 className={`font-bold text-base ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>{f.title}</h3>
+                                                    <span className={`text-xl font-bold flex-shrink-0 ${i % 2 === 0 ? 'text-brand-green-500' : 'text-brand-yellow-500'}`}>{f.num}</span>
+                                                </div>
+                                                <p className={`text-xs mb-3 leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>{f.details}</p>
+                                                <div className="space-y-1.5 flex-1">
+                                                    {f.highlights.map((highlight, idx) => (
+                                                        <div key={idx} className="flex items-start gap-2">
+                                                            <CheckCircle2 size={14} className={`flex-shrink-0 mt-0.5 ${i % 2 === 0 ? 'text-brand-green-500' : 'text-brand-yellow-500'}`} />
+                                                            <span className={`text-xs leading-tight ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-700'}`}>{highlight}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="mt-3 text-center flex-shrink-0">
+                                                    <span className={`text-xs font-semibold ${i % 2 === 0 ? 'text-brand-green-600' : 'text-brand-yellow-600'}`}>Click to flip back ↻</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                </div>
                             </motion.div>
                         ))}
                     </motion.div>
@@ -1388,110 +1531,225 @@ const About = () => {
             </section>
 
             {/* ===== GLOBAL PRESENCE ===== */}
-            <section className={`py-12 md:py-20 ${theme === 'dark' ? 'bg-dark-card' : 'bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50'}`}>
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-12">
-                        <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Global Presence</h2>
-                        <p className={theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}>Worldwide enterprise support across 6 continents</p>
-                    </div>
+            <section className={`py-16 md:py-24 relative overflow-hidden ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-white via-slate-50/50 to-white'}`}>
+                {/* Decorative background elements */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className={`absolute top-20 -left-20 w-96 h-96 rounded-full blur-3xl opacity-20 ${theme === 'dark' ? 'bg-brand-green-500' : 'bg-brand-green-200'}`} />
+                    <div className={`absolute bottom-20 -right-20 w-96 h-96 rounded-full blur-3xl opacity-20 ${theme === 'dark' ? 'bg-brand-yellow-500' : 'bg-brand-yellow-200'}`} />
+                </div>
+
+                <div className="container mx-auto px-4 relative z-10">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <motion.span
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${theme === 'dark' ? 'bg-dark-accent/20 text-dark-accent' : 'bg-gradient-to-r from-brand-green-100 to-brand-yellow-100 text-brand-green-700'}`}
+                        >
+                            <Globe className="inline w-4 h-4 mr-2" />
+                            Our Locations
+                        </motion.span>
+                        <h2 className={`text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r ${theme === 'dark' ? 'from-dark-text to-dark-text-muted' : 'from-gray-900 to-gray-700'} bg-clip-text text-transparent`}>
+                            Global Presence
+                        </h2>
+                        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                            Worldwide enterprise support across 6 continents with 24/7 availability
+                        </p>
+                    </motion.div>
 
                     <div className="max-w-[1600px] mx-auto">
-                        <div className="grid lg:grid-cols-3 gap-8 items-stretch">
-                            <div className="flex flex-col justify-center space-y-6">
+                        <div className="grid lg:grid-cols-[1fr_1.5fr_1fr] gap-8 items-stretch">
+                            {/* Left - Office Tabs */}
+                            <motion.div 
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                className="flex flex-col justify-center space-y-4"
+                            >
                                 {offices.map((o, i) => (
                                     <motion.div
                                         key={i}
-                                        className={`flex items-center gap-6 px-8 py-8 rounded-3xl cursor-pointer transition-all duration-300 ${activeOffice === i
-                                            ? 'bg-white shadow-xl border-l-8 border-brand-green-500'
-                                            : 'bg-white/60 hover:bg-white hover:shadow-lg border-l-8 border-transparent'
-                                            }`}
+                                        className={`group relative flex items-center gap-4 px-6 py-5 rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden ${
+                                            activeOffice === i
+                                                ? theme === 'dark'
+                                                    ? 'bg-dark-card shadow-2xl border-2 border-brand-green-500/50'
+                                                    : 'bg-white shadow-2xl border-2 border-brand-green-500'
+                                                : theme === 'dark'
+                                                    ? 'bg-dark-card/50 hover:bg-dark-card border-2 border-transparent hover:border-brand-green-500/20'
+                                                    : 'bg-white/80 hover:bg-white border-2 border-transparent hover:border-brand-green-100 hover:shadow-lg'
+                                        }`}
                                         onClick={() => setActiveOffice(i)}
-                                        whileHover={{ x: 6 }}
+                                        whileHover={{ x: 8, scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
-                                        <img
-                                            src={o.flagImg}
-                                            alt={`${o.country} flag`}
-                                            className="w-12 h-9 object-cover rounded shadow-sm"
-                                        />
-                                        <div>
-                                            <div className={`text-xl font-bold transition-colors ${activeOffice === i ? 'text-brand-green-600' : 'text-gray-900'}`}>
-                                                {o.city}
-                                            </div>
-                                            <div className="text-base font-medium text-gray-500">{o.country}</div>
-                                        </div>
+                                        {/* Gradient background on active */}
                                         {activeOffice === i && (
                                             <motion.div
-                                                className="ml-auto w-2 h-2 rounded-full bg-brand-green-500"
-                                                layoutId="activeIndicator"
-                                                initial={{ scale: 0 }}
-                                                animate={{ scale: 1 }}
+                                                className="absolute inset-0 bg-gradient-to-r from-brand-green-500/5 to-brand-yellow-500/5"
+                                                layoutId="activeBackground"
                                             />
                                         )}
+                                        
+                                        {/* Flag with border */}
+                                        <div className="relative flex-shrink-0">
+                                            <img
+                                                src={o.flagImg}
+                                                alt={`${o.country} flag`}
+                                                className="w-14 h-10 object-cover rounded-lg shadow-md ring-2 ring-white/50"
+                                            />
+                                            {activeOffice === i && (
+                                                <motion.div
+                                                    className="absolute -top-1 -right-1 w-3 h-3 bg-brand-green-500 rounded-full border-2 border-white"
+                                                    initial={{ scale: 0 }}
+                                                    animate={{ scale: 1 }}
+                                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                                />
+                                            )}
+                                        </div>
+                                        
+                                        <div className="flex-1 relative z-10">
+                                            <div className={`text-lg font-bold transition-colors ${
+                                                activeOffice === i 
+                                                    ? 'text-brand-green-600' 
+                                                    : theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
+                                            }`}>
+                                                {o.city}
+                                            </div>
+                                            <div className={`text-sm font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
+                                                {o.country}
+                                            </div>
+                                        </div>
+                                        
+                                        <ArrowRight 
+                                            className={`w-5 h-5 transition-all ${
+                                                activeOffice === i 
+                                                    ? 'text-brand-green-500 translate-x-1' 
+                                                    : theme === 'dark' ? 'text-dark-text-muted opacity-0 group-hover:opacity-100' : 'text-gray-400 opacity-0 group-hover:opacity-100'
+                                            }`} 
+                                        />
                                     </motion.div>
                                 ))}
-                            </div>
+                            </motion.div>
 
                             {/* Center - Landmark Image */}
-                            <div className="h-full min-h-[550px]">
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                className="h-full min-h-[500px] lg:min-h-[600px]"
+                            >
                                 <motion.div
-                                    className="relative h-full rounded-3xl overflow-hidden shadow-2xl"
+                                    className={`relative h-full rounded-3xl overflow-hidden shadow-2xl border-4 ${theme === 'dark' ? 'border-dark-card' : 'border-white'}`}
                                     key={activeOffice}
-                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.4 }}
+                                    transition={{ duration: 0.5, type: "spring" }}
                                 >
                                     <img
                                         src={offices[activeOffice].image}
                                         alt={offices[activeOffice].city}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                                </motion.div>
-                            </div>
-
-                            {/* Right - Office Info Card */}
-                            <div>
-                                <motion.div
-                                    className="bg-white rounded-3xl p-8 shadow-xl h-full flex flex-col justify-between"
-                                    key={`info-${activeOffice}`}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.4, delay: 0.1 }}
-                                >
-                                    <h3 className="text-xl font-bold text-gray-900 mb-8">
-                                        {offices[activeOffice].companyName}
-                                    </h3>
-
-                                    <div className="space-y-4 flex-1">
-                                        {/* Address Card */}
-                                        <div className="p-4 border border-gray-200 rounded-xl hover:border-brand-green-200 hover:shadow-sm transition-all">
-                                            <div className="flex gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-green-50 to-brand-green-50 flex items-center justify-center flex-shrink-0 border border-brand-green-100">
-                                                    <MapPin className="w-5 h-5 text-brand-green-600" />
+                                    {/* Enhanced gradient overlays */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                                    <div className="absolute inset-0 bg-gradient-to-br from-brand-green-500/10 to-brand-yellow-500/10" />
+                                    
+                                    {/* Location badge */}
+                                    <motion.div
+                                        className="absolute bottom-6 left-6 right-6"
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                    >
+                                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-green-500 to-brand-green-600 flex items-center justify-center">
+                                                    <MapPin className="w-6 h-6 text-white" />
                                                 </div>
-                                                <div>
-                                                    <div className="text-xs text-brand-green-600 font-semibold mb-1 uppercase tracking-wide">Address</div>
-                                                    <div className="text-sm text-gray-700 leading-relaxed">
-                                                        {offices[activeOffice].address}
-                                                    </div>
+                                                <div className="flex-1">
+                                                    <div className="text-sm font-semibold text-brand-green-600 uppercase tracking-wide">Now Viewing</div>
+                                                    <div className="text-lg font-bold text-gray-900">{offices[activeOffice].city}, {offices[activeOffice].country}</div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </motion.div>
+                                </motion.div>
+                            </motion.div>
 
-                                        {/* Contact Card */}
-                                        <div className="p-4 border border-gray-200 rounded-xl hover:border-brand-green-200 hover:shadow-sm transition-all">
-                                            <div className="flex gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-green-50 to-brand-green-50 flex items-center justify-center flex-shrink-0 border border-brand-green-100">
-                                                    <Phone className="w-5 h-5 text-brand-green-600" />
-                                                </div>
-                                                <div>
-                                                    <div className="text-xs text-brand-green-600 font-semibold mb-1 uppercase tracking-wide">Contact</div>
-                                                    <div className="text-sm text-gray-700">
-                                                        {offices[activeOffice].phone}
+                            {/* Right - Office Info Card */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                            >
+                                <motion.div
+                                    className={`rounded-3xl p-8 shadow-2xl h-full flex flex-col justify-between border-2 ${
+                                        theme === 'dark' 
+                                            ? 'bg-dark-card border-dark-accent/20' 
+                                            : 'bg-white border-gray-100'
+                                    }`}
+                                    key={`info-${activeOffice}`}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.4, delay: 0.1 }}
+                                >
+                                    <div>
+                                        <div className="flex items-center gap-3 mb-8">
+                                            <div className="w-2 h-12 bg-gradient-to-b from-brand-green-500 to-brand-yellow-500 rounded-full" />
+                                            <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                                                {offices[activeOffice].companyName}
+                                            </h3>
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            {/* Address Card */}
+                                            <motion.div 
+                                                className={`group p-5 rounded-2xl transition-all duration-300 border-2 ${
+                                                    theme === 'dark'
+                                                        ? 'bg-dark-bg/50 border-dark-accent/20 hover:border-brand-green-500/50 hover:bg-dark-bg'
+                                                        : 'bg-gradient-to-br from-gray-50 to-white border-gray-200 hover:border-brand-green-300 hover:shadow-md'
+                                                }`}
+                                                whileHover={{ x: 4 }}
+                                            >
+                                                <div className="flex gap-4">
+                                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-green-500 to-brand-green-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                                                        <MapPin className="w-6 h-6 text-white" />
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <div className="text-xs text-brand-green-600 font-bold mb-2 uppercase tracking-wider">Address</div>
+                                                        <div className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-700'}`}>
+                                                            {offices[activeOffice].address}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </motion.div>
+
+                                            {/* Contact Card */}
+                                            <motion.div 
+                                                className={`group p-5 rounded-2xl transition-all duration-300 border-2 ${
+                                                    theme === 'dark'
+                                                        ? 'bg-dark-bg/50 border-dark-accent/20 hover:border-brand-yellow-500/50 hover:bg-dark-bg'
+                                                        : 'bg-gradient-to-br from-gray-50 to-white border-gray-200 hover:border-brand-yellow-300 hover:shadow-md'
+                                                }`}
+                                                whileHover={{ x: 4 }}
+                                            >
+                                                <div className="flex gap-4">
+                                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-yellow-500 to-brand-yellow-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                                                        <Phone className="w-6 h-6 text-white" />
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <div className="text-xs text-brand-yellow-600 font-bold mb-2 uppercase tracking-wider">Contact</div>
+                                                        <div className={`text-sm font-semibold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                                                            {offices[activeOffice].phone}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
                                         </div>
                                     </div>
 
@@ -1500,15 +1758,20 @@ const About = () => {
                                         href={offices[activeOffice].mapUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-6 w-full py-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all uppercase tracking-wider text-sm"
+                                        className={`mt-8 w-full py-4 px-6 font-bold rounded-xl flex items-center justify-center gap-3 shadow-lg transition-all uppercase tracking-wider text-sm relative overflow-hidden group ${
+                                            theme === 'dark'
+                                                ? 'bg-gradient-to-r from-brand-green-600 to-brand-green-500 hover:from-brand-green-500 hover:to-brand-green-400 text-white'
+                                                : 'bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 text-white'
+                                        }`}
                                         whileHover={{ scale: 1.02, y: -2 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
-                                        GET DIRECTIONS
-                                        <span className="w-1.5 h-1.5 bg-brand-green-400 rounded-full animate-pulse" />
+                                        <span className="relative z-10">GET DIRECTIONS</span>
+                                        <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                                     </motion.a>
                                 </motion.div>
-                            </div>
+                            </motion.div>
                         </div>
                     </div>
                 </div>
