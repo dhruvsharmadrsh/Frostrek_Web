@@ -121,7 +121,7 @@ const ValueCard = ({
                 />
             </motion.div>
 
-            {/* Content */}
+            {/* Content */ }
             <div className="relative flex flex-col p-7 md:p-8 text-white z-10 min-h-[420px]">
 
                 {/* Top Row */}
