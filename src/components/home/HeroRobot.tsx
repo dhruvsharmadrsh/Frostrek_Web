@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useRef, useState, useCallback } from 'react';
-import { AdaptiveDpr, Preload, Environment, ContactShadows, OrbitControls } from '@react-three/drei';
+import { AdaptiveDpr, Preload, Environment, OrbitControls } from '@react-three/drei';
 import RobotModel from '../RobotModel';
 
 const HeroRobot = () => {
@@ -127,7 +127,7 @@ const HeroRobot = () => {
 
             {/* Contact shadow for grounding */}
             {/* Contact shadow for grounding */}
-            <ContactShadows
+            {/* <ContactShadows
                 position={[0, -0.8, 0]}
                 opacity={0.55}
                 scale={35}
@@ -135,7 +135,7 @@ const HeroRobot = () => {
                 far={10}
                 resolution={512}
                 color="#3d2914"
-            />
+            /> */}
 
             {/* Robot Model - moved higher */}
             <Suspense fallback={null}>

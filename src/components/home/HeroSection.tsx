@@ -66,13 +66,14 @@ const HeroSection = () => {
             <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
                 <div className="relative w-[100%] h-[100%] lg:w-[100%] lg:h-[100%] rounded-3xl overflow-hidden shadow-2xl pointer-events-auto">
                     <Plasma
-                        color="#FDFBF7"
-                        speed={1}
+                        color="#B07552"       // Main bronze
+                        speed={0.6}           // Slower = calmer
                         direction="forward"
-                        scale={2}
-                        opacity={0.8}
+                        scale={1.8}           // Slightly wider
+                        opacity={0.55}        // Softer
                         mouseInteractive
                     />
+
                 </div>
             </div>
             <div className="container mx-auto px-4 md:px-6 relative z-10">
