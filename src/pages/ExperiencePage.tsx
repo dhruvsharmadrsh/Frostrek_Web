@@ -4,6 +4,7 @@ import VoiceCallWidget from '../components/experience/VoiceCallWidget';
 import ChatbotDemo from '../components/experience/ChatbotDemo';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useTheme } from '../context/ThemeContext';
+import CTASection from '../components/home/CTASection';
 
 const ExperiencePage = () => {
     const { theme } = useTheme();
@@ -113,40 +114,7 @@ const ExperiencePage = () => {
             </section>
 
             {/* CTA Section */}
-            <section className="relative pb-24 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-4xl mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className={`relative rounded-3xl p-8 sm:p-12 text-center overflow-hidden ${theme === 'dark' ? 'bg-dark-card' : 'bg-brand-green-600'}`}
-                    >
-                        {/* Glow effects */}
-                        <div className={`absolute top-0 left-1/4 w-64 h-64 rounded-full blur-3xl ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-500/20'}`} />
-                        <div className={`absolute bottom-0 right-1/4 w-64 h-64 rounded-full blur-3xl ${theme === 'dark' ? 'bg-amber-500/20' : 'bg-brand-yellow-500/20'}`} />
-
-                        <div className="relative z-10">
-                            <h2 className={`text-3xl sm:text-4xl font-bold mb-4 font-heading ${theme === 'dark' ? 'text-dark-text' : 'text-white'}`}>
-                                Ready to Transform Your Business?
-                            </h2>
-                            <p className={`mb-8 max-w-xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-300'}`}>
-                                Get a personalized demo and see how our AI solutions can
-                                automate your workflows and delight your customers.
-                            </p>
-                            <motion.a
-                                href="/schedule-demo"
-                                className={`inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white hover:from-brand-green-600 hover:to-brand-green-700'}`}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                Schedule a Demo
-                                <ArrowRight className="w-5 h-5" />
-                            </motion.a>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
+            <CTASection />
         </div>
     );
 };

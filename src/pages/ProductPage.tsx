@@ -11,6 +11,7 @@ import { WorkflowBuilder } from '../components/product/WorkflowBuilder';
 import { CapabilitiesSystem } from '../components/product/CapabilitiesSystem';
 import ProductHero from '../components/product/ProductHero';
 import { useTheme } from '../context/ThemeContext';
+import CTASection from '../components/home/CTASection';
 
 const ProductPage = () => {
     const { theme } = useTheme();
@@ -147,22 +148,7 @@ const ProductPage = () => {
             }
 
             {/* 7. Final Call to Action */}
-            <section className={`py-32 text-center relative overflow-hidden ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-brand-green-600'}`}>
-                <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-dark-accent/20 via-dark-navbar to-dark-bg' : 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-green-500/40 via-brand-green-600 to-brand-green-700'}`} />
-                <div className="container mx-auto px-4 relative z-10">
-                    <h2 className={`text-4xl md:text-6xl font-sans font-bold mb-8 ${theme === 'dark' ? 'text-dark-text' : 'text-white'}`}>Ready to transform your business?</h2>
-                    <p className={`text-xl mb-12 max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-brand-green-50'}`}>
-                        Join 500+ companies using Frostrek to automate operations and drive growth.
-                    </p>
-                    <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <Link to="/contact">
-                            <Button size="lg" className={`rounded-full px-12 h-16 text-xl font-bold ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-brand-green-500 hover:bg-brand-green-400 text-white'}`}>
-                                Get Started Now
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            <CTASection />
         </div>
     );
 };

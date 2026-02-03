@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { Calendar, ArrowRight } from 'lucide-react';
+// import { Calendar, ArrowRight } from 'lucide-react'; // Removed unused icons
 import { Link } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -80,7 +80,7 @@ const CTASection = () => {
 
         const tl = gsap.timeline({ repeat: -1, yoyo: true });
         tl.to(primaryBtn, {
-            boxShadow: '0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(34, 197, 94, 0.15)',
+            boxShadow: '0 0 25px rgba(255, 255, 255, 0.3), 0 0 50px rgba(176, 117, 82, 0.4)',
             duration: 1.5,
             ease: 'sine.inOut'
         });
@@ -116,21 +116,11 @@ const CTASection = () => {
                     </p>
 
                     <div ref={buttonsRef} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Link to="/schedule-demo" className="cta-button">
-                            <button
-                                className="primary-cta flex items-center px-10 py-4 bg-white text-[#B07552] font-bold text-lg rounded-xl hover:bg-[#FDFBF7] shadow-xl transition-all duration-300 transform hover:scale-105"
-                            >
-                                <Calendar className="mr-2" size={20} />
-                                Schedule a demo
-                            </button>
+                        <Link to="/schedule-demo" className={`cta-button primary-cta px-10 py-4 text-white rounded-xl font-bold text-lg shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto text-center flex items-center justify-center hover:bg-white hover:text-[#B07552] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] ${theme === 'dark' ? 'bg-dark-accent shadow-dark-accent/20' : 'bg-[#B07552] shadow-[#B07552]/20'}`}>
+                            Schedule a Demo
                         </Link>
-                        <Link to="/contact">
-                            <button
-                                className="cta-button flex items-center px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-xl hover:bg-white/10 transition-all duration-300 transform hover:scale-105 group"
-                            >
-                                Contact Sales
-                                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
-                            </button>
+                        <Link to="/contact" className="cta-button px-10 py-4 bg-transparent border-2 border-white/50 text-white rounded-xl font-bold text-lg transition-all duration-300 w-full sm:w-auto hover:scale-105 text-center flex items-center justify-center hover:bg-white hover:border-white hover:text-[#B07552] hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                            Contact Sales
                         </Link>
                     </div>
                 </div>

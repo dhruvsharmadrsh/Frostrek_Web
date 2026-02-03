@@ -8,6 +8,7 @@ import InnovationProcess from '../components/about/InnovationProcess';
 import { useTheme } from '../context/ThemeContext';
 // Extracted constant for optimization
 const HEADLINE_WORDS = ['Accelerate', 'growth', 'at', 'the', 'new', 'speed', 'of', 'business'];
+import CTASection from '../components/home/CTASection';
 
 // ============ TEAM DATA ============
 const TEAM_DATA = [
@@ -1554,42 +1555,8 @@ const About = () => {
             </section>
 
             {/* ===== CTA ===== */}
-            <section id="cta" className="py-24">
-                <div className="container mx-auto px-4">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="relative bg-gradient-to-br from-brand-green-500 via-brand-green-600 to-brand-green-700 rounded-3xl p-12 md:p-16 text-center max-w-4xl mx-auto overflow-hidden"
-                    >
-                        {/* Animated background */}
-                        <motion.div
-                            className="absolute inset-0 opacity-30"
-                            style={{ background: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)' }}
-                            animate={{ x: [0, 100, 0], y: [0, -50, 0] }}
-                            transition={{ duration: 10, repeat: Infinity }}
-                        />
-
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 relative z-10">
-                            Ready to Transform Your Business?
-                        </h2>
-                        <p className="text-brand-green-100 text-lg mb-10 relative z-10">
-                            Let's build the future of AI together.
-                        </p>
-
-                        <div className="flex flex-wrap gap-4 justify-center relative z-10">
-                            <MagneticButton variant="cta" className="px-8 py-4">
-                                <span className="flex items-center gap-2">Book a Demo <ArrowRight className="w-5 h-5" /></span>
-                            </MagneticButton>
-                            <Link to="/contact">
-                                <MagneticButton variant="secondary" className="px-8 py-4 !bg-transparent !border-white/50 !text-white hover:!bg-white/10">
-                                    Contact Sales
-                                </MagneticButton>
-                            </Link>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
+            {/* ===== CTA ===== */}
+            <CTASection />
         </div>
     );
 };
