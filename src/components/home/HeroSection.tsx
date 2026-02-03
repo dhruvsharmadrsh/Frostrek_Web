@@ -23,6 +23,8 @@ const ROBOT_MESSAGES = [
     "How can I help? 🚀"
 ];
 
+
+
 const HeroSection = () => {
     const [index, setIndex] = useState(0);
     const [messageIndex, setMessageIndex] = useState(0);

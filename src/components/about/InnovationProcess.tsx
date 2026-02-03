@@ -167,8 +167,8 @@ const InnovationProcess = () => {
         const pos = getNodePos(nodeId);
         const centerX = 50;
         const centerY = 50;
-        const nodeX = 50 + pos.x * 0.5;
-        const nodeY = 50 + pos.y * 0.5;
+        const nodeX = 50 + pos.x;
+        const nodeY = 50 + pos.y;
 
         const midX = (centerX + nodeX) / 2;
         const midY = (centerY + nodeY) / 2;
@@ -194,7 +194,7 @@ const InnovationProcess = () => {
             <svg
                 className="absolute inset-0 w-full h-full pointer-events-none"
                 viewBox="0 0 100 100"
-                preserveAspectRatio="xMidYMid meet"
+                preserveAspectRatio="none"
             >
                 <defs>
                     <linearGradient id="innovation-line-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
