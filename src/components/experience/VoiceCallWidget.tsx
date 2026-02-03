@@ -23,14 +23,7 @@ const VoiceCallWidget: React.FC<VoiceCallWidgetProps> = ({ onCallStateChange }) 
     // Ref to track call active state for async callbacks
     const isCallActiveRef = useRef(false);
 
-    // Session ID for conversation context
-    const [sessionId] = useState(() => {
-        const stored = sessionStorage.getItem('voiceCallSessionId');
-        if (stored) return stored;
-        const newId = crypto.randomUUID?.() || Math.random().toString(36).substring(2) + Date.now().toString(36);
-        sessionStorage.setItem('voiceCallSessionId', newId);
-        return newId;
-    });
+
 
     // Audio recording refs
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);

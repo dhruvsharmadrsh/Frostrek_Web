@@ -1,3 +1,4 @@
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Sparkles, Mic, Square, MessageSquare } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
