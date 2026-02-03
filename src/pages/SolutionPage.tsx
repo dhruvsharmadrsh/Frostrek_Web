@@ -148,10 +148,10 @@ const SolutionPage = () => {
             </section>
 
             {/* Challenges vs Solutions */}
-            <CommonChallenges challenges={solution.challenges} />
+            <CommonChallenges key={location.pathname} challenges={solution.challenges} />
 
             {/* Features / Solution Grid */}
-            <FrostrekAdvantage features={solution.features} />
+            <FrostrekAdvantage key={`features-${location.pathname}`} features={solution.features} />
 
             {/* Bottom CTA */}
             <CTASection />

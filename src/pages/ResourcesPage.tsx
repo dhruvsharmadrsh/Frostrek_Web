@@ -114,10 +114,13 @@ const CaseStudyCard = ({ study, onClick }: { study: CaseStudy; onClick: () => vo
     );
 };
 
-const BlogCard = ({ post }: { post: BlogPost }) => {
+const BlogCard = ({ post, onClick }: { post: BlogPost; onClick: () => void }) => {
     const { theme } = useTheme();
     return (
-        <Card className={`group cursor-pointer overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}>
+        <Card
+            onClick={onClick}
+            className={`group cursor-pointer overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
+        >
             <div className="relative h-48 overflow-hidden">
                 {post.image && (
                     <img
@@ -168,20 +171,26 @@ const ResourcesPage = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState<'case-studies' | 'blogs'>('case-studies');
     const [selectedStudy, setSelectedStudy] = useState<CaseStudy | null>(null);
+    const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
+    useEffect(() => {
+        setIsExpanded(false);
+    }, [activeTab]);
+
     // Lock body scroll when modal is open
     useEffect(() => {
-        if (selectedStudy) {
+        if (selectedStudy || selectedBlog) {
             document.body.style.overflow = 'hidden';
             return () => {
                 document.body.style.overflow = 'unset';
             };
         }
-    }, [selectedStudy]);
+    }, [selectedStudy, selectedBlog]);
 
     const navigate = useNavigate();
 
@@ -233,15 +242,32 @@ const ResourcesPage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.5 }}
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                            className="relative"
                         >
-                            {CASE_STUDIES.map((study) => (
-                                <CaseStudyCard
-                                    key={study.id}
-                                    study={study}
-                                    onClick={() => setSelectedStudy(study)}
-                                />
-                            ))}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {(isExpanded ? CASE_STUDIES : CASE_STUDIES.slice(0, 9)).map((study, index) => (
+                                    <div key={study.id} className={!isExpanded && index >= 6 ? 'blur-[2px] opacity-60 pointer-events-none select-none' : ''}>
+                                        <CaseStudyCard
+                                            study={study}
+                                            onClick={() => setSelectedStudy(study)}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
+                            {!isExpanded && (
+                                <div className="absolute bottom-0 left-0 w-full h-[320px] flex items-end justify-center pb-8 bg-gradient-to-t from-white/90 via-white/40 to-transparent z-10 rounded-b-2xl dark:from-dark-bg/90 dark:via-dark-bg/40">
+                                    <Button
+                                        onClick={() => setIsExpanded(true)}
+                                        className={`shadow-lg px-8 py-3 rounded-full font-bold transform hover:scale-105 transition-all ${theme === 'dark'
+                                            ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90'
+                                            : 'bg-brand-green-600 text-white hover:bg-brand-green-700'
+                                            }`}
+                                    >
+                                        View All Case Studies
+                                    </Button>
+                                </div>
+                            )}
                         </motion.div>
                     ) : (
                         <motion.div
@@ -250,11 +276,32 @@ const ResourcesPage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.5 }}
-                            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+                            className="relative"
                         >
-                            {BLOG_POSTS.map((post) => (
-                                <BlogCard key={post.id} post={post} />
-                            ))}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {(isExpanded ? BLOG_POSTS : BLOG_POSTS.slice(0, 9)).map((post, index) => (
+                                    <div key={post.id} className={!isExpanded && index >= 6 ? 'blur-[2px] opacity-60 pointer-events-none select-none' : ''}>
+                                        <BlogCard
+                                            post={post}
+                                            onClick={() => setSelectedBlog(post)}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
+                            {!isExpanded && BLOG_POSTS.length > 6 && (
+                                <div className="absolute bottom-0 left-0 w-full h-[320px] flex items-end justify-center pb-8 bg-gradient-to-t from-white/90 via-white/40 to-transparent z-10 rounded-b-2xl dark:from-dark-bg/90 dark:via-dark-bg/40">
+                                    <Button
+                                        onClick={() => setIsExpanded(true)}
+                                        className={`shadow-lg px-8 py-3 rounded-full font-bold transform hover:scale-105 transition-all ${theme === 'dark'
+                                            ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90'
+                                            : 'bg-brand-green-600 text-white hover:bg-brand-green-700'
+                                            }`}
+                                    >
+                                        View All Articles
+                                    </Button>
+                                </div>
+                            )}
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -367,6 +414,113 @@ const ResourcesPage = () => {
                                             : 'bg-brand-green-600 hover:bg-brand-green-700 text-white'
                                             }`}>
                                         Schedule Similar Project
+                                    </Button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Blog Modal */}
+            <AnimatePresence>
+                {selectedBlog && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+                        onClick={() => setSelectedBlog(null)}
+                    >
+                        <motion.div
+                            layoutId={`blog-${selectedBlog.id}`}
+                            className={`rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                onClick={() => setSelectedBlog(null)}
+                                className={`absolute top-4 right-4 p-2 rounded-full transition-colors z-10 ${theme === 'dark'
+                                    ? 'bg-dark-bg/80 hover:bg-dark-accent/20 text-dark-text'
+                                    : 'bg-white/80 hover:bg-gray-100 text-gray-600'
+                                    }`}
+                            >
+                                <X size={20} />
+                            </button>
+
+                            <div className="relative h-64 md:h-80 w-full">
+                                <img
+                                    src={selectedBlog.image}
+                                    alt={selectedBlog.title}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white">
+                                    <div className="flex items-center gap-4 text-sm font-medium mb-3 opacity-90">
+                                        <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {selectedBlog.date}</span>
+                                        <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {selectedBlog.readTime}</span>
+                                    </div>
+                                    <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide mb-2 ${selectedBlog.category === 'Industry Trends' ? 'bg-amber-100 text-amber-800' :
+                                        selectedBlog.category === 'Technical Deep Dive' ? 'bg-blue-100 text-blue-800' :
+                                            'bg-green-100 text-green-800'
+                                        }`}>
+                                        {selectedBlog.category}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="p-8 md:p-12">
+                                <h2 className={`text-3xl md:text-4xl font-bold mb-6 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                                    {selectedBlog.title}
+                                </h2>
+
+                                <div className={`flex items-center gap-3 mb-8 p-4 rounded-xl ${theme === 'dark' ? 'bg-dark-bg border border-dark-accent/20' : 'bg-gray-50 border border-gray-100'}`}>
+                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-100'}`}>
+                                        <User className={`w-5 h-5 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
+                                    </div>
+                                    <div>
+                                        <div className={`text-xs font-bold uppercase ${theme === 'dark' ? 'text-dark-accent' : 'text-gray-500'}`}>Written by</div>
+                                        <div className={`font-medium ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>{selectedBlog.author}</div>
+                                    </div>
+                                </div>
+
+                                <div className={`prose max-w-none ${theme === 'dark' ? 'prose-invert text-dark-text-muted' : 'text-gray-700'}`}>
+                                    <p className="text-xl leading-relaxed font-medium mb-8 opacity-90">
+                                        {selectedBlog.excerpt}
+                                    </p>
+                                    <div className="space-y-6 leading-relaxed">
+                                        {/* Placeholder for actual content since resources.ts has '...' */}
+                                        <p>
+                                            In the rapidly evolving landscape of artificial intelligence, {selectedBlog.title} represents a pivotal shift.
+                                            Enterprises are constantly seeking ways to leverage these advancements to stay ahead of the curve.
+                                        </p>
+                                        <p>
+                                            This article explores the nuances of {selectedBlog.category}, diving deep into the methodologies and frameworks
+                                            that drive success. From data infrastructure to model alignment, every component plays a critical role.
+                                        </p>
+                                        <h3 className="text-2xl font-bold mt-8 mb-4">The Strategic Imperative</h3>
+                                        <p>
+                                            Understanding the core mechanics is just the beginning. The real value lies in the strategic application of these
+                                            technologies to solve real-world business problems. Whether it's through enhanced automation, improved decision-making,
+                                            or novel customer experiences, the impact is profound.
+                                        </p>
+                                        <p>
+                                            As we continue to push the boundaries of what's possible, keeping a pulse on these developments is not just beneficial—it's essential
+                                            for long-term viability and growth.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className={`mt-12 pt-8 border-t flex justify-between items-center ${theme === 'dark' ? 'border-dark-accent/20' : 'border-gray-100'}`}>
+                                    <span className={`text-sm italic ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
+                                        Posted in <strong>{selectedBlog.category}</strong>
+                                    </span>
+                                    <Button
+                                        onClick={() => window.open('https://medium.com/@frostrek', '_blank')}
+                                        className={`rounded-full px-6 ${theme === 'dark'
+                                            ? 'bg-dark-accent/10 hover:bg-dark-accent/20 text-dark-accent'
+                                            : 'bg-brand-green-50 hover:bg-brand-green-100 text-brand-green-700'
+                                            }`}>
+                                        Read on Medium <ArrowUpRight size={16} className="ml-2" />
                                     </Button>
                                 </div>
                             </div>

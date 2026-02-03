@@ -152,6 +152,11 @@ export const SOLUTION_DATA: Record<string, SolutionData> = {
                 description: 'Falling behind competitors who are adopting AI.',
                 solvedBy: 'Stay ahead with cutting-edge agents that evolve with your business.'
             },
+            {
+                title: 'Data-Driven Decisions',
+                description: 'Struggling to extract insights from overwhelming amounts of data.',
+                solvedBy: 'AI-powered analytics transform raw data into actionable intelligence in real-time.'
+            },
         ],
         features: [
             { title: 'Custom AI Models', description: 'Train models on your proprietary data for unique insights.', icon: TrendingUp },

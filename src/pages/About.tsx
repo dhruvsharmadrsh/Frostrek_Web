@@ -509,6 +509,7 @@ const ScrollIndicator = memo(() => (
 ));
 
 // ============ TEAM FLIP CARD ============
+// ============ TEAM FLIP CARD ============
 const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; delay: number }) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
@@ -525,7 +526,7 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
             <motion.div
                 className="relative w-full h-full preserve-3d cursor-pointer"
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ duration: 0.5, type: 'spring', stiffness: 80, damping: 12 }}
+                transition={{ type: 'spring', stiffness: 120, damping: 20 }}
                 style={{ transformStyle: 'preserve-3d' }}
             >
                 {/* Front Face */}
@@ -540,17 +541,17 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
                             className="w-full h-full object-cover"
                             loading="lazy"
                         />
-                        {/* Glassmorphism Overlay */}
-                        <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
-                            <div className="backdrop-blur-sm bg-white/10 rounded-xl p-4 border border-white/20">
+                        {/* Overlay - Optimized: Removed backdrop-blur for performance */}
+                        <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
+                            <div className="bg-black/40 rounded-xl p-4 border border-white/10">
                                 <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
                                 <p className="text-brand-yellow-300 font-medium">{member.role}</p>
                             </div>
                         </div>
                         {/* Hover Hint */}
                         <motion.div
-                            className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 text-xs text-white border border-white/30"
-                            animate={{ opacity: [0.5, 1, 0.5] }}
+                            className="absolute top-4 right-4 bg-black/40 rounded-full px-3 py-1.5 text-xs text-white border border-white/20"
+                            animate={{ opacity: [0.6, 1, 0.6] }}
                             transition={{ duration: 2, repeat: Infinity }}
                         >
                             Hover for bio
@@ -563,9 +564,9 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
                     className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden shadow-xl"
                     style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                 >
-                    <div className="w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 flex flex-col">
-                        {/* Glassmorphism Card */}
-                        <div className="flex-1 backdrop-blur-xl bg-white/5 rounded-xl p-5 border border-white/10 flex flex-col">
+                    {/* Optimized: Solid background instead of backdrop-blur-xl */}
+                    <div className="w-full h-full bg-slate-900 border border-slate-700 p-6 flex flex-col">
+                        <div className="flex-1 flex flex-col">
                             <div className="flex items-center gap-4 mb-4">
                                 <img
                                     src={member.image}
@@ -917,7 +918,7 @@ const About = () => {
     const opacity = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
 
     const [activeOffice, setActiveOffice] = useState<number>(0);
-    const [hoveredTimeline, setHoveredTimeline] = useState<number | null>(null);
+
 
     const texts = useMemo(() => ['Intelligent Systems', 'Agentic AI', 'Machine Learning', 'Neural Networks'], []);
 
@@ -1223,8 +1224,6 @@ const About = () => {
                                 {/* Content Card */}
                                 <div
                                     className={`ml-12 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pr-16 text-left md:text-right' : 'md:pl-16 text-left'}`}
-                                    onMouseEnter={() => setHoveredTimeline(i)}
-                                    onMouseLeave={() => setHoveredTimeline(null)}
                                 >
                                     <motion.div
                                         className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 cursor-pointer"
@@ -1250,33 +1249,29 @@ const About = () => {
                                     </motion.div>
                                 </div>
 
-                                {/* Image display area - shows on hover */}
+                                {/* Image display area - always visible on scroll */}
                                 <div className={`hidden md:flex md:w-1/2 items-center ${i % 2 === 0 ? 'md:pl-16 justify-start' : 'md:pr-16 justify-end'}`}>
-                                    <AnimatePresence>
-                                        {hoveredTimeline === i && (
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                                                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                                                className="relative overflow-hidden rounded-2xl shadow-2xl"
-                                                style={{ boxShadow: `0 25px 50px -12px ${item.color.shadow}` }}
-                                            >
-                                                <img
-                                                    src={item.image}
-                                                    alt={item.title}
-                                                    className="w-[300px] h-[200px] object-cover"
-                                                    loading="lazy"
-                                                />
-                                                <div
-                                                    className="absolute inset-0 pointer-events-none"
-                                                    style={{
-                                                        background: `linear-gradient(135deg, ${item.color.border}20 0%, transparent 50%)`
-                                                    }}
-                                                />
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.2 + (i * 0.1) }}
+                                        className="relative overflow-hidden rounded-2xl shadow-2xl"
+                                        style={{ boxShadow: `0 25px 50px -12px ${item.color.shadow}` }}
+                                    >
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            className="w-[300px] h-[200px] object-cover"
+                                            loading="lazy"
+                                        />
+                                        <div
+                                            className="absolute inset-0 pointer-events-none"
+                                            style={{
+                                                background: `linear-gradient(135deg, ${item.color.border}20 0%, transparent 50%)`
+                                            }}
+                                        />
+                                    </motion.div>
                                 </div>
                             </motion.div>
                         ))}

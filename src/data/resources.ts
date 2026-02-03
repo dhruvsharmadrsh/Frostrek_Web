@@ -278,5 +278,71 @@ export const BLOG_POSTS: BlogPost[] = [
         category: 'Best Practices',
         content: '...',
         image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop'
+    },
+    {
+        id: 'blog-ai-ethics',
+        title: 'Navigating AI Ethics in Data Collection',
+        excerpt: 'Ethical considerations are paramount in modern AI. We explore how to build diverse, unbiased datasets while respecting user privacy and consent.',
+        date: 'Jul 22, 2025',
+        readTime: '5 min read',
+        author: 'Ethics Committee',
+        category: 'best practices',
+        content: '...',
+        image: 'https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?q=80&w=1000&auto=format&fit=crop'
+    },
+    {
+        id: 'blog-multimodal-trends',
+        title: 'The Rise of Multimodal AI Models',
+        excerpt: 'Text is no longer enough. The next wave of AI models processes video, audio, and text simultaneously. Here is what that means for your data strategy.',
+        date: 'Jun 10, 2025',
+        readTime: '7 min read',
+        author: 'Research Team',
+        category: 'industry trends',
+        content: '...',
+        image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?q=80&w=1000&auto=format&fit=crop'
+    },
+    {
+        id: 'blog-voice-ai',
+        title: 'Optimizing Voice AI for Regional Dialects',
+        excerpt: 'Global deployment means understanding local nuances. How we tackle the challenge of collecting and annotating for under-represented languages.',
+        date: 'May 05, 2025',
+        readTime: '4 min read',
+        author: 'Linguistics Lead',
+        category: 'technical deep dive',
+        content: '...',
+        image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=1000&auto=format&fit=crop'
+    },
+    {
+        id: 'blog-data-security',
+        title: 'Enterprise-Grade Data Security Protocols',
+        excerpt: 'Security cannot be an afterthought. A look at our ISO 27001 certified workflows and how we protect sensitive client data during annotation.',
+        date: 'Apr 18, 2025',
+        readTime: '6 min read',
+        author: 'Security Officer',
+        category: 'services',
+        content: '...',
+        image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop'
+    },
+    {
+        id: 'blog-human-in-the-loop',
+        title: 'The Enduring Role of Human-in-the-Loop',
+        excerpt: 'Even as models get smarter, human oversight remains critical. We discuss why HITL is the key to handling edge cases and ensuring reliability.',
+        date: 'Mar 30, 2025',
+        readTime: '5 min read',
+        author: 'Frostrek Team',
+        category: 'industry trends',
+        content: '...',
+        image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop'
+    },
+    {
+        id: 'blog-medical-ai',
+        title: 'Accelerating Medical AI with Precision Data',
+        excerpt: 'In healthcare, accuracy is life-saving. How expert annotation teams are powering the next generation of diagnostic tools.',
+        date: 'Feb 14, 2025',
+        readTime: '8 min read',
+        author: 'Healthcare Lead',
+        category: 'industry trends',
+        content: '...',
+        image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1000&auto=format&fit=crop'
     }
 ];

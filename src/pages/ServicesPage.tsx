@@ -1,48 +1,12 @@
 import { motion } from 'framer-motion';
-import { Users, Brain, Code, Bot, Smartphone, Workflow, CheckCircle, ArrowRight } from 'lucide-react';
+import { Users, Brain, Code, CheckCircle, ArrowRight } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useTheme } from '../context/ThemeContext';
+import InteractiveValues from '../components/services/InteractiveValues';
+import InteractiveServices from '../components/services/InteractiveServices';
 
 const ServicesPage = () => {
     const { theme } = useTheme();
-    const services = [
-        {
-            number: "01",
-            icon: Users,
-            title: "AI Talent Sourcing and Deployment",
-            description: "Source and deploy skilled AI professionals aligned with your project's specific requirements, objectives, and delivery timelines."
-        },
-        {
-            number: "02",
-            icon: Brain,
-            title: "AI Model Training and Optimization",
-            description: "Enhance AI model performance through expert training, optimization, and real-world evaluation to ensure accuracy, reliability, and measurable impact."
-        },
-        {
-            number: "03",
-            icon: Code,
-            title: "Customized AI Development Solutions",
-            description: "Design and build tailored AI systems that address complex business challenges with scalable, reliable, and efficient architectures."
-        },
-        {
-            number: "04",
-            icon: Bot,
-            title: "AI Agents & Agentic AI Systems",
-            description: "Develop intelligent AI agents capable of reasoning, decision-making, and autonomous task execution across business and operational workflows."
-        },
-        {
-            number: "05",
-            icon: Smartphone,
-            title: "AI-Powered Application & Platform Development",
-            description: "Build production-ready web and mobile applications, internal tools, dashboards, and platforms that embed AI into everyday business use."
-        },
-        {
-            number: "06",
-            icon: Workflow,
-            title: "Organizational Workflow Automation & Integration",
-            description: "Integrate AI into organizational processes to automate workflows, improve efficiency, and enable seamless coordination across systems and teams."
-        }
-    ];
 
     const customSolutions = [
         "Data Annotation",
@@ -53,11 +17,7 @@ const ServicesPage = () => {
         "LLM Assess"
     ];
 
-    const coreValues = [
-        "Trust",
-        "Innovation",
-        "Collaboration"
-    ];
+
 
     return (
         <div className={`min-h-screen relative transition-colors ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
@@ -99,81 +59,10 @@ const ServicesPage = () => {
             </section>
 
             {/* Core Values Section */}
-            <section className={`py-16 relative ${theme === 'dark' ? 'bg-dark-card' : ''}`}>
-                <div className="container mx-auto px-4 md:px-6">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="text-center mb-12"
-                    >
-                        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>
-                            We work as a family and you are part of it
-                        </h2>
-                        <p className={`text-xl ${theme === 'dark' ? 'text-dark-text-muted' : 'text-secondary'}`}>We are committed to:</p>
-                    </motion.div>
+            <InteractiveValues />
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                        {coreValues.map((value, index) => (
-                            <motion.div
-                                key={value}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className={`backdrop-blur-md border-2 rounded-xl p-8 text-center transition-all duration-300 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30 hover:border-dark-accent' : 'bg-white/70 border-brand-green-200/50 hover:border-brand-green-400/70 hover:shadow-lg hover:shadow-brand-green-500/10'}`}
-                            >
-                                <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`}>{value}</h3>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Main Services Grid */}
-            <section className={`py-20 relative ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
-                <div className="container mx-auto px-4 md:px-6">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="text-center mb-16"
-                    >
-                        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>
-                            Our Services
-                        </h2>
-                    </motion.div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {services.map((service, index) => {
-                            const Icon = service.icon;
-                            return (
-                                <motion.div
-                                    key={service.number}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                                    className={`group relative backdrop-blur-md border-2 rounded-xl p-6 transition-all duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20 hover:border-dark-accent' : 'bg-white/70 border-brand-green-200/50 hover:border-brand-green-400/70 hover:shadow-xl hover:shadow-brand-green-500/10'}`}
-                                >
-                                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl ${theme === 'dark' ? 'bg-gradient-to-br from-dark-accent/10 to-transparent' : 'bg-gradient-to-br from-brand-green-500/10 to-transparent'}`} />
-
-                                    <div className="relative">
-                                        <div className="flex items-start justify-between mb-4">
-                                            <span className={`text-5xl font-bold ${theme === 'dark' ? 'text-dark-accent/30' : 'text-brand-green-500/30'}`}>{service.number}</span>
-                                            <Icon className={`w-8 h-8 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
-                                        </div>
-                                        <h3 className={`text-xl font-bold mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-primary'}`}>{service.title}</h3>
-                                        <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-secondary'}`}>{service.description}</p>
-                                    </div>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </section>
+            {/* Main Services Grid - Interactive Component */}
+            <InteractiveServices />
 
             {/* Custom and Bespoke AI Solutions */}
             <section className={`py-20 relative ${theme === 'dark' ? 'bg-dark-card' : ''}`}>
