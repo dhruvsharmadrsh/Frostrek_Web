@@ -73,21 +73,42 @@ void main() {
   vec3 rgb = sanitize(o.rgb);
   
   float intensity = (rgb.r + rgb.g + rgb.b) / 3.0;
-  vec3 customColor = intensity * uCustomColor;
-  vec3 finalColor = mix(rgb, customColor, step(0.5, uUseCustomColor));
-  
-  float alpha = length(rgb) * uOpacity;
-  fragColor = vec4(finalColor, alpha);
+  // Theme base colors from your Tailwind palette
+vec3 cream = vec3(0.992, 0.984, 0.969);   // #FDFBF7
+vec3 bronze = uCustomColor;               // #B07552 passed from React
+vec3 gold = vec3(0.831, 0.733, 0.459);    // #D4BB75
+
+// Warm tinting
+vec3 warmPlasma = mix(rgb, bronze, 0.65);
+vec3 creamyBlend = mix(warmPlasma, cream, 0.4);
+
+// Subtle gold highlights
+float highlight = smoothstep(0.4, 0.9, intensity);
+vec3 finalColor = mix(creamyBlend, gold, highlight * 0.25);
+
+// Softer alpha for ambient feel
+float alpha = smoothstep(0.0, 1.2, length(rgb)) * uOpacity;
+
+fragColor = vec4(finalColor, alpha);
+
 }`;
+interface PlasmaProps {
+  color?: string;
+  speed?: number;
+  direction?: 'forward' | 'reverse' | 'pingpong';
+  scale?: number;
+  opacity?: number;
+  mouseInteractive?: boolean;
+}
 
 export const Plasma = ({
-    color = '#FDFBF7',
-    speed = 1,
-    direction = 'forward',
-    scale = 2,
-    opacity = 0.6,
-    mouseInteractive = true
-}) => {
+  color = '#FDFBF7',
+  speed = 0.6,
+  direction = 'forward',
+  scale = 1.8,
+  opacity = 0.8,
+  mouseInteractive = true
+}: PlasmaProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const mousePos = useRef({ x: 0, y: 0 });
 
