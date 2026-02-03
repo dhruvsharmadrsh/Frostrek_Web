@@ -117,7 +117,6 @@ const DynamicConnection = ({
                 stroke="#B07552"
                 strokeWidth="2"
                 strokeLinecap="round"
-                strokeDasharray="10 6"
                 initial={{ pathLength: 0 }}
                 whileInView={{ pathLength: 1 }}
                 viewport={{ once: true }}
@@ -184,14 +183,6 @@ export const WorkflowBuilder = ({ steps }: { steps: ProductProcessStep[] }) => {
 
                 {/* 2. Main Canvas */}
                 <div className={`flex-1 relative overflow-hidden group cursor-default ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-[#F9FAFB]'}`}>
-                    {/* Dot Grid Background */}
-                    <div className="absolute inset-0 opacity-[0.4] pointer-events-none"
-                        style={{
-                            backgroundImage: `radial-gradient(${theme === 'dark' ? '#5a4a3a' : '#CBD5E1'} 1px, transparent 1px)`,
-                            backgroundSize: '20px 20px'
-                        }}
-                    />
-
                     {/* Editor Toolbar (Floating) */}
                     <div className={`absolute top-6 left-1/2 -translate-x-1/2 backdrop-blur-sm border rounded-full px-4 py-2 shadow-lg flex items-center gap-4 z-30 ${theme === 'dark' ? 'bg-dark-card/90 border-dark-accent/20' : 'bg-white/90 border-gray-200'}`}>
                         <button className={`transition-colors ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-text' : 'text-gray-400 hover:text-gray-900'}`}><MousePointer2 className="w-4 h-4" /></button>
