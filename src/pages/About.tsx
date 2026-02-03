@@ -1,5 +1,4 @@
 import { motion, useScroll, useTransform, useMotionValue, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { Target, Award, Zap, Shield, Globe, MapPin, Phone, ArrowRight, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, MousePointer2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, ChevronDown, type LucideIcon } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useRef, useState, useEffect, useMemo, memo } from 'react';

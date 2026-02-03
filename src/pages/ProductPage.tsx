@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { PRODUCT_DATA } from '../utils/productData';
-import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import CuteBackground from '../components/ui/CuteBackground';
 import { ImpactMetrics } from '../components/product/ImpactMetrics';

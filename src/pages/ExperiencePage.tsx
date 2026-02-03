@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Phone, MessageSquare, Sparkles, Zap, ArrowRight } from 'lucide-react';
+import { Phone, MessageSquare, Sparkles, Zap } from 'lucide-react';
 import VoiceCallWidget from '../components/experience/VoiceCallWidget';
 import ChatbotDemo from '../components/experience/ChatbotDemo';
 import CuteBackground from '../components/ui/CuteBackground';
