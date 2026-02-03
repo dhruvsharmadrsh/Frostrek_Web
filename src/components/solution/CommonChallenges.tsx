@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -13,9 +14,9 @@ interface CommonChallengesProps {
 }
 
 const IMAGES = [
-    "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800"
+    "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800", // AI Brain/Technology
+    "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800", // Business team working
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"  // Data analytics dashboard
 ];
 
 // Mobile Card Component
@@ -113,6 +114,7 @@ const DesktopCard = ({ challenge, index, total, theme }: { challenge: Challenge;
 
 const CommonChallenges = ({ challenges }: CommonChallengesProps) => {
     const { theme } = useTheme();
+    const location = useLocation();
     const container = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
@@ -124,15 +126,31 @@ const CommonChallenges = ({ challenges }: CommonChallengesProps) => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    // Cleanup GSAP on unmount or when switching to mobile
+    // Cleanup GSAP on unmount, route change, or when switching to mobile
     useEffect(() => {
         return () => {
             if (scrollTriggerRef.current) {
                 scrollTriggerRef.current.kill();
                 scrollTriggerRef.current = null;
             }
+            // Kill all ScrollTriggers associated with this component
+            ScrollTrigger.getAll().forEach(st => {
+                if (st.trigger === triggerRef.current) {
+                    st.kill();
+                }
+            });
         };
-    }, [isMobile]);
+    }, [isMobile, location.pathname]);
+
+    // Force refresh ScrollTrigger on route change
+    useEffect(() => {
+        // Small delay to ensure DOM is updated
+        const timeout = setTimeout(() => {
+            ScrollTrigger.refresh();
+        }, 100);
+
+        return () => clearTimeout(timeout);
+    }, [location.pathname]);
 
     useGSAP(() => {
         if (isMobile || !triggerRef.current || !container.current || challenges.length === 0) {
@@ -144,30 +162,78 @@ const CommonChallenges = ({ challenges }: CommonChallengesProps) => {
             return;
         }
 
+        // Kill any existing ScrollTrigger before creating a new one
+        if (scrollTriggerRef.current) {
+            scrollTriggerRef.current.kill();
+            scrollTriggerRef.current = null;
+        }
+
+        // Also kill any lingering ScrollTriggers on this trigger element
+        ScrollTrigger.getAll().forEach(st => {
+            if (st.trigger === triggerRef.current) {
+                st.kill();
+            }
+        });
+
         const cards = gsap.utils.toArray<HTMLElement>('.challenge-card');
         const count = cards.length;
         if (count === 0) return;
 
-        gsap.set(cards, { yPercent: 0 });
+        // Initialize all cards properly - first card on top with highest z-index
+        cards.forEach((card, i) => {
+            gsap.set(card, {
+                yPercent: 0,
+                scale: 1,
+                opacity: 1,
+                zIndex: count - i, // First card gets highest z-index
+            });
+        });
 
-        const timeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: triggerRef.current,
-                start: "top top",
-                end: `+=${(count - 1) * 80}%`,
-                scrub: 0.5,
-                pin: true,
-                anticipatePin: 1,
-                onRefresh: (self) => { scrollTriggerRef.current = self; }
+        // Calculate proper scroll distance - each card transition needs enough scroll space
+        const scrollPerCard = window.innerHeight * 0.8; // 80vh per card transition
+        const totalScrollDistance = (count - 1) * scrollPerCard;
+
+        const st = ScrollTrigger.create({
+            trigger: triggerRef.current,
+            start: "top top",
+            end: `+=${totalScrollDistance}`,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            scrub: 0.3,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+                const progress = self.progress;
+
+                cards.forEach((card, i) => {
+                    if (i === count - 1) return; // Don't animate the last card, it stays as the final view
+
+                    // Calculate when this card should start and finish animating
+                    const cardStartProgress = i / (count - 1);
+                    const cardEndProgress = (i + 1) / (count - 1);
+
+                    // Calculate local progress for this card (0 to 1)
+                    let cardProgress = 0;
+                    if (progress >= cardStartProgress && progress <= cardEndProgress) {
+                        cardProgress = (progress - cardStartProgress) / (cardEndProgress - cardStartProgress);
+                    } else if (progress > cardEndProgress) {
+                        cardProgress = 1;
+                    }
+
+                    // Animate card: slide up, scale down slightly, and fade out
+                    gsap.set(card, {
+                        yPercent: -100 * cardProgress,
+                        scale: 1 - (0.03 * cardProgress),
+                        opacity: 1 - cardProgress, // Fully fade out when animated away
+                        zIndex: count - i, // Maintain proper stacking order
+                    });
+                });
             }
         });
 
-        cards.forEach((card, i) => {
-            if (i === count - 1) return;
-            timeline.to(card, { yPercent: -100 - (i * 5), scale: 0.95, ease: "none", duration: 1 }, i * 0.8);
-        });
+        scrollTriggerRef.current = st;
 
-    }, { scope: container, dependencies: [challenges, isMobile] });
+    }, { scope: container, dependencies: [challenges, isMobile, location.pathname] });
 
     return (
         <section ref={container} className={`relative ${theme === 'dark' ? 'bg-dark-bg' : 'bg-[#FDFBF7]'}`}>

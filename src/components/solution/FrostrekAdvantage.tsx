@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, Database, Shield, Globe,
     Check, BarChart3, Layers, Zap, Activity,
-    RotateCcw, ChevronRight, Workflow,
+    RotateCcw, Workflow,
     PartyPopper, Rocket, Star
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
@@ -256,16 +256,6 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                                         <h4 className={`font-bold text-sm ${theme === 'dark' ? 'text-dark-text' : 'text-[#2D241E]'}`}>{step.title}</h4>
                                                         <p className={`text-[11px] ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>{step.subtitle}</p>
                                                     </div>
-
-                                                    {!isProcessed && !isProcessing && (
-                                                        <motion.div
-                                                            className="text-[#D6C8BC] group-hover:text-[#B07552]"
-                                                            animate={{ x: [0, 3, 0] }}
-                                                            transition={{ duration: 1, repeat: Infinity }}
-                                                        >
-                                                            <ChevronRight size={18} />
-                                                        </motion.div>
-                                                    )}
                                                 </div>
                                             </motion.button>
                                         );
