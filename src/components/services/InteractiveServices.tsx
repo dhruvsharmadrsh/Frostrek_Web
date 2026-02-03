@@ -9,7 +9,6 @@ import {
     Bot,
     Smartphone,
     Workflow,
-    Sparkles,
     ArrowRight,
     X,
     Zap,
