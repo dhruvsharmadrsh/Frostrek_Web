@@ -141,6 +141,7 @@ const HeroRobot = () => {
             <Suspense fallback={null}>
                 <RobotModel
                     position={[0, 0.8, 0]}
+                    rotation={[0, -Math.PI / 4, 0]}
                     scale={1.1}
                     isSpeaking={isSpeaking}
                 />
