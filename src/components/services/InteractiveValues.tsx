@@ -195,12 +195,9 @@ const ValueCard = ({
                             transition={{ delay: 0.4 }}
                         >
                             <span>Click to explore</span>
-                            <motion.span
-                                animate={{ x: [0, 4, 0] }}
-                                transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-                            >
+                            <span className="inline-block animate-bounce-slow">
                                 →
-                            </motion.span>
+                            </span>
                         </motion.div>
                     )}
                 </div>

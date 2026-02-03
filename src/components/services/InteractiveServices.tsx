@@ -134,7 +134,21 @@ const InteractiveServicesWorkflow = () => {
     const [selectedNode, setSelectedNode] = useState<string | null>(null);
     const [draggedNode, setDraggedNode] = useState<string | null>(null);
     const [isAnimated, setIsAnimated] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
     const dragStartRef = useRef<{ x: number; y: number; nodeX: number; nodeY: number } | null>(null);
+
+    // Visibility detection for SVG animations
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsVisible(entry.isIntersecting),
+            { threshold: 0.1 }
+        );
+
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, []);
 
     const getTargetPositions = useCallback(() => {
         const formation: Record<string, { x: number; y: number }> = {};
@@ -335,15 +349,19 @@ const InteractiveServicesWorkflow = () => {
                             </filter>
                         </defs>
 
-                        {/* Outer ring pulses */}
-                        <circle cx="50" cy="50" r="2" fill="none" stroke={isDark ? "#F5D9C8" : "#B07552"} strokeWidth="0.15" opacity="0.3">
-                            <animate attributeName="r" values="2;22;2" dur="4s" repeatCount="indefinite" />
-                            <animate attributeName="opacity" values="0.4;0;0.4" dur="4s" repeatCount="indefinite" />
-                        </circle>
-                        <circle cx="50" cy="50" r="2" fill="none" stroke={isDark ? "#F5D9C8" : "#B07552"} strokeWidth="0.1" opacity="0.2">
-                            <animate attributeName="r" values="2;28;2" dur="5s" repeatCount="indefinite" begin="1s" />
-                            <animate attributeName="opacity" values="0.3;0;0.3" dur="5s" repeatCount="indefinite" begin="1s" />
-                        </circle>
+                        {/* Outer ring pulses - Pause when not visible */}
+                        {isVisible && (
+                            <>
+                                <circle cx="50" cy="50" r="2" fill="none" stroke={isDark ? "#F5D9C8" : "#B07552"} strokeWidth="0.15" opacity="0.3">
+                                    <animate attributeName="r" values="2;22;2" dur="4s" repeatCount="indefinite" />
+                                    <animate attributeName="opacity" values="0.4;0;0.4" dur="4s" repeatCount="indefinite" />
+                                </circle>
+                                <circle cx="50" cy="50" r="2" fill="none" stroke={isDark ? "#F5D9C8" : "#B07552"} strokeWidth="0.1" opacity="0.2">
+                                    <animate attributeName="r" values="2;28;2" dur="5s" repeatCount="indefinite" begin="1s" />
+                                    <animate attributeName="opacity" values="0.3;0;0.3" dur="5s" repeatCount="indefinite" begin="1s" />
+                                </circle>
+                            </>
+                        )}
 
                         {/* Connection lines */}
                         {SERVICE_NODES.map((node) => {

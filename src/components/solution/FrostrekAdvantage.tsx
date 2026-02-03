@@ -39,43 +39,53 @@ const WORKFLOW_STEPS = [
     }
 ];
 
-// Floating Particle Component
-const FloatingParticle = ({ delay, size, duration }: { delay: number; size: number; duration: number }) => (
-    <motion.div
-        className="absolute rounded-full bg-[#B07552]/30"
-        style={{ width: size, height: size }}
-        initial={{ opacity: 0, scale: 0, x: '-50%', y: '-50%' }}
-        animate={{
-            opacity: [0, 0.8, 0],
-            scale: [0, 1.5, 0],
-            x: ['-50%', `${Math.random() * 100 - 50}%`],
-            y: ['-50%', `${Math.random() * 100 - 50}%`],
+// Floating Particle Component - Memoized random values for performance
+const FloatingParticle = ({ delay, size, duration }: { 
+    delay: number; size: number; duration: number;
+}) => (
+    <div
+        className="absolute rounded-full bg-[#B07552]/30 animate-ping"
+        style={{ 
+            width: size, 
+            height: size,
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            animationDelay: `${delay}s`,
+            animationDuration: `${duration}s`
         }}
-        transition={{ duration, delay, repeat: Infinity, repeatDelay: Math.random() * 2 }}
     />
 );
 
 
 
-// Confetti Component
+// Confetti Component - Reduced to 10 elements, memoized random values
+const CONFETTI_DATA = Array.from({ length: 10 }, (_, i) => ({
+    left: Math.random() * 100,
+    x: (Math.random() - 0.5) * 100,
+    rotate: 360 * (Math.random() > 0.5 ? 1 : -1),
+    duration: 2 + Math.random(),
+    color: ['#B07552', '#10B981', '#6366F1', '#EC4899', '#F59E0B'][i % 5],
+}));
+
 const Confetti = () => (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(20)].map((_, i) => (
+        {CONFETTI_DATA.map((data, i) => (
             <motion.div
                 key={i}
                 className="absolute w-2 h-2 rounded-full"
                 style={{
-                    left: `${Math.random() * 100}%`,
+                    left: `${data.left}%`,
                     top: '-10px',
-                    backgroundColor: ['#B07552', '#10B981', '#6366F1', '#EC4899', '#F59E0B'][i % 5],
+                    backgroundColor: data.color,
                 }}
                 animate={{
                     y: ['0%', '500%'],
-                    x: [0, (Math.random() - 0.5) * 100],
-                    rotate: [0, 360 * (Math.random() > 0.5 ? 1 : -1)],
+                    x: [0, data.x],
+                    rotate: [0, data.rotate],
                     opacity: [1, 0],
                 }}
-                transition={{ duration: 2 + Math.random(), delay: i * 0.05, ease: 'easeOut' }}
+                transition={{ duration: data.duration, delay: i * 0.05, ease: 'easeOut' }}
             />
         ))}
     </div>
@@ -130,15 +140,11 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                         whileHover={{ scale: 1.05 }}
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#B07552]/10 to-[#8A5A35]/10 border border-[#B07552]/20 text-[#B07552] font-bold text-[11px] uppercase tracking-wider mb-4 cursor-default"
                     >
-                        <motion.div animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                        <div className="animate-wiggle">
                             <Workflow size={14} />
-                        </motion.div>
+                        </div>
                         <span>Interactive Demo</span>
-                        <motion.div
-                            className="w-2 h-2 rounded-full bg-[#B07552]"
-                            animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
-                            transition={{ duration: 1, repeat: Infinity }}
-                        />
+                        <div className="w-2 h-2 rounded-full bg-[#B07552] animate-pulse" />
                     </motion.div>
 
                     <motion.h2
@@ -240,9 +246,9 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                                         transition={{ duration: 0.3, repeat: isProcessing ? Infinity : 0 }}
                                                     >
                                                         {isProcessing ? (
-                                                            <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}>
+                                                            <div className="animate-spin">
                                                                 <Activity size={20} />
-                                                            </motion.div>
+                                                            </div>
                                                         ) : isProcessed ? (
                                                             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }}>
                                                                 <Check size={20} />
@@ -285,10 +291,8 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                             transition={{ type: 'spring', stiffness: 100 }}
                                         />
                                         {/* Shimmer on progress bar */}
-                                        <motion.div
-                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                                            animate={{ x: ['-100%', '100%'] }}
-                                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                        <div
+                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"
                                         />
                                     </div>
                                 </div>
@@ -300,7 +304,12 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                 {isActive && (
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         {[...Array(6)].map((_, i) => (
-                                            <FloatingParticle key={i} delay={i * 0.3} size={4 + Math.random() * 4} duration={2 + Math.random()} />
+                                            <FloatingParticle 
+                                                key={i} 
+                                                delay={i * 0.3} 
+                                                size={4 + (i % 3) * 2} 
+                                                duration={2 + (i % 3) * 0.5}
+                                            />
                                         ))}
                                     </div>
                                 )}
@@ -332,10 +341,8 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                                 exit={{ opacity: 0 }}
                                                 className="absolute inset-1"
                                             >
-                                                <motion.div
-                                                    animate={{ rotate: 360 }}
-                                                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                                    className="w-full h-full rounded-full border-[3px] border-transparent border-t-[#B07552] border-r-[#B07552]/30"
+                                                <div
+                                                    className="w-full h-full rounded-full border-[3px] border-transparent border-t-[#B07552] border-r-[#B07552]/30 animate-spin"
                                                 />
                                             </motion.div>
                                         )}
@@ -463,13 +470,11 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                             className={`h-[220px] flex items-center justify-center rounded-xl border-2 border-dashed ${theme === 'dark' ? 'border-dark-accent/50 bg-dark-bg/50' : 'border-[#E6D0C6] bg-white/30'}`}
                                         >
                                             <div className="text-center">
-                                                <motion.div
-                                                    className="w-12 h-12 bg-gradient-to-br from-[#E6D0C6]/50 to-[#E6D0C6]/30 rounded-full mx-auto mb-3 flex items-center justify-center"
-                                                    animate={{ y: [0, -6, 0], rotate: [0, 5, -5, 0] }}
-                                                    transition={{ duration: 3, repeat: Infinity }}
+                                                <div
+                                                    className="w-12 h-12 bg-gradient-to-br from-[#E6D0C6]/50 to-[#E6D0C6]/30 rounded-full mx-auto mb-3 flex items-center justify-center animate-bounce-slow"
                                                 >
                                                     <Rocket className="text-[#B07552]/50" size={20} />
-                                                </motion.div>
+                                                </div>
                                                 <p className={`text-xs font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8C7E72]'}`}>Ready to launch</p>
                                                 <p className={`text-[10px] mt-0.5 ${theme === 'dark' ? 'text-dark-text-muted/70' : 'text-[#A89A8E]'}`}>Click a challenge to begin</p>
                                             </div>
@@ -484,13 +489,11 @@ const FrostrekAdvantage = ({ features: _features }: FrostrekAdvantageProps) => {
                                             className={`h-[220px] flex items-center justify-center rounded-xl border-2 ${theme === 'dark' ? 'border-dark-accent/50 bg-dark-accent/10' : 'border-[#B07552]/30 bg-gradient-to-br from-[#B07552]/5 to-transparent'}`}
                                         >
                                             <div className="text-center">
-                                                <motion.div
-                                                    className="w-12 h-12 bg-[#B07552]/10 rounded-full mx-auto mb-3 flex items-center justify-center"
-                                                    animate={{ rotate: 360 }}
-                                                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                                                <div
+                                                    className="w-12 h-12 bg-[#B07552]/10 rounded-full mx-auto mb-3 flex items-center justify-center animate-spin"
                                                 >
                                                     <Activity className="text-[#B07552]" size={20} />
-                                                </motion.div>
+                                                </div>
                                                 <p className="text-xs text-[#B07552] font-medium">Generating solution...</p>
                                             </div>
                                         </motion.div>

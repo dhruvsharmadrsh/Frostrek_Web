@@ -182,7 +182,7 @@ const TypewriterText = memo(({ texts }: { texts: string[] }) => {
         }
         if (phase === 'delete') {
             if (text.length > 0) {
-                const t = setTimeout(() => setText(text.slice(0, -1)), 30);
+                const t = setTimeout(() => setText(text.slice(0, -1)), 80);
                 return () => clearTimeout(t);
             }
             setIndex(i => (i + 1) % texts.length);
@@ -191,7 +191,7 @@ const TypewriterText = memo(({ texts }: { texts: string[] }) => {
         if (phase === 'type') {
             const target = texts[index];
             if (text.length < target.length) {
-                const t = setTimeout(() => setText(target.slice(0, text.length + 1)), 50);
+                const t = setTimeout(() => setText(target.slice(0, text.length + 1)), 120);
                 return () => clearTimeout(t);
             }
             setPhase('show');
@@ -201,11 +201,7 @@ const TypewriterText = memo(({ texts }: { texts: string[] }) => {
     return (
         <span className="relative">
             {text}
-            <motion.span
-                className="inline-block w-[3px] h-[0.85em] bg-brand-green-400 ml-1 align-middle rounded-full"
-                animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.6, repeat: Infinity }}
-            />
+            <span className="inline-block w-[3px] h-[0.85em] bg-brand-green-400 ml-1 align-middle rounded-full animate-pulse" />
         </span>
     );
 });
@@ -335,14 +331,12 @@ const Counter = memo(({ value, suffix = '' }: { value: number; suffix?: string }
 
 // ============ FLOATING ICON ============
 const FloatingIcon = memo(({ icon: Icon, delay, x, y }: { icon: LucideIcon; delay: number; x: string; y: string }) => (
-    <motion.div
-        className="absolute w-10 h-10 bg-white/80 backdrop-blur rounded-xl shadow-lg flex items-center justify-center border border-brand-green-500/20"
-        style={{ left: x, top: y }}
-        animate={{ y: [0, -12, 0], rotate: [0, 5, -5, 0] }}
-        transition={{ duration: 4, delay, repeat: Infinity, ease: 'easeInOut' }}
+    <div
+        className="absolute w-10 h-10 bg-white/80 backdrop-blur rounded-xl shadow-lg flex items-center justify-center border border-brand-green-500/20 animate-bounce-slow"
+        style={{ left: x, top: y, animationDelay: `${delay}s` }}
     >
         <Icon className="w-5 h-5 text-brand-green-600" />
-    </motion.div>
+    </div>
 ));
 
 // ============ INTERACTIVE GLOBE ============
@@ -361,17 +355,9 @@ const InteractiveGlobe = memo(() => {
 
     return (
         <div className="relative w-full h-80 flex items-center justify-center">
-            {/* Animated rings */}
-            <motion.div
-                className="absolute w-56 h-56 border-2 border-dashed border-brand-green-500/20 rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-            />
-            <motion.div
-                className="absolute w-44 h-44 border-2 border-dashed border-brand-yellow-500/20 rounded-full"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-            />
+            {/* Animated rings - Using CSS instead of Framer Motion for performance */}
+            <div className="absolute w-56 h-56 border-2 border-dashed border-brand-green-500/20 rounded-full animate-spin-slow" />
+            <div className="absolute w-44 h-44 border-2 border-dashed border-brand-yellow-500/20 rounded-full animate-spin-slow-reverse" />
 
             {/* Globe center */}
             <motion.div
@@ -387,12 +373,8 @@ const InteractiveGlobe = memo(() => {
                 transition={{ type: 'spring', stiffness: 300 }}
             >
                 <Globe className="w-12 h-12 text-white" />
-                {/* Pulse rings */}
-                <motion.div
-                    className="absolute inset-0 rounded-full border-2 border-brand-green-300"
-                    animate={{ scale: [1, 1.8], opacity: [0.6, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                />
+                {/* Pulse rings - Using CSS for performance */}
+                <div className="absolute inset-0 rounded-full border-2 border-brand-green-300 animate-ping" />
             </motion.div>
 
             {/* City dots with tooltips */}
@@ -412,11 +394,7 @@ const InteractiveGlobe = memo(() => {
                         animate={{ scale: hoveredCity === i ? 1.5 : 1 }}
                     >
                         <div className="w-4 h-4 bg-brand-green-500 rounded-full shadow-lg" />
-                        <motion.div
-                            className="absolute inset-0 rounded-full bg-brand-green-400"
-                            animate={{ scale: [1, 2.5], opacity: [0.5, 0] }}
-                            transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }}
-                        />
+                        <div className="absolute inset-0 rounded-full bg-brand-green-400 animate-ping" style={{ animationDelay: `${i * 0.3}s` }} />
                     </motion.div>
                     <AnimatePresence>
                         {hoveredCity === i && (
@@ -498,14 +476,12 @@ const TechIcon = memo(({ icon: Icon, label, delay }: { icon: LucideIcon; label: 
 
 // ============ SCROLL INDICATOR ============
 const ScrollIndicator = memo(() => (
-    <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
+    <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer animate-bounce-slow"
         onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}
     >
         <MousePointer2 className="w-5 h-5 text-brand-green-500" />
-    </motion.div>
+    </div>
 ));
 
 // ============ TEAM FLIP CARD ============
@@ -549,13 +525,11 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
                             </div>
                         </div>
                         {/* Hover Hint */}
-                        <motion.div
-                            className="absolute top-4 right-4 bg-black/40 rounded-full px-3 py-1.5 text-xs text-white border border-white/20"
-                            animate={{ opacity: [0.6, 1, 0.6] }}
-                            transition={{ duration: 2, repeat: Infinity }}
+                        <div
+                            className="absolute top-4 right-4 bg-black/40 rounded-full px-3 py-1.5 text-xs text-white border border-white/20 animate-pulse"
                         >
                             Hover for bio
-                        </motion.div>
+                        </div>
                     </div>
                 </div>
 
@@ -642,10 +616,8 @@ const CertificationBadge = memo(({ cert, delay }: { cert: typeof CERTIFICATIONS_
                 transition={{ type: 'spring', stiffness: 300 }}
             >
                 {/* Glow effect */}
-                <motion.div
-                    className="absolute inset-0 bg-white/20"
-                    animate={{ opacity: [0, 0.3, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                <div
+                    className="absolute inset-0 bg-white/20 animate-pulse"
                 />
 
                 <div className="relative flex items-center gap-3">
@@ -817,25 +789,19 @@ const TechEcosystemDiagram = memo(() => {
     return (
         <div className="relative w-full max-w-[320px] aspect-square mx-auto">
             {/* Orbiting Rings */}
-            <motion.div
-                className="absolute inset-8 border-2 border-dashed border-gray-200 rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+            <div
+                className="absolute inset-8 border-2 border-dashed border-gray-200 rounded-full animate-spin-slow"
             />
-            <motion.div
-                className="absolute inset-16 border-2 border-dashed border-gray-200 rounded-full"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+            <div
+                className="absolute inset-16 border-2 border-dashed border-gray-200 rounded-full animate-spin-slow-reverse"
             />
 
             {/* Center Logo */}
-            <motion.div
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-brand-green-500 to-brand-yellow-600 rounded-2xl flex items-center justify-center shadow-2xl z-10"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 3, repeat: Infinity }}
+            <div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-brand-green-500 to-brand-yellow-600 rounded-2xl flex items-center justify-center shadow-2xl z-10 animate-pulse"
             >
                 <span className="text-white font-bold text-lg">F</span>
-            </motion.div>
+            </div>
 
             {/* Orbiting Icons */}
             {categories.map((cat, i) => {

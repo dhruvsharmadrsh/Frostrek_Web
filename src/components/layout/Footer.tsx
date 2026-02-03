@@ -1,44 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Mail, Linkedin, Twitter, Facebook, ChevronDown, Check, ArrowUp, Sparkles, Copy, Globe, MapPin } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-
-// Mock constants - replace with actual imports
-const NAV_ITEMS = [
-  {
-    label: 'Products',
-    megaMenu: [{
-      items: [
-        { name: 'AI Platform', href: '/products/ai-platform' },
-        { name: 'Automation Suite', href: '/products/automation' },
-        { name: 'Analytics Dashboard', href: '/products/analytics' },
-        { name: 'Integration Tools', href: '/products/integration' },
-        { name: 'Security Hub', href: '/products/security' }
-      ]
-    }]
-  },
-  {
-    label: 'Solutions',
-    megaMenu: [{
-      items: [
-        { name: 'Manufacturing', href: '/solutions/manufacturing' },
-        { name: 'Healthcare', href: '/solutions/healthcare' },
-        { name: 'Finance', href: '/solutions/finance' },
-        { name: 'Retail', href: '/solutions/retail' }
-      ]
-    }]
-  }
-];
-
-const COMPANY_INFO = {
-  name: 'Frostrek Technologies',
-  address: 'Sector 65, Success Suncity Tower, Gurgaon',
-  contact: 'info@frostrek.com',
-  socials: {
-    linkedin: 'https://linkedin.com/company/frostrek',
-    twitter: 'https://twitter.com/frostrek',
-    facebook: 'https://facebook.com/frostrek'
-  }
-};
+import { NAV_ITEMS, COMPANY_INFO } from '../../utils/constants';
 
 const LANGUAGES = [
   { code: 'en', name: 'English', flag: 'ENG' },
@@ -94,11 +57,17 @@ const Footer = () => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
-  // Scroll handler for back-to-top
+  // Scroll handler for back-to-top with rAF throttling
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      setShowBackToTop(scrollPercent > 60);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        setShowBackToTop(scrollPercent > 60);
+        ticking = false;
+      });
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -229,17 +198,17 @@ const Footer = () => {
       {/* Footer */}
       <footer
         ref={footerRef}
-        className={`border-t py-10 transition-colors duration-300 ${isVisible ? 'footer-revealed' : 'opacity-0'} ${theme === 'dark' ? 'bg-dark-navbar border-dark-accent/20' : 'bg-gradient-to-b from-white to-gray-50 border-gray-200'}`}
+        className={`border-t py-8 transition-colors duration-300 ${isVisible ? 'footer-revealed' : 'opacity-0'} ${theme === 'dark' ? 'bg-dark-navbar border-dark-accent/20' : 'bg-gradient-to-b from-white to-gray-50 border-gray-200'}`}
       >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
-            {/* Brand, Info & Map (Left - Uses 4/12 cols) */}
-            <div className="lg:col-span-4 space-y-6">
-              <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-6">
+            {/* Brand & Info (Left - Uses 3/12 cols) */}
+            <div className="lg:col-span-3 space-y-4">
+              <div className="space-y-3">
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 group">
                   <a href="/" className="flex items-center gap-2">
-                    <img src="/logo.png" alt="Frostrek Logo" className="h-9 w-9 transition-transform group-hover:scale-110" />
-                    <span className={`text-2xl font-bold font-sans tracking-tight ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                    <img src="/logo.png" alt="Frostrek Logo" className="h-8 w-8 transition-transform group-hover:scale-110" />
+                    <span className={`text-xl font-bold font-sans tracking-tight ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                       Frostrek
                     </span>
                   </a>
@@ -259,39 +228,22 @@ const Footer = () => {
                 </p>
               </div>
 
-              {/* Embedded Map with Hover Address Tooltip */}
-              <div ref={locationRef} onClick={handleLocationClick} className={`relative w-full h-36 rounded-xl overflow-hidden shadow-md border group cursor-pointer transition-all duration-300 ${theme === 'dark' ? 'border-dark-accent/30 bg-dark-card hover:shadow-dark-accent/10' : 'border-gray-200 bg-gray-50 hover:shadow-lg'}`}>
-                <iframe
-                  title="Office Location"
-                  width="100%"
-                  height="100%"
-                  frameBorder="0"
-                  scrolling="no"
-                  marginHeight={0}
-                  marginWidth={0}
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=77.0%2C28.4%2C77.1%2C28.5&amp;layer=mapnik&amp;marker=28.4595%2C77.0266"
-                  className="group-hover:opacity-40 transition-opacity duration-300 pointer-events-none"
-                  style={{ filter: theme === 'dark' ? 'invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.2)' : 'none' }}
-                ></iframe>
-
-                {/* Address Tooltip Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-95 group-hover:scale-100">
-                  <div className={`px-4 py-2 rounded-lg shadow-xl backdrop-blur-md flex flex-col items-center text-center gap-1 ${theme === 'dark' ? 'bg-dark-card/90 text-white border border-dark-accent/30' : 'bg-white/90 text-gray-900 border border-gray-200'}`}>
-                    <MapPin size={16} className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
-                    <span className="text-xs font-bold">Success Suncity Tower</span>
-                    <span className="text-[10px] opacity-80">Sector 65, Gurgaon</span>
-                  </div>
-                </div>
-              </div>
-
               {/* Email & Lang Row */}
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col gap-3">
                 <div className={`flex items-center gap-2 email-container ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                   <Mail size={16} className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
-                  <button onClick={copyEmail} className={`email-shimmer text-xs transition-colors flex items-center gap-1 group ${theme === 'dark' ? 'hover:text-dark-accent' : 'hover:text-[#B07552]'}`}>
+                  <a 
+                    href={`mailto:${COMPANY_INFO.contact}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      copyEmail();
+                      window.location.href = `mailto:${COMPANY_INFO.contact}`;
+                    }}
+                    className={`email-shimmer text-xs transition-colors flex items-center gap-1 group ${theme === 'dark' ? 'hover:text-dark-accent' : 'hover:text-[#B07552]'}`}
+                  >
                     <span className="truncate max-w-[150px]">{COMPANY_INFO.contact}</span>
                     {emailCopied ? <Check size={12} className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} /> : <Copy size={12} className="opacity-0 group-hover:opacity-100" />}
-                  </button>
+                  </a>
                 </div>
 
                 {/* Language Switcher Small */}
@@ -315,10 +267,10 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Links (Right - Uses 8/12 cols) */}
-            <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+            {/* Links (Right - Uses 9/12 cols) */}
+            <div className="lg:col-span-9 grid grid-cols-2 md:grid-cols-4 gap-6">
               {/* Products */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <h4 className={`section-title font-semibold mb-2 text-sm uppercase tracking-wider ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Products</h4>
                 <ul className="space-y-2">
                   {NAV_ITEMS.find(n => n.label === 'Products')?.megaMenu?.flatMap(s => s.items).slice(0, 5).map(item => (
@@ -330,7 +282,7 @@ const Footer = () => {
               </div>
 
               {/* Solutions */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <h4 className={`section-title font-semibold mb-2 text-sm uppercase tracking-wider ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Solutions</h4>
                 <ul className="space-y-2">
                   {NAV_ITEMS.find(n => n.label === 'Solutions')?.megaMenu?.flatMap(s => s.items).map(item => (
@@ -342,7 +294,7 @@ const Footer = () => {
               </div>
 
               {/* Company */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <h4 className={`section-title font-semibold mb-2 text-sm uppercase tracking-wider ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Company</h4>
                 <ul className="space-y-2">
                   <li><a href="/about" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>About Us</a></li>
@@ -353,17 +305,41 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Connect (Socials & Copyright moved here) */}
-              <div className="space-y-4 flex flex-col justify-between h-full pb-2">
-                <div>
-                  <h4 className={`section-title font-semibold mb-2 text-sm uppercase tracking-wider ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Connect</h4>
-                  <div className="flex items-center gap-3">
-                    <a href={COMPANY_INFO.socials.linkedin} className={`social-icon w-8 h-8 rounded-full flex items-center justify-center transition-colors ${theme === 'dark' ? 'bg-dark-card text-dark-accent hover:bg-dark-accent hover:text-white' : 'bg-[#fdfbf7] text-[#B07552] hover:bg-[#B07552] hover:text-white'}`}><Linkedin size={16} /></a>
-                    <a href={COMPANY_INFO.socials.twitter} className={`social-icon w-8 h-8 rounded-full flex items-center justify-center transition-colors ${theme === 'dark' ? 'bg-dark-card text-dark-accent hover:bg-dark-accent hover:text-white' : 'bg-[#fdfbf7] text-[#B07552] hover:bg-[#B07552] hover:text-white'}`}><Twitter size={16} /></a>
-                    <a href={COMPANY_INFO.socials.facebook} className={`social-icon w-8 h-8 rounded-full flex items-center justify-center transition-colors ${theme === 'dark' ? 'bg-dark-card text-dark-accent hover:bg-dark-accent hover:text-white' : 'bg-[#fdfbf7] text-[#B07552] hover:bg-[#B07552] hover:text-white'}`}><Facebook size={16} /></a>
+              {/* Connect (Socials, Map & Copyright) */}
+              <div className="space-y-3">
+                <h4 className={`section-title font-semibold mb-2 text-sm uppercase tracking-wider ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Connect</h4>
+                <div className="flex items-center gap-3">
+                  <a href={COMPANY_INFO.socials.linkedin} className={`social-icon w-8 h-8 rounded-full flex items-center justify-center transition-colors ${theme === 'dark' ? 'bg-dark-card text-dark-accent hover:bg-dark-accent hover:text-white' : 'bg-[#fdfbf7] text-[#B07552] hover:bg-[#B07552] hover:text-white'}`}><Linkedin size={16} /></a>
+                  <a href={COMPANY_INFO.socials.twitter} className={`social-icon w-8 h-8 rounded-full flex items-center justify-center transition-colors ${theme === 'dark' ? 'bg-dark-card text-dark-accent hover:bg-dark-accent hover:text-white' : 'bg-[#fdfbf7] text-[#B07552] hover:bg-[#B07552] hover:text-white'}`}><Twitter size={16} /></a>
+                  <a href={COMPANY_INFO.socials.facebook} className={`social-icon w-8 h-8 rounded-full flex items-center justify-center transition-colors ${theme === 'dark' ? 'bg-dark-card text-dark-accent hover:bg-dark-accent hover:text-white' : 'bg-[#fdfbf7] text-[#B07552] hover:bg-[#B07552] hover:text-white'}`}><Facebook size={16} /></a>
+                </div>
+
+                {/* Embedded Map - Now Small and Under Connect */}
+                <div ref={locationRef} onClick={handleLocationClick} className={`relative w-full h-24 rounded-lg overflow-hidden shadow-md border group cursor-pointer transition-all duration-300 ${theme === 'dark' ? 'border-dark-accent/30 bg-dark-card hover:shadow-dark-accent/10' : 'border-gray-200 bg-gray-50 hover:shadow-lg'}`}>
+                  <iframe
+                    title="Office Location"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    scrolling="no"
+                    marginHeight={0}
+                    marginWidth={0}
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=77.0%2C28.4%2C77.1%2C28.5&amp;layer=mapnik&amp;marker=28.4595%2C77.0266"
+                    className="group-hover:opacity-40 transition-opacity duration-300 pointer-events-none"
+                    style={{ filter: theme === 'dark' ? 'invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.2)' : 'none' }}
+                  ></iframe>
+
+                  {/* Address Tooltip Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-95 group-hover:scale-100">
+                    <div className={`px-3 py-1.5 rounded-lg shadow-xl backdrop-blur-md flex flex-col items-center text-center gap-0.5 ${theme === 'dark' ? 'bg-dark-card/90 text-white border border-dark-accent/30' : 'bg-white/90 text-gray-900 border border-gray-200'}`}>
+                      <MapPin size={14} className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
+                      <span className="text-[10px] font-bold">Success Suncity Tower</span>
+                      <span className="text-[9px] opacity-80">Sector 65, Gurgaon</span>
+                    </div>
                   </div>
                 </div>
-                <div className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'} mt-auto`}>
+
+                <div className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>
                   &copy; {currentYear} {COMPANY_INFO.name}.<br />All rights reserved.
                 </div>
               </div>

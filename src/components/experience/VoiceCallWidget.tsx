@@ -370,25 +370,17 @@ const VoiceCallWidget: React.FC<VoiceCallWidgetProps> = ({ onCallStateChange }) 
                         }}
                     >
                         {/* Inner pulsing circles for listening state */}
-                        <AnimatePresence>
-                            {isListening && (
-                                <>
-                                    {[0, 1, 2].map((i) => (
-                                        <motion.div
-                                            key={i}
-                                            className="absolute inset-0 rounded-full border-2 border-white/50"
-                                            initial={{ scale: 1, opacity: 0.5 }}
-                                            animate={{ scale: 1.5 + i * 0.2, opacity: 0 }}
-                                            transition={{
-                                                duration: 1.5,
-                                                repeat: Infinity,
-                                                delay: i * 0.3,
-                                            }}
-                                        />
-                                    ))}
-                                </>
-                            )}
-                        </AnimatePresence>
+                        {isListening && (
+                            <>
+                                {[0, 1, 2].map((i) => (
+                                    <div
+                                        key={i}
+                                        className="absolute inset-0 rounded-full border-2 border-white/50 animate-ping"
+                                        style={{ animationDelay: `${i * 0.3}s` }}
+                                    />
+                                ))}
+                            </>
+                        )}
 
                         {/* Icon */}
                         {isLoading ? (

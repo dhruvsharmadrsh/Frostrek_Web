@@ -206,20 +206,16 @@ const ChatbotDemo: React.FC = () => {
                         </div>
                         <div className={`p-3 rounded-2xl rounded-tl-none shadow-sm flex items-center ${theme === 'dark' ? 'bg-dark-card border border-dark-accent/20' : 'bg-white border border-gray-100'}`}>
                             <div className="flex gap-1">
-                                <motion.div
-                                    className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
-                                    animate={{ opacity: [0.4, 1, 0.4] }}
-                                    transition={{ duration: 1.4, repeat: Infinity, times: [0, 0.5, 1] }}
+                                <div
+                                    className={`w-1.5 h-1.5 rounded-full animate-pulse ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
                                 />
-                                <motion.div
-                                    className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
-                                    animate={{ opacity: [0.4, 1, 0.4] }}
-                                    transition={{ duration: 1.4, delay: 0.2, repeat: Infinity, times: [0, 0.5, 1] }}
+                                <div
+                                    className={`w-1.5 h-1.5 rounded-full animate-pulse ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
+                                    style={{ animationDelay: '0.2s' }}
                                 />
-                                <motion.div
-                                    className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
-                                    animate={{ opacity: [0.4, 1, 0.4] }}
-                                    transition={{ duration: 1.4, delay: 0.4, repeat: Infinity, times: [0, 0.5, 1] }}
+                                <div
+                                    className={`w-1.5 h-1.5 rounded-full animate-pulse ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`}
+                                    style={{ animationDelay: '0.4s' }}
                                 />
                             </div>
                         </div>

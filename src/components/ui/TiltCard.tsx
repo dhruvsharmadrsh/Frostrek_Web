@@ -36,7 +36,13 @@ const TiltCard = ({
         // Skip on touch devices
         if ('ontouchstart' in window) return;
 
-        const handleMouseMove = (e: MouseEvent) => {
+        // rAF throttling for mouse move
+        let ticking = false;
+        let lastEvent: MouseEvent | null = null;
+
+        const updateTilt = () => {
+            if (!lastEvent || !card) return;
+            const e = lastEvent;
             const rect = card.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
@@ -81,6 +87,15 @@ const TiltCard = ({
                     opacity: 0.3,
                     duration: 0.3
                 });
+            }
+            ticking = false;
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            lastEvent = e;
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(updateTilt);
             }
         };
 

@@ -181,6 +181,10 @@ const TestimonialsSection = () => {
                                     src={current.image}
                                     alt={current.author}
                                     className="w-full h-full object-cover"
+                                    width={256}
+                                    height={256}
+                                    loading="lazy"
+                                    decoding="async"
                                 />
                                 {/* Gradient overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#B07552]/40 to-transparent" />

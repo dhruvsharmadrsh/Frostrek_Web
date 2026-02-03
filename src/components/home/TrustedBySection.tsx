@@ -34,9 +34,8 @@ const TrustedBySection = () => {
 
     useEffect(() => {
         const section = sectionRef.current;
-        const marquee = marqueeRef.current;
         const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
-        if (!section || !marquee || cards.length === 0) return;
+        if (!section || cards.length === 0) return;
 
         const ctx = gsap.context(() => {
             // Title entrance
@@ -45,17 +44,7 @@ const TrustedBySection = () => {
                 { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 80%' } }
             );
 
-            // Infinite marquee
-            const totalWidth = marquee.scrollWidth / 2;
-            gsap.to(marquee, {
-                x: -totalWidth,
-                duration: 35,
-                ease: 'none',
-                repeat: -1,
-                modifiers: { x: gsap.utils.unitize(x => parseFloat(x) % totalWidth) }
-            });
-
-            // Continuous wave animation removed
+            // Marquee now uses CSS animation - no GSAP needed
 
         }, section);
 
@@ -80,7 +69,7 @@ const TrustedBySection = () => {
                 <div className="relative -mx-6 overflow-hidden">
 
 
-                    <div ref={marqueeRef} className="flex gap-12 py-10" style={{ width: 'max-content' }}>
+                    <div ref={marqueeRef} className="flex gap-12 py-10 animate-marquee" style={{ width: 'max-content' }}>
                         {[...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS].map((logo, i) => {
                             return (
                                 <div

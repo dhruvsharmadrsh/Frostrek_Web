@@ -79,7 +79,7 @@ const HeroSection = () => {
                 </div>
             </div>
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-12 lg:gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
 
                     {/* Left Column: Text Content */}
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full mx-auto lg:mx-0">
@@ -137,8 +137,8 @@ const HeroSection = () => {
                     </div>
 
                     {/* Right Column: 3D Robot */}
-                    <div className="flex justify-center lg:justify-end relative mt-8 lg:mt-0">
-                        <div className="relative w-full max-w-[450px] lg:max-w-[550px] aspect-[4/5] flex items-center justify-center">
+                    <div className="flex justify-center items-center relative mt-8 lg:mt-0">
+                        <div className="relative w-full max-w-[450px] lg:max-w-[500px] aspect-[4/5] flex items-center justify-center mx-auto">
                             {/* Subtle glow behind robot */}
                             <div className="absolute inset-0 bg-gradient-to-tr from-[#E6D0C6] to-transparent opacity-30 rounded-full blur-3xl transform scale-90" />
 

@@ -1,11 +1,11 @@
 import { useGLTF } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 export default function RobotModel({ isSpeaking = false, ...props }) {
   const group = useRef();
-  const mouse = useRef({ x: 0, y: 0 });
+  const isVisible = useRef(true);
 
   const eyeParts = useRef([]);
   const mouthParts = useRef([]);
@@ -17,14 +17,19 @@ export default function RobotModel({ isSpeaking = false, ...props }) {
   const blinking = useRef(false);
 
   const { scene } = useGLTF("/models/genkub_greeting_robot.glb", true);
+  const { invalidate } = useThree();
 
   useEffect(() => {
-    const handle = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = (e.clientY / window.innerHeight) * 2 - 1;
+    // Pause animations when tab is hidden
+    const handleVisibility = () => {
+      isVisible.current = !document.hidden;
     };
-    window.addEventListener("mousemove", handle);
-    return () => window.removeEventListener("mousemove", handle);
+    
+    document.addEventListener("visibilitychange", handleVisibility);
+    
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, []);
 
   useEffect(() => {
@@ -107,22 +112,15 @@ export default function RobotModel({ isSpeaking = false, ...props }) {
   }, [scene]);
 
   useFrame((state, delta) => {
+    // Skip processing when tab is hidden
+    if (!isVisible.current || !group.current) return;
+    
     const t = state.clock.getElapsedTime();
 
-    if (group.current) {
-      group.current.position.y = Math.sin(t * 1.2) * 0.08;
-      group.current.rotation.y = THREE.MathUtils.lerp(
-        group.current.rotation.y,
-        mouse.current.x * 0.35,
-        0.08
-      );
-      group.current.rotation.x = THREE.MathUtils.lerp(
-        group.current.rotation.x,
-        mouse.current.y * 0.15,
-        0.08
-      );
-    }
+    // Floating animation (always runs - cheap operation)
+    group.current.position.y = Math.sin(t * 1.2) * 0.08;
 
+    // Blink timer logic
     blinkTimer.current += delta;
 
     if (!blinking.current && blinkTimer.current > nextBlink.current) {
@@ -130,6 +128,7 @@ export default function RobotModel({ isSpeaking = false, ...props }) {
       blinkTimer.current = 0;
     }
 
+    // Only update eye materials during blink animation
     if (blinking.current) {
       const half = blinkDuration / 2;
       const p = blinkTimer.current;
@@ -145,41 +144,44 @@ export default function RobotModel({ isSpeaking = false, ...props }) {
         nextBlink.current = Math.random() * 3 + 3;
       }
 
-      eyeParts.current.forEach((eye) => {
-        eye.material.opacity = opacity;
-      });
+      // Use for loop instead of forEach for better performance
+      for (let i = 0; i < eyeParts.current.length; i++) {
+        eyeParts.current[i].material.opacity = opacity;
+      }
     }
 
-    const speakPulse = isSpeaking
-      ? (Math.sin(t * 12) + 1) / 2
-      : 0;
+    // Speaking animations - only process if speaking state is relevant
+    const speakPulse = isSpeaking ? (Math.sin(t * 12) + 1) / 2 : 0;
 
-    mouthParts.current.forEach((mouth) => {
+    for (let i = 0; i < mouthParts.current.length; i++) {
+      const mouth = mouthParts.current[i];
       mouth.material.emissiveIntensity = THREE.MathUtils.lerp(
         mouth.material.emissiveIntensity,
         isSpeaking ? 1.4 + speakPulse * 0.8 : 1.3,
         0.2
       );
-
       mouth.material.opacity = THREE.MathUtils.lerp(
         mouth.material.opacity,
         isSpeaking ? 0.85 + speakPulse * 0.15 : 1,
         0.2
       );
-    });
+    }
 
-    earParts.current.forEach((ear) => {
-      ear.material.emissiveIntensity = THREE.MathUtils.lerp(
-        ear.material.emissiveIntensity,
+    for (let i = 0; i < earParts.current.length; i++) {
+      earParts.current[i].material.emissiveIntensity = THREE.MathUtils.lerp(
+        earParts.current[i].material.emissiveIntensity,
         isSpeaking ? 1.6 : 1.3,
         0.1
       );
-    });
+    }
+    
+    // Request next frame render
+    invalidate();
   });
 
   return (
     <group ref={group} {...props}>
-      <primitive object={scene} scale={1.7} />
+      <primitive object={scene} scale={1.4} rotation={[0, -0.3, 0]} />
     </group>
   );
 }

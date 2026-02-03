@@ -1,38 +1,74 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, createContext, useContext } from 'react';
+import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface SmoothScrollProviderProps {
     children: React.ReactNode;
 }
 
+// Create context to share Lenis instance
+const LenisContext = createContext<Lenis | null>(null);
+
 /**
- * Lightweight SmoothScrollProvider using native CSS scroll-behavior.
- * Removed Lenis + GSAP ticker integration for better performance.
+ * SmoothScrollProvider with Lenis for premium smooth scrolling.
+ * Integrates with GSAP ScrollTrigger for synchronized animations.
  */
 const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
+    const lenisRef = useRef<Lenis | null>(null);
 
     useEffect(() => {
-        // Enable smooth scrolling via CSS
-        document.documentElement.style.scrollBehavior = 'smooth';
+        // Initialize Lenis with optimized settings
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
+            infinite: false,
+        });
 
-        // Handle route changes - scroll to top
+        lenisRef.current = lenis;
+
+        // Sync Lenis with GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
+
+        // Use GSAP ticker for smooth animation loop
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        
+        gsap.ticker.lagSmoothing(0);
+
+        // Handle route changes - scroll to top instantly
         const handleRouteChange = () => {
-            window.scrollTo({ top: 0, behavior: 'instant' });
+            lenis.scrollTo(0, { immediate: true });
         };
 
         window.addEventListener('popstate', handleRouteChange);
 
         return () => {
-            document.documentElement.style.scrollBehavior = '';
+            gsap.ticker.remove((time) => lenis.raf(time * 1000));
             window.removeEventListener('popstate', handleRouteChange);
+            lenis.destroy();
+            lenisRef.current = null;
         };
     }, []);
 
-    return <>{children}</>;
+    return (
+        <LenisContext.Provider value={lenisRef.current}>
+            {children}
+        </LenisContext.Provider>
+    );
 };
 
 export default SmoothScrollProvider;
 
-// Export a hook for compatibility
+// Export hook to access Lenis instance
 export const useLenis = () => {
-    return null;
+    return useContext(LenisContext);
 };

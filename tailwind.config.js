@@ -74,6 +74,19 @@ export default {
                 'card-gradient': 'linear-gradient(135deg, #FDFBF7 0%, #FAF6F3 100%)',
             },
             animation: {
+                // Marquee animation for trusted section
+                'marquee': 'marquee 35s linear infinite',
+                // Slow spin animations for CapabilitiesSystem
+                'spin-slow': 'spin 20s linear infinite',
+                'spin-slow-reverse': 'spinReverse 30s linear infinite',
+                // Pulse glow for core engine
+                'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                // Wiggle for badges
+                'wiggle': 'wiggle 2s ease-in-out infinite',
+                // Bounce slow for floating elements
+                'bounce-slow': 'bounceSlow 4s ease-in-out infinite',
+                // Shimmer for progress bars
+                'shimmer': 'shimmer 3s ease-in-out infinite',
                 // Wave animations
                 'wave-1': 'wave1 8s ease-in-out infinite',
                 'wave-2': 'wave2 10s ease-in-out infinite 1s',
@@ -108,6 +121,41 @@ export default {
                 'float': 'float 4s ease-in-out infinite',
             },
             keyframes: {
+                // Wiggle animation for badges
+                wiggle: {
+                    '0%, 100%': { transform: 'rotate(0deg)' },
+                    '25%': { transform: 'rotate(10deg)' },
+                    '75%': { transform: 'rotate(-10deg)' },
+                },
+                bounceSlow: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-10px)' },
+                },
+                shimmer: {
+                    '0%': { transform: 'translateX(-100%)' },
+                    '100%': { transform: 'translateX(100%)' },
+                },
+                // Marquee keyframe for infinite scroll
+                marquee: {
+                    '0%': { transform: 'translateX(0)' },
+                    '100%': { transform: 'translateX(-50%)' },
+                },
+                // Spin reverse for counter-rotation
+                spinReverse: {
+                    '0%': { transform: 'rotate(360deg)' },
+                    '100%': { transform: 'rotate(0deg)' },
+                },
+                // Pulse glow for core engine
+                pulseGlow: {
+                    '0%, 100%': { 
+                        transform: 'scale(1)',
+                        boxShadow: '0 0 20px rgba(176, 117, 82, 0.2)'
+                    },
+                    '50%': { 
+                        transform: 'scale(1.05)',
+                        boxShadow: '0 0 40px rgba(176, 117, 82, 0.4)'
+                    },
+                },
                 // Float keyframe for hero images
                 float: {
                     '0%, 100%': { transform: 'translateY(0)' },

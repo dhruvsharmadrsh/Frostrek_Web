@@ -157,6 +157,9 @@ const ChatDemo = () => {
     );
 };
 
+// Memoized wave heights to prevent recalculation on every render
+const WAVE_HEIGHTS = [20, 32, 16, 28, 12, 24, 30, 18, 26, 14, 22, 20];
+
 const VoiceDemo = () => {
     const { theme } = useTheme();
     return (
@@ -165,16 +168,16 @@ const VoiceDemo = () => {
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B07552] to-[#8A5A35] flex items-center justify-center animate-pulse">
                     <Volume2 className="w-8 h-8 text-white" />
                 </div>
+                {/* Single ping element instead of double for performance */}
                 <div className="absolute inset-0 w-16 h-16 rounded-full border-2 border-[#B07552]/50 animate-ping" />
-                <div className="absolute inset-[-8px] w-20 h-20 rounded-full border border-[#B07552]/30 animate-ping" style={{ animationDelay: '1s' }} />
             </div>
             <div className="flex items-center gap-1 mb-2">
-                {[...Array(12)].map((_, i) => (
+                {WAVE_HEIGHTS.map((height, i) => (
                     <div
                         key={i}
                         className="w-1 bg-gradient-to-t from-[#B07552] to-[#E6D0C6] rounded-full animate-voice-wave"
                         style={{
-                            height: `${Math.random() * 24 + 8}px`,
+                            height: `${height}px`,
                             animationDelay: `${i * 0.2}s`
                         }}
                     />

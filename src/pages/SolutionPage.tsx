@@ -104,10 +104,8 @@ const SolutionPage = () => {
                             </div>
 
                             {/* Floating Elements */}
-                            <motion.div
-                                animate={{ y: [0, -10, 0] }}
-                                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                                className={`absolute -top-6 -right-6 rounded-xl p-4 shadow-xl z-20 ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
+                            <div
+                                className={`absolute -top-6 -right-6 rounded-xl p-4 shadow-xl z-20 animate-bounce-slow ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
                             >
                                 <div className="flex items-center gap-3">
                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-green-100'}`}>
@@ -118,7 +116,7 @@ const SolutionPage = () => {
                                         <div className={`text-lg font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>+127%</div>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
 
                             <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] rounded-full blur-3xl -z-10 ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-400/20'}`} />
                         </motion.div>

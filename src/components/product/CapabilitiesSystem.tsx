@@ -94,35 +94,22 @@ const CoreEngine = ({ activeIndex, theme }: { activeIndex: number, theme: string
                 ))}
             </svg>
 
-            {/* Central Core */}
-            <motion.div
-                animate={{
-                    scale: [1, 1.05, 1],
-                    boxShadow: [
-                        "0 0 20px rgba(176, 117, 82, 0.2)",
-                        "0 0 40px rgba(176, 117, 82, 0.4)",
-                        "0 0 20px rgba(176, 117, 82, 0.2)"
-                    ]
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className={`relative z-20 w-32 h-32 rounded-full border-4 flex items-center justify-center shadow-2xl ${theme === 'dark' ? 'bg-dark-card border-dark-accent/50' : 'bg-white border-brand-green-100'}`}
+            {/* Central Core - Using CSS animation for pulse glow instead of Framer Motion infinite */}
+            <div
+                className={`relative z-20 w-32 h-32 rounded-full border-4 flex items-center justify-center shadow-2xl animate-pulse-glow ${theme === 'dark' ? 'bg-dark-card border-dark-accent/50' : 'bg-white border-brand-green-100'}`}
             >
                 <div className="absolute inset-2 bg-gradient-to-br from-brand-green-500 to-brand-green-700 rounded-full flex items-center justify-center text-white text-center p-2 shadow-inner">
                     <Brain className="w-12 h-12 text-white/90" />
                 </div>
 
-                {/* Orbiting Rings */}
-                <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute -inset-4 border border-brand-green-200 rounded-full border-dashed"
+                {/* Orbiting Rings - Using CSS animation instead of Framer Motion infinite */}
+                <div
+                    className="absolute -inset-4 border border-brand-green-200 rounded-full border-dashed animate-spin-slow"
                 />
-                <motion.div
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                    className="absolute -inset-8 border border-brand-green-100/50 rounded-full"
+                <div
+                    className="absolute -inset-8 border border-brand-green-100/50 rounded-full animate-spin-slow-reverse"
                 />
-            </motion.div>
+            </div>
 
             {/* Satellites */}
             {satellites.map((sat, i) => (

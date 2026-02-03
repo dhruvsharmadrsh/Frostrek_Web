@@ -1,11 +1,26 @@
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useRef, useState, useCallback } from 'react';
+import { Suspense, useRef, useState, useCallback, useEffect } from 'react';
 import { AdaptiveDpr, Preload, Environment, OrbitControls } from '@react-three/drei';
 import RobotModel from '../RobotModel';
 
 const HeroRobot = () => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
+
+    // Visibility detection for pausing render when off-screen
+    useEffect(() => {
+        if (!containerRef.current) return;
+        
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsVisible(entry.isIntersecting),
+            { threshold: 0.1 }
+        );
+        observer.observe(containerRef.current);
+        
+        return () => observer.disconnect();
+    }, []);
 
     // Initialize audio on first interaction
     const startAudio = useCallback(() => {
@@ -32,17 +47,19 @@ const HeroRobot = () => {
     // Removed stopAudio as we want it to play fully
 
     return (
+        <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
         <Canvas
             camera={{ position: [0, 0.5, 3.5], fov: 45 }}
-            dpr={[1, 2]}
-            frameloop="always"
+            dpr={[1, 1.5]}
+            frameloop={isVisible ? "always" : "never"}
             gl={{
                 antialias: true,
                 alpha: true,
-                powerPreference: 'high-performance',
+                powerPreference: 'default',
                 toneMapping: 1,
                 toneMappingExposure: 1.2,
             }}
+            performance={{ min: 0.5 }}
             style={{
                 width: '100%',
                 height: '100%',
@@ -150,6 +167,7 @@ const HeroRobot = () => {
             {/* Preload assets */}
             <Preload all />
         </Canvas>
+        </div>
     );
 };
 

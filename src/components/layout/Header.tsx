@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
+import { Menu, X, ChevronDown, Palette } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { NAV_ITEMS } from '../../utils/constants';
 import Button from '../ui/Button';
@@ -14,12 +14,20 @@ const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
     const { theme, toggleTheme } = useTheme();
+    const ticking = useRef(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
+            // Throttle scroll events using requestAnimationFrame
+            if (!ticking.current) {
+                requestAnimationFrame(() => {
+                    setIsScrolled(window.scrollY > 20);
+                    ticking.current = false;
+                });
+                ticking.current = true;
+            }
         };
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -77,6 +85,17 @@ const Header = () => {
 
                 {/* 3. CTAs (Right) */}
                 <div className="hidden lg:flex items-center justify-end gap-4 min-w-[180px]">
+                    <Link to="/schedule-demo">
+                        <Button size="sm" className={cn(
+                            "px-6 rounded-md font-semibold border-none shadow-md",
+                            theme === 'dark'
+                                ? "bg-dark-accent text-dark-bg hover:bg-dark-accent/90"
+                                : "bg-background text-[#B07552]"
+                        )}>
+                            Request Demo
+                        </Button>
+                    </Link>
+
                     {/* Theme Toggle Button */}
                     <button
                         onClick={toggleTheme}
@@ -90,23 +109,12 @@ const Header = () => {
                     >
                         <motion.div
                             initial={false}
-                            animate={{ rotate: theme === 'dark' ? 180 : 0 }}
-                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                            animate={{ rotate: theme === 'dark' ? 360 : 0 }}
+                            transition={{ duration: 0.5, ease: 'easeInOut' }}
                         >
-                            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                            <Palette size={20} />
                         </motion.div>
                     </button>
-
-                    <Link to="/schedule-demo">
-                        <Button size="sm" className={cn(
-                            "px-6 rounded-md font-semibold border-none shadow-md",
-                            theme === 'dark'
-                                ? "bg-dark-accent text-dark-bg hover:bg-dark-accent/90"
-                                : "bg-background text-[#B07552]"
-                        )}>
-                            Request Demo
-                        </Button>
-                    </Link>
                 </div>
 
                 {/* Mobile Menu Toggle */}
@@ -150,6 +158,15 @@ const Header = () => {
                                 </div>
                             ))}
                             <div className="mt-4 flex flex-col gap-3">
+                                <Link to="/schedule-demo" onClick={() => setMobileMenuOpen(false)}>
+                                    <Button className={cn(
+                                        "w-full justify-center",
+                                        theme === 'dark' ? "bg-dark-accent text-dark-bg" : "bg-[#B07552] text-white"
+                                    )}>
+                                        Request Demo
+                                    </Button>
+                                </Link>
+
                                 {/* Mobile Theme Toggle */}
                                 <button
                                     onClick={toggleTheme}
@@ -163,22 +180,13 @@ const Header = () => {
                                 >
                                     <motion.div
                                         initial={false}
-                                        animate={{ rotate: theme === 'dark' ? 180 : 0 }}
-                                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                        animate={{ rotate: theme === 'dark' ? 360 : 0 }}
+                                        transition={{ duration: 0.5, ease: 'easeInOut' }}
                                     >
-                                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                                        <Palette size={20} />
                                     </motion.div>
                                     <span className="font-medium">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
                                 </button>
-
-                                <Link to="/schedule-demo" onClick={() => setMobileMenuOpen(false)}>
-                                    <Button className={cn(
-                                        "w-full justify-center",
-                                        theme === 'dark' ? "bg-dark-accent text-dark-bg" : "bg-[#B07552] text-white"
-                                    )}>
-                                        Request Demo
-                                    </Button>
-                                </Link>
                             </div>
                         </div>
                     </motion.div>

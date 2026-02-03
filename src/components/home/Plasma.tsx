@@ -111,10 +111,28 @@ export const Plasma = ({
 }: PlasmaProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const mousePos = useRef({ x: 0, y: 0 });
+    const isVisibleRef = useRef(true);
 
     useEffect(() => {
         if (!containerRef.current) return;
         const containerEl = containerRef.current;
+
+        // Visibility detection - pause rendering when not visible
+        const visibilityObserver = new IntersectionObserver(
+            ([entry]) => {
+                isVisibleRef.current = entry.isIntersecting;
+            },
+            { threshold: 0.1 }
+        );
+        visibilityObserver.observe(containerEl);
+
+        // Also pause when tab is not visible
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                isVisibleRef.current = false;
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         const useCustomColor = color ? 1.0 : 0.0;
         const customColorRgb = color ? hexToRgb(color) : [1, 1, 1];
@@ -186,6 +204,12 @@ export const Plasma = ({
         let raf = 0;
         const t0 = performance.now();
         const loop = (t: number) => {
+            // Skip rendering when not visible (saves GPU)
+            if (!isVisibleRef.current) {
+                raf = requestAnimationFrame(loop);
+                return;
+            }
+            
             let timeValue = (t - t0) * 0.001;
             if (direction === 'pingpong') {
                 const pingpongDuration = 10;
@@ -207,6 +231,8 @@ export const Plasma = ({
         return () => {
             cancelAnimationFrame(raf);
             ro.disconnect();
+            visibilityObserver.disconnect();
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             if (mouseInteractive && containerEl) {
                 containerEl.removeEventListener('mousemove', handleMouseMove);
             }
