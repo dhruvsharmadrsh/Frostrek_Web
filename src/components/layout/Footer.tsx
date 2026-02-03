@@ -190,7 +190,7 @@ const Footer = () => {
       {/* Careers Card - Keep unchanged */}
       <div className={`py-6 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
         <div className="container mx-auto px-4 md:px-6">
-          <a href="/careers" className="block max-w-4xl mx-auto">
+          <a href="/contact" className="block max-w-4xl mx-auto">
             <div className={`careers-card border-2 rounded-2xl p-6 cursor-pointer transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30 hover:border-dark-accent' : 'bg-white border-gray-200'}`}>
               <div className="flex items-center gap-6">
                 <div className="flex-shrink-0">

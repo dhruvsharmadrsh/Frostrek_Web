@@ -122,7 +122,7 @@ const ChatDemo = () => {
     ];
 
     return (
-        <div className={`rounded-xl p-4 h-[200px] overflow-hidden border transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}>
+        <div className={`rounded-xl cursor-pointer p-4 h-[200px] overflow-hidden border transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}>
             <div className={`flex items-center gap-2 mb-3 pb-2 border-b ${theme === 'dark' ? 'border-dark-accent/20' : 'border-gray-300'}`}>
                 <div className="w-2 h-2 rounded-full bg-[#B07552] animate-pulse" />
                 <span className={`text-xs ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>Frosty AI Agent</span>
@@ -194,12 +194,12 @@ const SearchDemo = () => {
     ];
 
     return (
-        <div className={`rounded-xl p-4 h-[200px] border transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}>
+        <div className={`rounded-xl p-2 h-[200px] border transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}>
             <div className={`flex items-center gap-2 rounded-lg px-3 py-2 mb-3 border ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-white border-gray-200'}`}>
                 <Search className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`} />
-                <span className={`text-sm ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>What were last quarter's revenue targets?</span>
+                <span className={`text-sm cursor-pointer ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>What were last quarter's revenue targets?</span>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 border">
                 {results.map((result, i) => (
                     <div
                         key={i}
@@ -208,7 +208,7 @@ const SearchDemo = () => {
                     >
                         <div className="flex items-center gap-2">
                             <Database className="w-3 h-3 text-[#B07552]" />
-                            <span className={`text-xs ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>{result.title}</span>
+                            <span className={`text-xs cursor-pointer ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>{result.title}</span>
                         </div>
                         <span className="text-xs font-medium text-[#B07552]">{result.match}</span>
                     </div>
@@ -239,11 +239,11 @@ const WorkflowDemo = () => {
     return (
         <div
             ref={containerRef}
-            className={`rounded-xl p-4 h-[200px] border flex items-center justify-center cursor-pointer overflow-hidden relative transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}
+            className={`rounded-xl p-4 h-[200px] min-w-[340px] border flex items-center justify-center cursor-pointer overflow-hidden relative transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
                 {steps.map((step, i) => (
                     <div key={i} className="flex items-center">
                         <motion.div
@@ -331,7 +331,7 @@ const AnalyticsDemo = () => {
     return (
         <div
             ref={containerRef}
-            className={`rounded-xl p-4 h-[200px] border cursor-pointer overflow-hidden relative transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}
+            className={`rounded-xl p-4 h-[200px] border overflow-hidden relative transition-colors ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30' : 'bg-[#f5ece4] border-gray-300'}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
