@@ -121,10 +121,10 @@ const ValueCard = ({
                 />
             </motion.div>
 
-            {/* Content */ }
+            {/* content */ }
             <div className="relative flex flex-col p-7 md:p-8 text-white z-10 min-h-[420px]">
 
-                {/* Top Row */}
+                {/* top Row */}
                 <div className="flex justify-between items-start mb-auto">
                     <motion.div
                         className="p-3.5 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 shadow-lg"
