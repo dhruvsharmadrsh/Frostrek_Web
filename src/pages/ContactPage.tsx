@@ -389,8 +389,7 @@ const InputGroup = ({
   value,
   onChange,
   placeholder,
-  theme,
-  required = true
+  theme
 }: any) => (
     <div className="space-y-2">
         <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{label}</label>
