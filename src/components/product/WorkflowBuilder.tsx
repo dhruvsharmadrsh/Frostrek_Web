@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, MotionValue } from 'framer-motion';
 import {
     Brain,
@@ -45,15 +46,7 @@ const CanvasNode = ({
             transition={{ duration: 0.5, delay: index * 0.2 }}
             className={`absolute top-0 left-0 p-4 w-60 rounded-2xl border shadow-xl group transition-all duration-300 z-20 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30 hover:border-dark-accent hover:shadow-2xl' : 'bg-white border-gray-200 hover:border-brand-green-300 hover:shadow-2xl'}`}
         >
-            {/* Input Port */}
-            {index > 0 && (
-                <div className={`absolute -left-3 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-white ${theme === 'dark' ? 'bg-dark-text-muted' : 'bg-gray-300'}`} />
-            )}
 
-            {/* Output Port */}
-            {index < 2 && (
-                <div className={`absolute -right-3 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-white group-hover:scale-125 transition-transform ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-500'}`} />
-            )}
 
             <div className="flex items-start gap-3">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/30 text-dark-accent group-hover:bg-dark-accent group-hover:text-dark-bg' : 'bg-brand-green-50 border-brand-green-100 text-brand-green-600 group-hover:bg-brand-green-500 group-hover:text-white'}`}>
@@ -82,29 +75,62 @@ const DynamicConnection = ({
     startX, startY, endX, endY, delay,
     startOffset = { x: 240, y: 36 }, // Center-ish of the ports
     endOffset = { x: 0, y: 36 },
-    theme
+    theme,
+    isVertical = false
 }: {
     startX: MotionValue<number>, startY: MotionValue<number>,
     endX: MotionValue<number>, endY: MotionValue<number>,
     delay: number,
     startOffset?: { x: number, y: number },
     endOffset?: { x: number, y: number },
-    theme: string
+    theme: string,
+    isVertical?: boolean
 }) => {
 
-    // Create a transformed motion value string for the path d attribute
-    const pathD = useTransform([startX, startY, endX, endY], ([sx, sy, ex, ey]) => {
-        const sX = (sx as number) + startOffset.x;
-        const sY = (sy as number) + startOffset.y;
-        const eX = (ex as number) + endOffset.x;
-        const eY = (ey as number) + endOffset.y;
+    const [pathD, setPathD] = useState('');
 
-        const midX = (sX + eX) / 2;
-        return `M ${sX} ${sY} C ${midX} ${sY}, ${midX} ${eY}, ${eX} ${eY}`;
-    });
+    useEffect(() => {
+        const updatePath = () => {
+            const sx = startX.get();
+            const sy = startY.get();
+            const ex = endX.get();
+            const ey = endY.get();
+
+            // Adjust offsets based on layout
+            const sOffset = isVertical ? { x: 120, y: 140 } : startOffset; // Bot-Center vs Right-Center
+            const eOffset = isVertical ? { x: 120, y: 0 } : endOffset;     // Top-Center vs Left-Center
+
+            const sX = sx + sOffset.x;
+            const sY = sy + sOffset.y;
+            const eX = ex + eOffset.x;
+            const eY = ey + eOffset.y;
+
+            if (isVertical) {
+                const midY = (sY + eY) / 2;
+                setPathD(`M ${sX} ${sY} C ${sX} ${midY}, ${eX} ${midY}, ${eX} ${eY}`);
+            } else {
+                const midX = (sX + eX) / 2;
+                setPathD(`M ${sX} ${sY} C ${midX} ${sY}, ${midX} ${eY}, ${eX} ${eY}`);
+            }
+        };
+
+        updatePath();
+
+        const unsubscribers = [
+            startX.on('change', updatePath),
+            startY.on('change', updatePath),
+            endX.on('change', updatePath),
+            endY.on('change', updatePath),
+        ];
+
+        return () => unsubscribers.forEach(unsub => unsub());
+    }, [startX, startY, endX, endY, isVertical, startOffset, endOffset]);
 
     return (
-        <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-10">
+        <svg
+            className="absolute inset-0 pointer-events-none z-10"
+            style={{ width: '100%', height: '100%', overflow: 'visible' }}
+        >
             <motion.path
                 d={pathD}
                 fill="none"
@@ -118,9 +144,8 @@ const DynamicConnection = ({
                 strokeWidth="2"
                 strokeLinecap="round"
                 initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, delay }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1.5, delay, ease: "easeInOut" }}
             />
         </svg>
     );
@@ -128,6 +153,11 @@ const DynamicConnection = ({
 
 export const WorkflowBuilder = ({ steps }: { steps: ProductProcessStep[] }) => {
     const { theme } = useTheme();
+    const [zoom, setZoom] = useState(100);
+    const [isVertical, setIsVertical] = useState(false);
+
+    const handleZoomIn = () => setZoom(prev => Math.min(prev + 10, 150));
+    const handleZoomOut = () => setZoom(prev => Math.max(prev - 10, 50));
 
     // Initial positions - Tighter layout to fit container
     const x1 = useMotionValue(20);
@@ -139,13 +169,49 @@ export const WorkflowBuilder = ({ steps }: { steps: ProductProcessStep[] }) => {
     const x3 = useMotionValue(620); // 320 + 240 + 60
     const y3 = useMotionValue(130);
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setIsVertical(true);
+                // Mobile: Vertical Stack
+                // Center-ish align: Screen is usually ~360-400px. Node is 240px.
+                // Left offset ~50-60px looks good.
+                const mobileX = 40;
+
+                x1.set(mobileX);
+                y1.set(50);
+
+                x2.set(mobileX);
+                y2.set(250); // 50 + 160(height?) + gap
+
+                x3.set(mobileX);
+                y3.set(450);
+            } else {
+                setIsVertical(false);
+                // Desktop: Horizontal
+                x1.set(20);
+                y1.set(130);
+
+                x2.set(320);
+                y2.set(60);
+
+                x3.set(620);
+                y3.set(130);
+            }
+        };
+
+        handleResize(); // Initial check
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [x1, y1, x2, y2, x3, y3]);
+
     return (
         <div className="w-full max-w-6xl mx-auto">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className={`rounded-3xl border shadow-2xl overflow-hidden flex flex-col md:flex-row h-[500px] ${theme === 'dark' ? 'bg-dark-navbar border-dark-accent/20' : 'bg-white border-gray-200'}`}
+                className={`rounded-3xl border shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-[500px] ${theme === 'dark' ? 'bg-dark-navbar border-dark-accent/20' : 'bg-white border-gray-200'}`}
             >
                 {/* 1. Sidebar Palette (Static for visual) */}
                 <div className={`w-full md:w-64 border-r p-6 flex flex-col gap-6 relative z-30 ${theme === 'dark' ? 'bg-dark-bg border-dark-accent/20' : 'bg-gray-50 border-gray-200'}`}>
@@ -164,7 +230,7 @@ export const WorkflowBuilder = ({ steps }: { steps: ProductProcessStep[] }) => {
                             <motion.div
                                 key={i}
                                 whileHover={{ x: 5 }}
-                                className={`p-3 border rounded-xl shadow-sm cursor-grab flex items-center gap-3 transition-colors ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20 hover:border-dark-accent' : 'bg-white border-gray-200 hover:border-brand-green-300'}`}
+                                className={`p-3 border rounded-xl shadow-sm flex items-center gap-3 transition-colors ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20 hover:border-dark-accent' : 'bg-white border-gray-200 hover:border-brand-green-300'}`}
                             >
                                 <item.icon className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
                                 <span className={`text-sm font-medium ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>{item.label}</span>
@@ -182,27 +248,31 @@ export const WorkflowBuilder = ({ steps }: { steps: ProductProcessStep[] }) => {
                 </div>
 
                 {/* 2. Main Canvas */}
-                <div className={`flex-1 relative overflow-hidden group cursor-default ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-[#F9FAFB]'}`}>
+                <div className={`flex-1 relative group cursor-default min-h-[650px] md:min-h-0 ${theme === 'dark' ? 'bg-dark-navbar' : 'bg-[#F9FAFB]'}`}>
                     {/* Editor Toolbar (Floating) */}
-                    <div className={`absolute top-6 left-1/2 -translate-x-1/2 backdrop-blur-sm border rounded-full px-4 py-2 shadow-lg flex items-center gap-4 z-30 ${theme === 'dark' ? 'bg-dark-card/90 border-dark-accent/20' : 'bg-white/90 border-gray-200'}`}>
+                    <div className={`absolute bottom-6 md:top-6 md:bottom-auto left-1/2 -translate-x-1/2 backdrop-blur-sm border rounded-full px-4 py-2 shadow-lg flex items-center gap-4 z-30 ${theme === 'dark' ? 'bg-dark-card/90 border-dark-accent/20' : 'bg-white/90 border-gray-200'}`}>
                         <button className={`transition-colors ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-text' : 'text-gray-400 hover:text-gray-900'}`}><MousePointer2 className="w-4 h-4" /></button>
                         <div className={`w-px h-4 ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-gray-200'}`} />
-                        <button className={`transition-colors ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-text' : 'text-gray-400 hover:text-gray-900'}`}><ZoomOut className="w-4 h-4" /></button>
-                        <span className={`text-xs font-mono ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>100%</span>
-                        <button className={`transition-colors ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-text' : 'text-gray-400 hover:text-gray-900'}`}><ZoomIn className="w-4 h-4" /></button>
+                        <button onClick={handleZoomOut} className={`transition-colors ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-text' : 'text-gray-400 hover:text-gray-900'}`}><ZoomOut className="w-4 h-4" /></button>
+                        <span className={`text-xs font-mono min-w-[3ch] text-center ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>{zoom}%</span>
+                        <button onClick={handleZoomIn} className={`transition-colors ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-text' : 'text-gray-400 hover:text-gray-900'}`}><ZoomIn className="w-4 h-4" /></button>
                     </div>
 
                     {/* Nodes and Connections Container */}
-                    <div className="relative w-full h-full">
+                    <motion.div
+                        className="relative w-full h-full origin-center"
+                        animate={{ scale: zoom / 100 }}
+                        transition={{ duration: 0.3 }}
+                    >
                         {/* Dynamic Lines */}
-                        <DynamicConnection startX={x1} startY={y1} endX={x2} endY={y2} delay={0.5} theme={theme} />
-                        <DynamicConnection startX={x2} startY={y2} endX={x3} endY={y3} delay={1.0} theme={theme} />
+                        <DynamicConnection startX={x1} startY={y1} endX={x2} endY={y2} delay={0.5} theme={theme} isVertical={isVertical} />
+                        <DynamicConnection startX={x2} startY={y2} endX={x3} endY={y3} delay={1.0} theme={theme} isVertical={isVertical} />
 
                         {/* Draggable Nodes */}
                         <CanvasNode step={steps[0]} index={0} x={x1} y={y1} icon={Search} theme={theme} />
                         <CanvasNode step={steps[1]} index={1} x={x2} y={y2} icon={Workflow} theme={theme} />
                         <CanvasNode step={steps[2]} index={2} x={x3} y={y3} icon={Zap} theme={theme} />
-                    </div>
+                    </motion.div>
                 </div>
             </motion.div>
         </div>

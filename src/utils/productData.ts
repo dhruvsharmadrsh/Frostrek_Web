@@ -199,6 +199,9 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
             { title: 'Security First', description: 'ISO 27001 and GDPR compliant architecture.', icon: Shield },
             { title: 'Scalable', description: 'Built to handle enterprise-level loads.', icon: Database },
             { title: 'Custom LLMs', description: 'Fine-tune models on your proprietary data.', icon: Brain },
+            { title: 'Real-time Analytics', description: 'Track performance with live dashboards and insights.', icon: BarChart },
+            { title: 'Seamless Integration', description: 'Connect with your existing tools via REST APIs.', icon: Settings },
+            { title: 'Global Reach', description: 'Multi-language support with 40+ locales.', icon: Globe },
         ],
         benefits: [
             { title: 'Future Proof', description: 'Stay ahead of the technology curve.' },

@@ -21,38 +21,32 @@ const FeatureNode = ({
     return (
         <motion.div
             onHoverStart={() => onHover(index)}
-            className={`relative p-6 rounded-2xl border transition-all duration-300 cursor-pointer group w-full ${isActive
-                ? theme === 'dark' ? 'bg-dark-card border-dark-accent shadow-xl shadow-dark-accent/20 z-10' : 'bg-white border-brand-green-200 shadow-xl shadow-brand-green-100 z-10'
+            onClick={() => onHover(index)}
+            className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer group w-full ${isActive
+                ? theme === 'dark' ? 'bg-dark-card border-dark-accent shadow-lg shadow-dark-accent/20 z-10' : 'bg-white border-brand-green-200 shadow-lg shadow-brand-green-100 z-10'
                 : theme === 'dark' ? 'bg-dark-bg/50 border-dark-accent/30 hover:bg-dark-card hover:border-dark-accent/50' : 'bg-white/50 border-gray-100 hover:bg-white hover:border-brand-green-100'
                 }`}
-            whileHover={{ x: 10 }}
+            whileHover={{ x: 5 }}
         >
-            <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-300 ${isActive
+            <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 ${isActive
                     ? 'bg-brand-green-600 text-white'
                     : theme === 'dark' ? 'bg-dark-accent/30 text-dark-accent' : 'bg-brand-green-50 text-brand-green-600'
                     }`}>
-                    {feature.icon && <feature.icon className="w-6 h-6" />}
+                    {feature.icon && <feature.icon className="w-5 h-5" />}
                 </div>
                 <div>
-                    <h4 className={`text-lg font-bold mb-1 transition-colors ${isActive
+                    <h4 className={`text-base font-bold transition-colors ${isActive
                         ? theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
                         : theme === 'dark' ? 'text-dark-text/80' : 'text-gray-600'
                         }`}>
                         {feature.title}
                     </h4>
-                    <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
+                    <p className={`text-xs leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
                         {feature.description}
                     </p>
                 </div>
             </div>
-
-            {/* Active Indicator Beam Start */}
-            {isActive && (
-                <div className="absolute top-1/2 -right-3 w-3 h-3 bg-brand-green-500 rounded-full">
-                    <div className="absolute inset-0 bg-brand-green-500 rounded-full animate-ping" />
-                </div>
-            )}
         </motion.div>
     );
 };
@@ -142,7 +136,7 @@ export const CapabilitiesSystem = ({ features }: { features: ProductFeature[] })
     return (
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
             {/* Left Column - Controls */}
-            <div className="w-full lg:w-5/12 space-y-4">
+            <div className="w-full lg:w-5/12 space-y-2">
                 {features.map((feature, idx) => (
                     <FeatureNode
                         key={idx}
