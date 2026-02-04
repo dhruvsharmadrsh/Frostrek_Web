@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { Users, Brain, Code, Bot, Smartphone, Workflow, CheckCircle, ArrowRight, Sparkles, Zap, Target, Globe, Lock, TrendingUp, Award, Rocket, Star, Layers, MessageCircle, Shield } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useTheme } from '../context/ThemeContext';
@@ -85,18 +85,18 @@ const ServicesPage = () => {
     ];
 
     const coreValues = [
-        { 
-            title: "Trust", 
+        {
+            title: "Trust",
             description: "Building lasting relationships through transparency and reliability",
             icon: Lock,
         },
-        { 
-            title: "Innovation", 
+        {
+            title: "Innovation",
             description: "Pushing boundaries with cutting-edge AI solutions",
             icon: Rocket,
         },
-        { 
-            title: "Collaboration", 
+        {
+            title: "Collaboration",
             description: "Working together as partners in your success",
             icon: Globe,
         }
@@ -104,15 +104,15 @@ const ServicesPage = () => {
 
     // Enhanced parallax effects
     const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-    const y2 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+
     const opacity1 = useTransform(scrollYProgress, [0, 0.3], [0.2, 0]);
 
     // Floating particles animation
     const FloatingParticle = ({ delay = 0, duration = 20, size = 2 }: { delay?: number; duration?: number; size?: number }) => (
         <motion.div
             className="absolute rounded-full"
-            style={{ 
-                backgroundColor: brandColors.primary, 
+            style={{
+                backgroundColor: brandColors.primary,
                 opacity: 0.3,
                 width: size,
                 height: size,
@@ -149,8 +149,8 @@ const ServicesPage = () => {
                 ref={ref}
                 initial={{ opacity: 0, y: 50 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ 
-                    duration: 0.6, 
+                transition={{
+                    duration: 0.6,
                     delay: index * 0.1,
                     ease: "easeOut"
                 }}
@@ -158,7 +158,7 @@ const ServicesPage = () => {
                 onMouseLeave={() => setIsHovered(false)}
                 className={`group relative ${gridClass}`}
             >
-                <div 
+                <div
                     className="relative h-full backdrop-blur-xl border-2 rounded-3xl overflow-hidden transition-all duration-500"
                     style={{
                         backgroundColor: theme === 'dark' ? 'rgba(26, 20, 16, 0.8)' : 'rgba(255, 255, 255, 0.95)',
@@ -168,7 +168,7 @@ const ServicesPage = () => {
                 >
                     {/* Image Section with Better Overlay for Light Theme */}
                     <div className="relative h-52 overflow-hidden">
-                        <motion.img 
+                        <motion.img
                             src={service.image}
                             alt={service.title}
                             className="w-full h-full object-cover"
@@ -179,15 +179,15 @@ const ServicesPage = () => {
                             transition={{ duration: 0.6 }}
                         />
                         {/* FIXED: Minimal overlay for better image visibility in light theme */}
-                        <div 
+                        <div
                             className="absolute inset-0"
                             style={{
-                                background: theme === 'dark' 
+                                background: theme === 'dark'
                                     ? `linear-gradient(to bottom, rgba(26, 20, 16, 0.3) 0%, rgba(26, 20, 16, 0.95) 100%)`
                                     : `linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.75) 100%)`
                             }}
                         />
-                        
+
                         {/* Premium badge */}
                         <motion.div
                             className="absolute top-4 right-4 px-4 py-2 rounded-full text-xs font-bold backdrop-blur-md shadow-lg"
@@ -213,9 +213,9 @@ const ServicesPage = () => {
                             >
                                 <Icon className="w-6 h-6 text-white" />
                             </div>
-                            <span 
+                            <span
                                 className="text-sm font-bold px-3 py-1.5 rounded-full backdrop-blur-md shadow-md"
-                                style={{ 
+                                style={{
                                     color: 'white',
                                     backgroundColor: theme === 'dark' ? `${brandColors.primary}80` : brandColors.primary
                                 }}
@@ -229,7 +229,7 @@ const ServicesPage = () => {
                     <div className="p-6">
                         <div className="relative z-10 flex flex-col">
                             {/* Title */}
-                            <h3 
+                            <h3
                                 className="font-black text-2xl mb-3"
                                 style={{
                                     color: theme === 'dark' ? brandColors.lightest : brandColors.dark,
@@ -237,9 +237,9 @@ const ServicesPage = () => {
                             >
                                 {service.title}
                             </h3>
-                            
+
                             {/* Description */}
-                            <p 
+                            <p
                                 className="leading-relaxed mb-5 text-base"
                                 style={{
                                     color: theme === 'dark' ? 'rgba(245, 230, 211, 0.85)' : 'rgba(44, 36, 22, 0.75)'
@@ -269,10 +269,10 @@ const ServicesPage = () => {
                                     </motion.div>
                                 ))}
                             </div>
-                           <div className="div">
-                            
-                           </div>
-                            
+                            <div className="div">
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -281,8 +281,8 @@ const ServicesPage = () => {
     };
 
     return (
-        <div 
-            ref={containerRef} 
+        <div
+            ref={containerRef}
             className="min-h-screen relative transition-colors overflow-hidden"
             style={{
                 backgroundColor: theme === 'dark' ? brandColors.darkBg : '#FAFAF8'
@@ -296,18 +296,18 @@ const ServicesPage = () => {
             ))}
 
             {/* Hero Section */}
-            <section 
+            <section
                 className="relative pt-32 pb-24 overflow-hidden"
                 style={{
-                    background: theme === 'dark' 
-                        ? brandColors.darkBg 
+                    background: theme === 'dark'
+                        ? brandColors.darkBg
                         : `linear-gradient(to bottom, #FAFAF8, ${brandColors.lightest})`
                 }}
             >
                 {/* Large decorative orbs */}
                 <motion.div
                     className="absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-                    style={{ 
+                    style={{
                         backgroundColor: brandColors.primary,
                         y: y1,
                         opacity: opacity1
@@ -315,7 +315,7 @@ const ServicesPage = () => {
                 />
                 <motion.div
                     className="absolute -top-20 right-0 w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none"
-                    style={{ 
+                    style={{
                         backgroundColor: brandColors.light,
                         opacity: 0.15
                     }}
@@ -360,7 +360,7 @@ const ServicesPage = () => {
                                 >
                                     <Star className="w-5 h-5" style={{ color: brandColors.primary, fill: brandColors.primary }} />
                                 </motion.div>
-                                <span 
+                                <span
                                     className="text-sm font-bold tracking-wide"
                                     style={{ color: brandColors.primary }}
                                 >
@@ -372,7 +372,7 @@ const ServicesPage = () => {
 
                         {/* Hero text - centered */}
                         <div className="text-center mb-12">
-                            <motion.h1 
+                            <motion.h1
                                 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6"
                                 style={{ color: theme === 'dark' ? brandColors.lightest : brandColors.dark }}
                                 initial={{ opacity: 0, y: 20 }}
@@ -381,7 +381,7 @@ const ServicesPage = () => {
                             >
                                 Transform Your Business
                                 <br />
-                                <motion.span 
+                                <motion.span
                                     style={{
                                         backgroundImage: `linear-gradient(90deg, ${brandColors.primary}, ${brandColors.light}, ${brandColors.primary})`,
                                         backgroundSize: '200% auto',
@@ -398,7 +398,7 @@ const ServicesPage = () => {
                                 </motion.span>
                             </motion.h1>
 
-                            <motion.p 
+                            <motion.p
                                 className="text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed"
                                 style={{ color: theme === 'dark' ? 'rgba(245, 230, 211, 0.85)' : 'rgba(44, 36, 22, 0.7)' }}
                                 initial={{ opacity: 0 }}
@@ -432,7 +432,7 @@ const ServicesPage = () => {
                                         className="group text-center"
                                     >
                                         <div className="flex flex-col items-center gap-3">
-                                            <motion.div 
+                                            <motion.div
                                                 className="p-3 rounded-xl"
                                                 style={{
                                                     backgroundImage: `linear-gradient(135deg, ${brandColors.primary}, ${brandColors.light})`
@@ -441,9 +441,9 @@ const ServicesPage = () => {
                                             >
                                                 <StatIcon className="w-6 h-6 text-white" />
                                             </motion.div>
-                                            
+
                                             <div>
-                                                <h3 
+                                                <h3
                                                     className="text-4xl md:text-5xl font-black mb-1"
                                                     style={{
                                                         backgroundImage: `linear-gradient(to right, ${brandColors.primary}, ${brandColors.light})`,
@@ -454,7 +454,7 @@ const ServicesPage = () => {
                                                 >
                                                     {stat.number}
                                                 </h3>
-                                                <p 
+                                                <p
                                                     className="text-sm font-semibold"
                                                     style={{ color: theme === 'dark' ? 'rgba(245, 230, 211, 0.7)' : 'rgba(44, 36, 22, 0.6)' }}
                                                 >
@@ -471,7 +471,7 @@ const ServicesPage = () => {
             </section>
 
             {/* Core Values */}
-            <section 
+            <section
                 className="py-24 relative overflow-hidden"
                 style={{
                     backgroundColor: theme === 'dark' ? 'rgba(26, 20, 16, 0.3)' : 'rgba(255, 255, 255, 0.3)'
@@ -485,12 +485,12 @@ const ServicesPage = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-16"
                     >
-                        <h2 
+                        <h2
                             className="text-4xl md:text-6xl font-black mb-4"
                             style={{ color: theme === 'dark' ? brandColors.lightest : brandColors.dark }}
                         >
                             Built on{' '}
-                            <span 
+                            <span
                                 style={{
                                     backgroundImage: `linear-gradient(to right, ${brandColors.primary}, ${brandColors.light})`,
                                     backgroundClip: 'text',
@@ -515,14 +515,14 @@ const ServicesPage = () => {
                                     transition={{ duration: 0.5, delay: index * 0.2 }}
                                     className="group flex-1"
                                 >
-                                    <motion.div 
+                                    <motion.div
                                         className="relative backdrop-blur-xl border-2 rounded-3xl p-8 overflow-hidden h-full cursor-pointer"
                                         style={{
                                             backgroundColor: theme === 'dark' ? 'rgba(26, 20, 16, 0.9)' : 'rgba(255, 255, 255, 0.95)',
                                             borderColor: `${brandColors.primary}40`
                                         }}
-                                        whileHover={{ 
-                                            y: -12, 
+                                        whileHover={{
+                                            y: -12,
                                             scale: 1.03,
                                             borderColor: brandColors.primary,
                                             boxShadow: `0 25px 50px -12px ${brandColors.primary}50`
@@ -659,12 +659,12 @@ const ServicesPage = () => {
                                         />
 
                                         <div className="relative z-10">
-                                            <motion.div 
+                                            <motion.div
                                                 className="mb-6 inline-block p-4 rounded-2xl shadow-lg transition-all duration-500 group-hover:shadow-2xl"
                                                 style={{
                                                     backgroundImage: `linear-gradient(135deg, ${brandColors.primary}, ${brandColors.light})`,
                                                 }}
-                                                whileHover={{ 
+                                                whileHover={{
                                                     scale: 1.1,
                                                     rotate: [0, -5, 5, 0]
                                                 }}
@@ -672,19 +672,19 @@ const ServicesPage = () => {
                                             >
                                                 <ValueIcon className="w-10 h-10 text-white" />
                                             </motion.div>
-                                            
-                                            <motion.h3 
+
+                                            <motion.h3
                                                 className="text-3xl font-black mb-3 transition-all duration-500"
-                                                style={{ 
+                                                style={{
                                                     color: theme === 'dark' ? brandColors.lightest : brandColors.dark
                                                 }}
                                                 whileHover={{ x: 5 }}
                                             >
                                                 {value.title}
                                             </motion.h3>
-                                            <motion.p 
+                                            <motion.p
                                                 className="text-base leading-relaxed transition-all duration-500"
-                                                style={{ 
+                                                style={{
                                                     color: theme === 'dark' ? 'rgba(245, 230, 211, 0.85)' : 'rgba(44, 36, 22, 0.8)'
                                                 }}
                                             >
@@ -700,11 +700,11 @@ const ServicesPage = () => {
             </section>
 
             {/* Main Services - BENTO GRID LAYOUT */}
-            <section 
+            <section
                 className="py-24 relative"
                 style={{
-                    background: theme === 'dark' 
-                        ? brandColors.darkBg 
+                    background: theme === 'dark'
+                        ? brandColors.darkBg
                         : `linear-gradient(to bottom, #FAFAF8, ${brandColors.lightest})`
                 }}
             >
@@ -716,9 +716,9 @@ const ServicesPage = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-16"
                     >
-                        <motion.div 
+                        <motion.div
                             className="inline-block mb-4"
-                            animate={{ 
+                            animate={{
                                 y: [0, -10, 0],
                             }}
                             transition={{ duration: 2, repeat: Infinity }}
@@ -726,12 +726,12 @@ const ServicesPage = () => {
                             <Rocket className="w-12 h-12" style={{ color: brandColors.primary }} />
                         </motion.div>
 
-                        <h2 
+                        <h2
                             className="text-4xl md:text-6xl font-black mb-4"
                             style={{ color: theme === 'dark' ? brandColors.lightest : brandColors.dark }}
                         >
                             Our Premium{' '}
-                            <span 
+                            <span
                                 style={{
                                     backgroundImage: `linear-gradient(to right, ${brandColors.primary}, ${brandColors.light})`,
                                     backgroundClip: 'text',
@@ -742,7 +742,7 @@ const ServicesPage = () => {
                                 AI Services
                             </span>
                         </h2>
-                        <p 
+                        <p
                             className="text-lg max-w-2xl mx-auto"
                             style={{ color: theme === 'dark' ? 'rgba(245, 230, 211, 0.8)' : 'rgba(44, 36, 22, 0.7)' }}
                         >
@@ -760,7 +760,7 @@ const ServicesPage = () => {
             </section>
 
             {/* Custom Solutions - BENTO GRID WITH IMAGES */}
-            <section 
+            <section
                 className="py-24 relative overflow-hidden"
                 style={{
                     backgroundColor: theme === 'dark' ? 'rgba(26, 20, 16, 0.5)' : 'rgba(255, 255, 255, 0.5)'
@@ -774,12 +774,12 @@ const ServicesPage = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-16"
                     >
-                        <h2 
+                        <h2
                             className="text-4xl md:text-6xl font-black mb-4"
                             style={{ color: theme === 'dark' ? brandColors.lightest : brandColors.dark }}
                         >
                             Specialized{' '}
-                            <span 
+                            <span
                                 style={{
                                     backgroundImage: `linear-gradient(to right, ${brandColors.primary}, ${brandColors.light})`,
                                     backgroundClip: 'text',
@@ -804,19 +804,19 @@ const ServicesPage = () => {
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ 
-                                        duration: 0.5, 
+                                    transition={{
+                                        duration: 0.5,
                                         delay: index * 0.1,
                                         type: "spring",
                                         stiffness: 200
                                     }}
-                                    whileHover={{ 
+                                    whileHover={{
                                         scale: 1.05,
                                         zIndex: 10
                                     }}
                                     className={`group relative ${isLarge ? 'md:col-span-2' : ''}`}
                                 >
-                                    <div 
+                                    <div
                                         className="relative h-full border-2 rounded-2xl overflow-hidden transition-all duration-300"
                                         style={{
                                             backgroundColor: theme === 'dark' ? 'rgba(26, 20, 16, 0.95)' : 'rgba(255, 255, 255, 0.95)',
@@ -826,7 +826,7 @@ const ServicesPage = () => {
                                     >
                                         {/* Background Image with FIXED Better Overlay for Light Theme */}
                                         <div className="absolute inset-0">
-                                            <motion.img 
+                                            <motion.img
                                                 src={solution.image}
                                                 alt={solution.name}
                                                 className="w-full h-full object-cover"
@@ -842,7 +842,7 @@ const ServicesPage = () => {
                                                 transition={{ duration: 0.6 }}
                                             />
                                             {/* FIXED: Minimal overlay for maximum image visibility in light theme */}
-                                            <div 
+                                            <div
                                                 className="absolute inset-0"
                                                 style={{
                                                     background: theme === 'dark'
@@ -853,7 +853,7 @@ const ServicesPage = () => {
                                         </div>
 
                                         {/* Animated glow */}
-                                        <motion.div 
+                                        <motion.div
                                             className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-60 blur-lg -z-10"
                                             style={{
                                                 backgroundColor: solution.color
@@ -867,9 +867,9 @@ const ServicesPage = () => {
                                         {/* Content */}
                                         <div className="relative z-10 p-6 h-full flex flex-col justify-between">
                                             <div className="flex justify-between items-start">
-                                                <motion.div 
+                                                <motion.div
                                                     className="p-3 rounded-xl shadow-xl"
-                                                    style={{ 
+                                                    style={{
                                                         backgroundColor: solution.color,
                                                         boxShadow: `0 10px 30px ${solution.color}40`
                                                     }}
@@ -889,15 +889,15 @@ const ServicesPage = () => {
                                                     transition={{ duration: 8, repeat: Infinity }}
                                                 />
                                             </div>
-                                            
+
                                             <div>
-                                                <h3 
+                                                <h3
                                                     className="font-black text-2xl mb-2"
                                                     style={{ color: solution.color }}
                                                 >
                                                     {solution.name}
                                                 </h3>
-                                                <motion.div 
+                                                <motion.div
                                                     className="h-1 rounded-full"
                                                     style={{ backgroundColor: solution.color }}
                                                     initial={{ width: 0 }}
@@ -916,10 +916,10 @@ const ServicesPage = () => {
             </section>
 
             {/* CTA Section */}
-            <section 
+            <section
                 className="py-32 relative overflow-hidden"
                 style={{
-                    background: theme === 'dark' 
+                    background: theme === 'dark'
                         ? `linear-gradient(135deg, ${brandColors.darkBg}, ${brandColors.dark})`
                         : `linear-gradient(135deg, ${brandColors.lightest}, ${brandColors.lighter})`
                 }}
@@ -943,9 +943,9 @@ const ServicesPage = () => {
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
                         >
-                            <motion.div 
+                            <motion.div
                                 className="flex justify-center mb-8"
-                                animate={{ 
+                                animate={{
                                     scale: [1, 1.2, 1],
                                     rotate: [0, 180, 360]
                                 }}
@@ -954,27 +954,27 @@ const ServicesPage = () => {
                                 <Sparkles className="w-20 h-20" style={{ color: brandColors.primary }} />
                             </motion.div>
 
-                            <h2 
+                            <h2
                                 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6"
                                 style={{ color: theme === 'dark' ? brandColors.lightest : brandColors.dark }}
                             >
                                 Ready to Build the Future?
                             </h2>
 
-                            <p 
+                            <p
                                 className="text-xl md:text-2xl mb-12"
                                 style={{ color: theme === 'dark' ? 'rgba(245, 230, 211, 0.85)' : 'rgba(44, 36, 22, 0.7)' }}
                             >
                                 Let's create intelligent, scalable AI solutions tailored to your vision.
                             </p>
-                            
+
                             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                                 <motion.button
                                     className="px-10 py-5 text-lg font-bold rounded-2xl transition-all duration-300 shadow-lg inline-flex items-center gap-3 text-white"
                                     style={{
                                         backgroundImage: `linear-gradient(to right, ${brandColors.primary}, ${brandColors.light})`
                                     }}
-                                    whileHover={{ 
+                                    whileHover={{
                                         scale: 1.05,
                                         boxShadow: `0 25px 50px ${brandColors.primary}60`
                                     }}
@@ -996,7 +996,7 @@ const ServicesPage = () => {
                                         color: brandColors.primary,
                                         backgroundColor: 'transparent'
                                     }}
-                                    whileHover={{ 
+                                    whileHover={{
                                         scale: 1.05,
                                         backgroundColor: `${brandColors.primary}10`
                                     }}
@@ -1008,7 +1008,7 @@ const ServicesPage = () => {
                             </div>
 
                             {/* Trust badges */}
-                            <motion.div 
+                            <motion.div
                                 className="mt-16 flex justify-center gap-8 flex-wrap"
                                 initial={{ opacity: 0 }}
                                 whileInView={{ opacity: 1 }}
@@ -1024,7 +1024,7 @@ const ServicesPage = () => {
                                     return (
                                         <div key={idx} className="flex items-center gap-2">
                                             <BadgeIcon className="w-5 h-5" style={{ color: brandColors.primary }} />
-                                            <span 
+                                            <span
                                                 className="text-sm font-semibold"
                                                 style={{ color: theme === 'dark' ? 'rgba(245, 230, 211, 0.7)' : 'rgba(44, 36, 22, 0.6)' }}
                                             >
