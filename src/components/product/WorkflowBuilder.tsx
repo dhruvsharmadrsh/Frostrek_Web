@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { motion, useMotionValue, useTransform, MotionValue } from 'framer-motion';
+import { motion, useMotionValue, MotionValue } from 'framer-motion';
 import {
     Brain,
     Workflow,

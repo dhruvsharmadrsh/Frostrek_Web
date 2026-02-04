@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { ProductStatistic } from '../../utils/productData';
-import { LayoutDashboard, BarChart3, PieChart, Settings, ArrowUpRight, Activity } from 'lucide-react';
+import { LayoutDashboard, BarChart3, PieChart, ArrowUpRight, Activity } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 // Reusable Circular Progress for Percentages
