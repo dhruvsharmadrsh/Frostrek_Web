@@ -162,7 +162,7 @@ const Footer = () => {
       {/* Footer */}
       <footer
         ref={footerRef}
-        className={`border-t py-8 transition-colors duration-300 ${isVisible ? 'footer-revealed' : 'opacity-0'} ${theme === 'dark' ? 'bg-dark-navbar border-dark-accent/20' : 'bg-gradient-to-b from-white to-gray-50 border-gray-200'}`}
+        className={`border-t pt-8 pb-4 transition-colors duration-300 ${isVisible ? 'footer-revealed' : 'opacity-0'} ${theme === 'dark' ? 'bg-dark-navbar border-dark-accent/20' : 'bg-gradient-to-b from-white to-gray-50 border-gray-200'}`}
       >
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-6">
@@ -271,7 +271,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className={`text-center pt-8 border-t ${theme === 'dark' ? 'border-dark-accent/10' : 'border-gray-200'} text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>
+          <div className={`text-center pt-4 border-t ${theme === 'dark' ? 'border-dark-accent/10' : 'border-gray-200'} text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>
             &copy; {currentYear} {COMPANY_INFO.name}. All rights reserved.
           </div>
 

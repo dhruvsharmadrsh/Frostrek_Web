@@ -340,12 +340,12 @@ const Chatbot: React.FC = () => {
                     zIndex: 10000,
                     backgroundColor: isOpen ? '#f0f0f0' : COLORS.primary,
                 }}
-                className={`p-3 rounded-full shadow-2xl transition-all duration-300 ai-copilot-button ${isOpen ? 'rotate-90' : ''}`}
+                className={`p-2 rounded-full shadow-2xl transition-all duration-300 ai-copilot-button ${isOpen ? 'rotate-90' : ''}`}
             >
                 {isOpen ? (
                     <X className="w-6 h-6" style={{ color: COLORS.text }} />
                 ) : (
-                    <div className="w-12 h-12 relative flex items-center justify-center overflow-hidden">
+                    <div className="w-10 h-10 relative flex items-center justify-center overflow-hidden">
                         <img
                             src="/robo2.gif"
                             alt="Chat"

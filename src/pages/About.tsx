@@ -885,6 +885,54 @@ const About = () => {
 
     const [activeOffice, setActiveOffice] = useState<number>(0);
     const [flippedCard, setFlippedCard] = useState<number | null>(null);
+    const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+    const dotsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         dotsRef.current.forEach((dot, index) => {
+    //             if (!dot) return;
+
+    //             const rect = dot.getBoundingClientRect();
+    //             const windowCenter = window.innerHeight / 2;
+
+    //             if (rect.top <= windowCenter && rect.bottom >= windowCenter) {
+    //                 setActiveImageIndex(index);
+    //             }
+    //         });
+    //     };
+
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => window.removeEventListener('scroll', handleScroll);
+    // }, []);
+
+    useEffect(() => {
+        const observers: IntersectionObserver[] = [];
+
+        dotsRef.current.forEach((dot, index) => {
+            if (!dot) return;
+
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    if (entry.isIntersecting) {
+                        setActiveImageIndex(index);
+                    }
+                },
+                {
+                    root: null,
+                    rootMargin: "-45% 0px -45% 0px", 
+                    threshold: 0
+                }
+            );
+
+            observer.observe(dot);
+            observers.push(observer);
+        });
+
+        return () => {
+            observers.forEach(obs => obs.disconnect());
+        };
+    }, []);
 
 
     const texts = useMemo(() => ['Intelligent Systems', 'Agentic AI', 'Machine Learning', 'Neural Networks'], []);
@@ -1202,74 +1250,101 @@ const About = () => {
                         {/* Vertical Line */}
                         <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-green-500/0 via-brand-green-500/50 to-brand-green-500/0 md:-translate-x-1/2"></div>
 
-                        {TIMELINE_DATA.map((item, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-50px" }}
-                                transition={{ delay: i * 0.1, duration: 0.5 }}
-                                className={`relative flex items-center gap-8 mb-16 last:mb-0 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
-                            >
-                                {/* Timeline Dot (Center) */}
-                                <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-brand-green-500 shadow-[0_0_0_4px_rgba(176,117,82,0.2)] z-10 md:-translate-x-1/2 translate-x-[-7px] md:translate-x-[-8px]">
-                                    <div className="absolute inset-0 bg-brand-green-400 animate-ping rounded-full opacity-75"></div>
-                                </div>
+                        {TIMELINE_DATA.map((item, i) => {
+                            const isActive = activeImageIndex === i;
 
-                                {/* Content Card */}
-                                <div
-                                    className={`ml-12 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pr-16 text-left md:text-right' : 'md:pl-16 text-left'}`}
+                            return (
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-50px" }}
+                                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                                    className={`relative flex items-center gap-8 mb-16 last:mb-0 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                                 >
-                                    <motion.div
-                                        className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 cursor-pointer"
-                                        whileHover={{
-                                            y: -4,
-                                            borderColor: item.color.border,
-                                            boxShadow: `0 10px 30px -10px ${item.color.shadow}`
+                                    {/* Timeline Dot with Ref */}
+                                    <div
+                                        ref={(el) => {
+                                            if (el) dotsRef.current[i] = el;
                                         }}
-                                        transition={{ duration: 0.2 }}
+                                        className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-brand-green-500 shadow-[0_0_0_4px_rgba(176,117,82,0.2)] z-10 md:-translate-x-1/2 translate-x-[-7px] md:translate-x-[-8px]"
                                     >
-                                        <div className={`flex flex-col gap-3 ${i % 2 === 0 ? 'md:items-end' : 'md:items-start'}`}>
-                                            <div className="flex items-center gap-3 mb-1">
-                                                <span className={`px-3 py-1 ${item.color.bg} ${item.color.text} rounded-full text-sm font-bold shadow-sm`}>
-                                                    {item.year}
-                                                </span>
-                                                <item.icon className={`w-5 h-5 ${item.color.iconColor} ${i % 2 === 0 ? 'md:order-first' : ''}`} />
-                                            </div>
-                                            <h3 className="text-2xl font-bold text-gray-900">{item.title}</h3>
-                                            <p className="text-gray-600 leading-relaxed font-medium">
-                                                {item.description}
-                                            </p>
-                                        </div>
-                                    </motion.div>
-                                </div>
+                                        {/* Pulsing effect when active */}
+                                        {isActive && (
+                                            <motion.div
+                                                className="absolute inset-0 bg-brand-green-400 rounded-full"
+                                                animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
+                                                transition={{ duration: 1.5, repeat: Infinity }}
+                                            />
+                                        )}
+                                    </div>
 
-                                {/* Image display area - always visible on scroll */}
-                                <div className={`hidden md:flex md:w-1/2 items-center ${i % 2 === 0 ? 'md:pl-16 justify-start' : 'md:pr-16 justify-end'}`}>
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.2 + (i * 0.1) }}
-                                        className="relative overflow-hidden rounded-2xl shadow-2xl"
-                                        style={{ boxShadow: `0 25px 50px -12px ${item.color.shadow}` }}
+                                    {/* Content Card */}
+                                    <div
+                                        className={`ml-12 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pr-16 text-left md:text-right' : 'md:pl-16 text-left'}`}
                                     >
-                                        <img
-                                            src={item.image}
-                                            alt={item.title}
-                                            className="w-[300px] h-[200px] object-cover"
-                                            loading="lazy"
-                                        />
-                                        <div
-                                            className="absolute inset-0 pointer-events-none"
-                                            style={{
-                                                background: `linear-gradient(135deg, ${item.color.border}20 0%, transparent 50%)`
+                                        <motion.div
+                                            className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 cursor-pointer"
+                                            whileHover={{
+                                                y: -4,
+                                                borderColor: item.color.border,
+                                                boxShadow: `0 10px 30px -10px ${item.color.shadow}`
                                             }}
-                                        />
-                                    </motion.div>
-                                </div>
-                            </motion.div>
-                        ))}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            <div className={`flex flex-col gap-3 ${i % 2 === 0 ? 'md:items-end' : 'md:items-start'}`}>
+                                                <div className="flex items-center gap-3 mb-1">
+                                                    <span className={`px-3 py-1 ${item.color.bg} ${item.color.text} rounded-full text-sm font-bold shadow-sm`}>
+                                                        {item.year}
+                                                    </span>
+                                                    <item.icon className={`w-5 h-5 ${item.color.iconColor} ${i % 2 === 0 ? 'md:order-first' : ''}`} />
+                                                </div>
+                                                <h3 className="text-2xl font-bold text-gray-900">{item.title}</h3>
+                                                <p className="text-gray-600 leading-relaxed font-medium">
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    </div>
+
+                                    {/* IMAGE DISPLAY - ONLY WHEN DOT IS AT CENTER */}
+                                    <div className={`hidden md:flex md:w-1/2 items-center ${i % 2 === 0 ? 'md:pl-16 justify-start' : 'md:pr-16 justify-end'}`}>
+                                        <AnimatePresence mode="wait">
+                                            {isActive && (
+                                                <motion.div
+                                                    key={i}
+                                                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                    exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                                                    transition={{ duration: 0.5, ease: "easeOut" }}
+                                                    className="relative overflow-hidden rounded-2xl shadow-2xl w-[300px] h-[200px]"
+                                                    style={{
+                                                        boxShadow: `0 25px 50px -12px ${item.color.shadow}`
+                                                    }}
+                                                >
+                                                    <motion.img
+                                                        src={item.image}
+                                                        alt={item.title}
+                                                        className="w-full h-full object-cover"
+                                                        loading="lazy"
+                                                        initial={{ scale: 1.05 }}
+                                                        animate={{ scale: 1 }}
+                                                        transition={{ duration: 0.6 }}
+                                                    />
+                                                    {/* Gradient overlay */}
+                                                    <div
+                                                        className="absolute inset-0 pointer-events-none"
+                                                        style={{
+                                                            background: `linear-gradient(135deg, ${item.color.border}15 0%, transparent 50%)`
+                                                        }}
+                                                    />
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>

@@ -62,7 +62,7 @@ const Header = () => {
                             <Link
                                 to={item.href}
                                 className={cn(
-                                    "flex items-center gap-1 text-sm font-semibold transition-colors py-2",
+                                    "flex items-center gap-1 text-sm font-semibold transition-colors py-2 relative",
                                     theme === 'dark'
                                         ? "text-dark-text/80 hover:text-dark-accent"
                                         : "text-background hover:text-primary",
@@ -71,6 +71,18 @@ const Header = () => {
                             >
                                 {item.label}
                                 {item.megaMenu && <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />}
+                                {location.pathname === item.href && (
+                                    <motion.div
+                                        layoutId="navbar-active"
+                                        className={cn(
+                                            "absolute bottom-0 left-0 right-0 h-0.5 rounded-full",
+                                            theme === 'dark' ? "bg-dark-accent" : "bg-[#8A5A35]"
+                                        )}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.3 }}
+                                    />
+                                )}
                             </Link>
 
                             {/* Mega Menu */}
