@@ -6,6 +6,7 @@ import { NAV_ITEMS } from '../../utils/constants';
 import Button from '../ui/Button';
 import { cn } from '../../utils/cn';
 import MegaMenu from './MegaMenu';
+import ThemeToggle from '../ui/ThemeToggle';
 import { useTheme } from '../../context/ThemeContext';
 
 
@@ -109,24 +110,7 @@ const Header = () => {
                     </Link>
 
                     {/* Theme Toggle Button */}
-                    <button
-                        onClick={toggleTheme}
-                        className={cn(
-                            "p-2 rounded-full transition-all duration-300 hover:scale-110",
-                            theme === 'dark'
-                                ? "bg-dark-card text-dark-accent hover:bg-dark-accent/20"
-                                : "bg-white/20 text-background hover:bg-white/30"
-                        )}
-                        aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-                    >
-                        <motion.div
-                            initial={false}
-                            animate={{ rotate: theme === 'dark' ? 360 : 0 }}
-                            transition={{ duration: 0.5, ease: 'easeInOut' }}
-                        >
-                            <Palette size={20} />
-                        </motion.div>
-                    </button>
+                    <ThemeToggle />
                 </div>
 
                 {/* Mobile Menu Toggle */}

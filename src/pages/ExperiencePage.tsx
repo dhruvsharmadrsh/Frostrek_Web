@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Phone, MessageSquare, Sparkles, Zap } from 'lucide-react';
 import VoiceCallWidget from '../components/experience/VoiceCallWidget';
 import ChatbotDemo from '../components/experience/ChatbotDemo';
+import LinkedinOutreachDemo from '../components/demos/LinkedinOutreachDemo';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useTheme } from '../context/ThemeContext';
 import CTASection from '../components/home/CTASection';
@@ -44,7 +45,8 @@ const ExperiencePage = () => {
 
             {/* Demo Cards Section */}
             <section className="relative pb-24 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-6xl mx-auto space-y-16">
+                    {/* Top Row: Voice & Chat */}
                     <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
                         {/* Voice AI Card */}
                         <motion.div
@@ -110,6 +112,29 @@ const ExperiencePage = () => {
                             </div>
                         </motion.div>
                     </div>
+
+                    {/* LinkedIn Outreach Demo (Full Width) */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="w-full"
+                    >
+                        <div className="mb-8 text-center lg:text-left">
+                            <span className="inline-block py-1 px-3 rounded-full bg-[#0077B5]/10 text-[#0077B5] text-xs font-bold tracking-wide mb-3">
+                                NEW PLAYGROUND
+                            </span>
+                            <h2 className={`text-3xl font-bold font-heading mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>
+                                LinkedIn Outreach Automation
+                            </h2>
+                            <p className={`max-w-2xl ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                                See how our agents scrape, identify, and extract verified leads from LinkedIn in real-time.
+                            </p>
+                        </div>
+
+                        <LinkedinOutreachDemo />
+                    </motion.div>
                 </div>
             </section>
 
