@@ -5,11 +5,12 @@ import { LayoutDashboard, BarChart3, PieChart, ArrowUpRight, Activity } from 'lu
 import { useTheme } from '../../context/ThemeContext';
 
 // Color palette for metrics - clean pie chart colors
+// Color palette for metrics - Frostrek Earthy/Bronze Theme
 const METRIC_COLORS = [
-    { fill: '#4A6FA5', light: '#C5D5E8', name: 'blue' },       // Blue (like reference)
-    { fill: '#5B8A72', light: '#B8D4C8', name: 'teal' },       // Teal/Green
-    { fill: '#E8A849', light: '#F5DDB8', name: 'amber' },      // Amber/Gold  
-    { fill: '#8B6B9E', light: '#D4C5DB', name: 'purple' },     // Purple
+    { fill: '#B07552', light: '#F2E8DF', darkBg: 'rgba(176, 117, 82, 0.2)', name: 'bronze' },  // Main Bronze
+    { fill: '#D4BB75', light: '#FAF5E6', darkBg: 'rgba(212, 187, 117, 0.2)', name: 'gold' },    // Gold/Sand
+    { fill: '#8A5A35', light: '#EDE4DD', darkBg: 'rgba(138, 90, 53, 0.2)', name: 'earth' },   // Deep Earth
+    { fill: '#A89A8A', light: '#F0EFEB', darkBg: 'rgba(168, 154, 138, 0.2)', name: 'stone' },   // Muted Stone
 ];
 
 // Clean Filled Pie Chart Component
@@ -62,8 +63,8 @@ const CircularProgress = ({ value, label, delay, theme, index = 0 }: { value: st
                         cx={center}
                         cy={center}
                         r={radius}
-                        fill={colors.light}
-                        stroke={theme === 'dark' ? '#555' : '#999'}
+                        fill={theme === 'dark' ? colors.darkBg : colors.light}
+                        stroke={theme === 'dark' ? '#444' : '#E5E7EB'}
                         strokeWidth="0.5"
                     />
 
