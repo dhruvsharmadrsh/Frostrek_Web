@@ -8,6 +8,8 @@ import { useTheme } from '../context/ThemeContext';
 // Extracted constant for optimization
 const HEADLINE_WORDS = ['Accelerate', 'growth', 'at', 'the', 'new', 'speed', 'of', 'business'];
 import CTASection from '../components/home/CTASection';
+import { useNavigate } from 'react-router-dom';
+
 
 // ============ TEAM DATA ============
 const TEAM_DATA = [
@@ -485,7 +487,6 @@ const ScrollIndicator = memo(() => (
 ));
 
 // ============ TEAM FLIP CARD ============
-// ============ TEAM FLIP CARD ============
 const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; delay: number }) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
@@ -877,6 +878,7 @@ const fadeUp = { hidden: { opacity: 0, y: 25 }, visible: { opacity: 1, y: 0, tra
 
 // ============ MAIN COMPONENT ============
 const About = () => {
+    const navigate = useNavigate();
     const { theme } = useTheme();
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: ref });
@@ -1067,20 +1069,26 @@ const About = () => {
                             transition={{ delay: 0.5 }}
                             className="flex flex-wrap gap-4 justify-center"
                         >
-                            <MagneticButton variant="primary" className="px-8 py-4" onClick={() => document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })}>
-                                <span className="flex items-center gap-2">Get Started <ArrowRight className="w-5 h-5" /></span>
-                            </MagneticButton>
+                            <MagneticButton
+                                variant="primary"
+                                className="px-8 py-4"
+                                onClick={() => navigate('/contact')}
+                                >
+                                <span className="flex items-center gap-2">
+                                    Get Started <ArrowRight className="w-5 h-5" />
+                                </span>
+                                </MagneticButton>
                             <MagneticButton variant="secondary" className="px-8 py-4" onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}>
                                 Learn More
                             </MagneticButton>
                         </motion.div>
                     </motion.div>
                 </div>
-                <ScrollIndicator />
+                {/* <ScrollIndicator /> */}
             </motion.section>
 
             {/* ===== TECH STACK ===== */}
-            <section className="py-12">
+            <section className="">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-wrap justify-center gap-8">
                         {tech.map((t, i) => <TechIcon key={i} icon={t.icon} label={t.label} delay={i * 0.1} />)}
@@ -1605,16 +1613,19 @@ const About = () => {
                 </div>
             </section>
 
-            {/* ===== GLOBAL PRESENCE ===== */}
+           {/* ===== GLOBAL PRESENCE ===== */}
             <section className={`py-16 md:py-24 relative overflow-hidden ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-white via-slate-50/50 to-white'}`}>
-                {/* Decorative background elements */}
+                
+                {/* Decorative background */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     <div className={`absolute top-20 -left-20 w-96 h-96 rounded-full blur-3xl opacity-20 ${theme === 'dark' ? 'bg-brand-green-500' : 'bg-brand-green-200'}`} />
                     <div className={`absolute bottom-20 -right-20 w-96 h-96 rounded-full blur-3xl opacity-20 ${theme === 'dark' ? 'bg-brand-yellow-500' : 'bg-brand-yellow-200'}`} />
                 </div>
 
                 <div className="container mx-auto px-4 relative z-10">
-                    <motion.div 
+                    
+                    {/* Header */}
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -1629,228 +1640,127 @@ const About = () => {
                             <Globe className="inline w-4 h-4 mr-2" />
                             Our Locations
                         </motion.span>
+
                         <h2 className={`text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r ${theme === 'dark' ? 'from-dark-text to-dark-text-muted' : 'from-gray-900 to-gray-700'} bg-clip-text text-transparent`}>
                             Global Presence
                         </h2>
+
                         <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
-                            Worldwide enterprise support across 6 continents with 24/7 availability
+                            Serving enterprises across three continents
                         </p>
                     </motion.div>
 
-                    <div className="max-w-[1600px] mx-auto">
-                        <div className="grid lg:grid-cols-[1fr_1.5fr_1fr] gap-8 items-stretch">
-                            {/* Left - Office Tabs */}
-                            <motion.div 
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                className="flex flex-col justify-center space-y-4"
-                            >
-                                {offices.map((o, i) => (
-                                    <motion.div
-                                        key={i}
-                                        className={`group relative flex items-center gap-4 px-6 py-5 rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden ${
-                                            activeOffice === i
-                                                ? theme === 'dark'
-                                                    ? 'bg-dark-card shadow-2xl border-2 border-brand-green-500/50'
-                                                    : 'bg-white shadow-2xl border-2 border-brand-green-500'
-                                                : theme === 'dark'
-                                                    ? 'bg-dark-card/50 hover:bg-dark-card border-2 border-transparent hover:border-brand-green-500/20'
-                                                    : 'bg-white/80 hover:bg-white border-2 border-transparent hover:border-brand-green-100 hover:shadow-lg'
-                                        }`}
-                                        onClick={() => setActiveOffice(i)}
-                                        whileHover={{ x: 8, scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                    >
-                                        {/* Gradient background on active */}
-                                        {activeOffice === i && (
-                                            <motion.div
-                                                className="absolute inset-0 bg-gradient-to-r from-brand-green-500/5 to-brand-yellow-500/5"
-                                                layoutId="activeBackground"
-                                            />
-                                        )}
-                                        
-                                        {/* Flag with border */}
-                                        <div className="relative flex-shrink-0">
-                                            <img
-                                                src={o.flagImg}
-                                                alt={`${o.country} flag`}
-                                                className="w-14 h-10 object-cover rounded-lg shadow-md ring-2 ring-white/50"
-                                            />
-                                            {activeOffice === i && (
-                                                <motion.div
-                                                    className="absolute -top-1 -right-1 w-3 h-3 bg-brand-green-500 rounded-full border-2 border-white"
-                                                    initial={{ scale: 0 }}
-                                                    animate={{ scale: 1 }}
-                                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                                />
-                                            )}
-                                        </div>
-                                        
-                                        <div className="flex-1 relative z-10">
-                                            <div className={`text-lg font-bold transition-colors ${
-                                                activeOffice === i 
-                                                    ? 'text-brand-green-600' 
-                                                    : theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
-                                            }`}>
-                                                {o.city}
-                                            </div>
-                                            <div className={`text-sm font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
-                                                {o.country}
-                                            </div>
-                                        </div>
-                                        
-                                        <ArrowRight 
-                                            className={`w-5 h-5 transition-all ${
-                                                activeOffice === i 
-                                                    ? 'text-brand-green-500 translate-x-1' 
-                                                    : theme === 'dark' ? 'text-dark-text-muted opacity-0 group-hover:opacity-100' : 'text-gray-400 opacity-0 group-hover:opacity-100'
-                                            }`} 
-                                        />
-                                    </motion.div>
-                                ))}
-                            </motion.div>
-
-                            {/* Center - Landmark Image */}
-                            <motion.div 
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                className="h-full min-h-[500px] lg:min-h-[600px]"
-                            >
+                    {/* Main Grid */}
+                    <div className="max-w-[1400px] mx-auto">
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {offices.map((o, i) => (
                                 <motion.div
-                                    className={`relative h-full rounded-3xl overflow-hidden shadow-2xl border-4 ${theme === 'dark' ? 'border-dark-card' : 'border-white'}`}
-                                    key={activeOffice}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.5, type: "spring" }}
-                                >
-                                    <img
-                                        src={offices[activeOffice].image}
-                                        alt={offices[activeOffice].city}
-                                        className="w-full h-full object-cover"
-                                    />
-                                    {/* Enhanced gradient overlays */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                                    <div className="absolute inset-0 bg-gradient-to-br from-brand-green-500/10 to-brand-yellow-500/10" />
-                                    
-                                    {/* Location badge */}
-                                    <motion.div
-                                        className="absolute bottom-6 left-6 right-6"
-                                        initial={{ y: 20, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.2 }}
-                                    >
-                                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-green-500 to-brand-green-600 flex items-center justify-center">
-                                                    <MapPin className="w-6 h-6 text-white" />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="text-sm font-semibold text-brand-green-600 uppercase tracking-wide">Now Viewing</div>
-                                                    <div className="text-lg font-bold text-gray-900">{offices[activeOffice].city}, {offices[activeOffice].country}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                </motion.div>
-                            </motion.div>
-
-                            {/* Right - Office Info Card */}
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                            >
-                                <motion.div
-                                    className={`rounded-3xl p-8 shadow-2xl h-full flex flex-col justify-between border-2 ${
-                                        theme === 'dark' 
-                                            ? 'bg-dark-card border-dark-accent/20' 
-                                            : 'bg-white border-gray-100'
+                                    key={i}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.1 }}
+                                    className={`group relative rounded-2xl overflow-hidden shadow-xl cursor-pointer h-[470px] w-[92%] mx-auto ${
+                                        theme === 'dark' ? 'bg-dark-card' : 'bg-white'
                                     }`}
-                                    key={`info-${activeOffice}`}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.4, delay: 0.1 }}
+                                    onClick={() => setActiveOffice(i)}
                                 >
-                                    <div>
-                                        <div className="flex items-center gap-3 mb-8">
-                                            <div className="w-2 h-12 bg-gradient-to-b from-brand-green-500 to-brand-yellow-500 rounded-full" />
-                                            <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
-                                                {offices[activeOffice].companyName}
-                                            </h3>
-                                        </div>
+                                    {/* Image with Hover Overlay ONLY on Image */}
+                                <motion.div className="h-[70%] overflow-hidden relative group">
 
-                                        <div className="space-y-4">
-                                            {/* Address Card */}
-                                            <motion.div 
-                                                className={`group p-5 rounded-2xl transition-all duration-300 border-2 ${
-                                                    theme === 'dark'
-                                                        ? 'bg-dark-bg/50 border-dark-accent/20 hover:border-brand-green-500/50 hover:bg-dark-bg'
-                                                        : 'bg-gradient-to-br from-gray-50 to-white border-gray-200 hover:border-brand-green-300 hover:shadow-md'
-                                                }`}
-                                                whileHover={{ x: 4 }}
-                                            >
-                                                <div className="flex gap-4">
-                                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-green-500 to-brand-green-600 flex items-center justify-center flex-shrink-0 shadow-lg">
-                                                        <MapPin className="w-6 h-6 text-white" />
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <div className="text-xs text-brand-green-600 font-bold mb-2 uppercase tracking-wider">Address</div>
-                                                        <div className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-700'}`}>
-                                                            {offices[activeOffice].address}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
+                                    <motion.img
+                                        src={o.image}
+                                        alt={o.city}
+                                        className="w-full h-full object-cover"
+                                        whileHover={{ scale: 1.05 }}
+                                        transition={{ duration: 0.4 }}
+                                    />
 
-                                            {/* Contact Card */}
-                                            <motion.div 
-                                                className={`group p-5 rounded-2xl transition-all duration-300 border-2 ${
-                                                    theme === 'dark'
-                                                        ? 'bg-dark-bg/50 border-dark-accent/20 hover:border-brand-yellow-500/50 hover:bg-dark-bg'
-                                                        : 'bg-gradient-to-br from-gray-50 to-white border-gray-200 hover:border-brand-yellow-300 hover:shadow-md'
-                                                }`}
-                                                whileHover={{ x: 4 }}
-                                            >
-                                                <div className="flex gap-4">
-                                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-yellow-500 to-brand-yellow-600 flex items-center justify-center flex-shrink-0 shadow-lg">
-                                                        <Phone className="w-6 h-6 text-white" />
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <div className="text-xs text-brand-yellow-600 font-bold mb-2 uppercase tracking-wider">Contact</div>
-                                                        <div className={`text-sm font-semibold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
-                                                            {offices[activeOffice].phone}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                        </div>
-                                    </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
-                                    {/* Get Directions Button */}
-                                    <motion.a
-                                        href={offices[activeOffice].mapUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`mt-8 w-full py-4 px-6 font-bold rounded-xl flex items-center justify-center gap-3 shadow-lg transition-all uppercase tracking-wider text-sm relative overflow-hidden group ${
-                                            theme === 'dark'
-                                                ? 'bg-gradient-to-r from-brand-green-600 to-brand-green-500 hover:from-brand-green-500 hover:to-brand-green-400 text-white'
-                                                : 'bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 text-white'
-                                        }`}
-                                        whileHover={{ scale: 1.02, y: -2 }}
-                                        whileTap={{ scale: 0.98 }}
+                                    {/* Hover Overlay - NOW CENTERED ONLY ON IMAGE */}
+                                    <motion.div
+                                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                        initial={{ opacity: 0 }}
+                                        whileHover={{ opacity: 1 }}
                                     >
-                                        <span className="relative z-10">GET DIRECTIONS</span>
-                                        <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-                                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                                    </motion.a>
+                                        <div
+                                            className={`m-6 p-5 rounded-xl w-[88%] max-w-[320px] shadow-xl backdrop-blur-md ${
+                                                theme === 'dark'
+                                                    ? 'bg-dark-card/95 border border-white/10'
+                                                    : 'bg-white/95 border border-gray-100'
+                                            }`}
+                                        >
+                                            <p className={`text-sm mb-3 text-center ${
+                                                theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'
+                                            }`}>
+                                                {o.address}
+                                            </p>
+
+                                            <p className={`font-semibold mb-4 text-center ${
+                                                theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
+                                            }`}>
+                                                {o.phone}
+                                            </p>
+
+                                            <div className="flex justify-center">
+                                                <motion.a
+                                                    href={o.mapUrl}
+                                                    target="_blank"
+                                                    className="px-5 py-2 bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white rounded-lg font-semibold text-sm"
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                >
+                                                    Get Directions
+                                                </motion.a>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+
                                 </motion.div>
-                            </motion.div>
+
+                                {/* Info Section - Unaffected */}
+                                <div className="h-[26%] p-5 flex flex-col justify-between">
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <img src={o.flagImg} alt="flag" className="w-6 h-4 rounded" />
+                                            <span className={`text-xs font-bold uppercase tracking-wider ${
+                                                theme === 'dark' ? 'text-brand-green-400' : 'text-brand-green-600'
+                                            }`}>
+                                                {o.name}
+                                            </span>
+                                        </div>
+
+                                        <h3 className={`text-xl font-bold ${
+                                            theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
+                                        }`}>
+                                            {o.city}
+                                        </h3>
+
+                                        <p className={`text-sm ${
+                                            theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'
+                                        }`}>
+                                            {o.country}
+                                        </p>
+                                    </div>
+                                    {/* MOBILE ONLY BUTTON */}
+                            <div className="lg:hidden mt-2">
+                                <a
+                                    href={o.mapUrl}
+                                    target="_blank"
+                                    className="block w-full text-center px-4 py-2 bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white rounded-lg font-semibold text-sm"
+                                >
+                                    Get Directions
+                                </a>
+                            </div>
+                                </div>
+                                </motion.div>
+                            ))}
                         </div>
                     </div>
                 </div>
             </section>
+
 
             {/* ===== CTA ===== */}
             {/* ===== CTA ===== */}
