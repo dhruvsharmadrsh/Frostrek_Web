@@ -185,9 +185,19 @@ const ResourcesPage = () => {
     // Lock body scroll when modal is open
     useEffect(() => {
         if (selectedStudy || selectedBlog) {
+            const scrollY = window.scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.left = '0';
+            document.body.style.right = '0';
             document.body.style.overflow = 'hidden';
             return () => {
-                document.body.style.overflow = 'unset';
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.left = '';
+                document.body.style.right = '';
+                document.body.style.overflow = '';
+                window.scrollTo(0, scrollY);
             };
         }
     }, [selectedStudy, selectedBlog]);
@@ -245,8 +255,8 @@ const ResourcesPage = () => {
                             className="relative"
                         >
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {(isExpanded ? CASE_STUDIES : CASE_STUDIES.slice(0, 9)).map((study, index) => (
-                                    <div key={study.id} className={!isExpanded && index >= 6 ? 'blur-[2px] opacity-60 pointer-events-none select-none' : ''}>
+                                {(isExpanded ? CASE_STUDIES : CASE_STUDIES.slice(0, 6)).map((study) => (
+                                    <div key={study.id}>
                                         <CaseStudyCard
                                             study={study}
                                             onClick={() => setSelectedStudy(study)}
@@ -256,17 +266,142 @@ const ResourcesPage = () => {
                             </div>
 
                             {!isExpanded && (
-                                <div className="absolute bottom-0 left-0 w-full h-[320px] flex items-end justify-center pb-8 bg-gradient-to-t from-white/90 via-white/40 to-transparent z-10 rounded-b-2xl dark:from-dark-bg/90 dark:via-dark-bg/40">
-                                    <Button
-                                        onClick={() => setIsExpanded(true)}
-                                        className={`shadow-lg px-8 py-3 rounded-full font-bold transform hover:scale-105 transition-all ${theme === 'dark'
-                                            ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90'
-                                            : 'bg-brand-green-600 text-white hover:bg-brand-green-700'
-                                            }`}
-                                    >
-                                        View All Case Studies
-                                    </Button>
-                                </div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3, duration: 0.6 }}
+                                    className="mt-16"
+                                >
+                                    {/* Innovative CTA Section */}
+                                    <div className={`relative overflow-hidden rounded-[2rem] ${theme === 'dark'
+                                        ? 'bg-gradient-to-br from-dark-card via-dark-bg to-dark-card border border-dark-accent/20'
+                                        : 'bg-gradient-to-br from-white via-brand-green-50/30 to-white border border-brand-green-100'
+                                        }`}>
+                                        {/* Animated background pattern */}
+                                        <div className="absolute inset-0 overflow-hidden">
+                                            <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] opacity-20 animate-pulse ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-400'}`} />
+                                            <div className={`absolute bottom-0 left-0 w-72 h-72 rounded-full blur-[80px] opacity-15 animate-pulse delay-1000 ${theme === 'dark' ? 'bg-amber-500' : 'bg-brand-yellow-400'}`} />
+                                            {/* Grid pattern overlay */}
+                                            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+                                        </div>
+
+                                        <div className="relative z-10 p-8 md:p-12">
+                                            <div className="flex flex-col lg:flex-row items-center gap-10">
+
+                                                {/* Left: Stacked Cards Preview */}
+                                                <div className="relative w-full lg:w-auto flex-shrink-0">
+                                                    <div className="relative h-48 w-full lg:w-80 flex items-center justify-center">
+                                                        {/* Stacked card previews */}
+                                                        {[2, 1, 0].map((i) => (
+                                                            <motion.div
+                                                                key={i}
+                                                                initial={{ opacity: 0, y: 20 }}
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                transition={{ delay: 0.4 + i * 0.1 }}
+                                                                className={`absolute rounded-2xl shadow-xl backdrop-blur-sm border ${theme === 'dark'
+                                                                    ? 'bg-dark-card/90 border-dark-accent/30'
+                                                                    : 'bg-white/90 border-brand-green-100'
+                                                                    }`}
+                                                                style={{
+                                                                    width: `${200 - i * 20}px`,
+                                                                    height: `${140 - i * 15}px`,
+                                                                    transform: `translateY(${i * 12}px) rotate(${(i - 1) * 3}deg)`,
+                                                                    zIndex: 3 - i,
+                                                                }}
+                                                            >
+                                                                <div className="p-4 h-full flex flex-col justify-between">
+                                                                    <div className={`w-8 h-8 rounded-lg ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-100'}`} />
+                                                                    <div className="space-y-2">
+                                                                        <div className={`h-2 rounded-full ${theme === 'dark' ? 'bg-dark-accent/30' : 'bg-brand-green-200'}`} style={{ width: `${80 - i * 10}%` }} />
+                                                                        <div className={`h-2 rounded-full ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-100'}`} style={{ width: `${60 - i * 10}%` }} />
+                                                                    </div>
+                                                                </div>
+                                                            </motion.div>
+                                                        ))}
+                                                        {/* Floating count badge */}
+                                                        <motion.div
+                                                            initial={{ scale: 0 }}
+                                                            animate={{ scale: 1 }}
+                                                            transition={{ delay: 0.8, type: 'spring' }}
+                                                            className={`absolute -top-2 -right-2 lg:right-4 w-16 h-16 rounded-full flex items-center justify-center shadow-xl ${theme === 'dark'
+                                                                ? 'bg-gradient-to-br from-dark-accent to-amber-500 text-dark-bg'
+                                                                : 'bg-gradient-to-br from-brand-green-500 to-brand-green-600 text-white'
+                                                                }`}
+                                                        >
+                                                            <span className="text-2xl font-black">+{CASE_STUDIES.length - 6}</span>
+                                                        </motion.div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Center: Content */}
+                                                <div className="flex-1 text-center lg:text-left">
+                                                    <motion.div
+                                                        initial={{ opacity: 0, x: -20 }}
+                                                        animate={{ opacity: 1, x: 0 }}
+                                                        transition={{ delay: 0.5 }}
+                                                    >
+                                                        <h3 className={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                                                            Unlock All Case Studies
+                                                        </h3>
+                                                        <p className={`text-lg mb-6 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                                                            Dive into our complete library of AI transformation stories across every industry.
+                                                        </p>
+
+                                                        {/* Category Pills */}
+                                                        <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-6">
+                                                            {['Computer Vision', 'NLP', 'Data Ops', 'Automation'].map((cat, i) => (
+                                                                <motion.span
+                                                                    key={cat}
+                                                                    initial={{ opacity: 0, scale: 0.8 }}
+                                                                    animate={{ opacity: 1, scale: 1 }}
+                                                                    transition={{ delay: 0.6 + i * 0.1 }}
+                                                                    className={`px-3 py-1.5 text-xs font-semibold rounded-full ${theme === 'dark'
+                                                                        ? 'bg-dark-accent/10 text-dark-accent border border-dark-accent/20'
+                                                                        : 'bg-brand-green-50 text-brand-green-700 border border-brand-green-200'
+                                                                        }`}
+                                                                >
+                                                                    {cat}
+                                                                </motion.span>
+                                                            ))}
+                                                        </div>
+                                                    </motion.div>
+                                                </div>
+
+                                                {/* Right: CTA Button */}
+                                                <motion.div
+                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    transition={{ delay: 0.7 }}
+                                                    className="flex-shrink-0"
+                                                >
+                                                    <motion.button
+                                                        onClick={() => setIsExpanded(true)}
+                                                        whileHover={{ scale: 1.05, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}
+                                                        whileTap={{ scale: 0.98 }}
+                                                        className={`group relative px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 ${theme === 'dark'
+                                                            ? 'bg-dark-accent text-dark-bg hover:bg-amber-400'
+                                                            : 'bg-brand-green-600 text-white hover:bg-brand-green-700'
+                                                            }`}
+                                                    >
+                                                        {/* Shimmer effect */}
+                                                        <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                                                            <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                                                        </div>
+                                                        <span className="relative z-10 flex items-center gap-3">
+                                                            Explore All
+                                                            <motion.div
+                                                                className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-dark-bg/30' : 'bg-white/20'}`}
+                                                                whileHover={{ rotate: 45 }}
+                                                            >
+                                                                <ArrowUpRight className="w-5 h-5" />
+                                                            </motion.div>
+                                                        </span>
+                                                    </motion.button>
+                                                </motion.div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
                             )}
                         </motion.div>
                     ) : (
@@ -279,8 +414,8 @@ const ResourcesPage = () => {
                             className="relative"
                         >
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                {(isExpanded ? BLOG_POSTS : BLOG_POSTS.slice(0, 9)).map((post, index) => (
-                                    <div key={post.id} className={!isExpanded && index >= 6 ? 'blur-[2px] opacity-60 pointer-events-none select-none' : ''}>
+                                {(isExpanded ? BLOG_POSTS : BLOG_POSTS.slice(0, 6)).map((post) => (
+                                    <div key={post.id}>
                                         <BlogCard
                                             post={post}
                                             onClick={() => setSelectedBlog(post)}
@@ -290,17 +425,142 @@ const ResourcesPage = () => {
                             </div>
 
                             {!isExpanded && BLOG_POSTS.length > 6 && (
-                                <div className="absolute bottom-0 left-0 w-full h-[320px] flex items-end justify-center pb-8 bg-gradient-to-t from-white/90 via-white/40 to-transparent z-10 rounded-b-2xl dark:from-dark-bg/90 dark:via-dark-bg/40">
-                                    <Button
-                                        onClick={() => setIsExpanded(true)}
-                                        className={`shadow-lg px-8 py-3 rounded-full font-bold transform hover:scale-105 transition-all ${theme === 'dark'
-                                            ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90'
-                                            : 'bg-brand-green-600 text-white hover:bg-brand-green-700'
-                                            }`}
-                                    >
-                                        View All Articles
-                                    </Button>
-                                </div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3, duration: 0.6 }}
+                                    className="mt-16"
+                                >
+                                    {/* Innovative CTA Section */}
+                                    <div className={`relative overflow-hidden rounded-[2rem] ${theme === 'dark'
+                                        ? 'bg-gradient-to-br from-dark-card via-dark-bg to-dark-card border border-dark-accent/20'
+                                        : 'bg-gradient-to-br from-white via-brand-green-50/30 to-white border border-brand-green-100'
+                                        }`}>
+                                        {/* Animated background pattern */}
+                                        <div className="absolute inset-0 overflow-hidden">
+                                            <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] opacity-20 animate-pulse ${theme === 'dark' ? 'bg-dark-accent' : 'bg-brand-green-400'}`} />
+                                            <div className={`absolute bottom-0 left-0 w-72 h-72 rounded-full blur-[80px] opacity-15 animate-pulse delay-1000 ${theme === 'dark' ? 'bg-amber-500' : 'bg-brand-yellow-400'}`} />
+                                            {/* Grid pattern overlay */}
+                                            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+                                        </div>
+
+                                        <div className="relative z-10 p-8 md:p-12">
+                                            <div className="flex flex-col lg:flex-row items-center gap-10">
+
+                                                {/* Left: Stacked Cards Preview */}
+                                                <div className="relative w-full lg:w-auto flex-shrink-0">
+                                                    <div className="relative h-48 w-full lg:w-80 flex items-center justify-center">
+                                                        {/* Stacked card previews */}
+                                                        {[2, 1, 0].map((i) => (
+                                                            <motion.div
+                                                                key={i}
+                                                                initial={{ opacity: 0, y: 20 }}
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                transition={{ delay: 0.4 + i * 0.1 }}
+                                                                className={`absolute rounded-2xl shadow-xl backdrop-blur-sm border ${theme === 'dark'
+                                                                    ? 'bg-dark-card/90 border-dark-accent/30'
+                                                                    : 'bg-white/90 border-brand-green-100'
+                                                                    }`}
+                                                                style={{
+                                                                    width: `${200 - i * 20}px`,
+                                                                    height: `${140 - i * 15}px`,
+                                                                    transform: `translateY(${i * 12}px) rotate(${(i - 1) * 3}deg)`,
+                                                                    zIndex: 3 - i,
+                                                                }}
+                                                            >
+                                                                <div className="p-4 h-full flex flex-col justify-between">
+                                                                    <div className={`w-8 h-8 rounded-lg ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-100'}`} />
+                                                                    <div className="space-y-2">
+                                                                        <div className={`h-2 rounded-full ${theme === 'dark' ? 'bg-dark-accent/30' : 'bg-brand-green-200'}`} style={{ width: `${80 - i * 10}%` }} />
+                                                                        <div className={`h-2 rounded-full ${theme === 'dark' ? 'bg-dark-accent/20' : 'bg-brand-green-100'}`} style={{ width: `${60 - i * 10}%` }} />
+                                                                    </div>
+                                                                </div>
+                                                            </motion.div>
+                                                        ))}
+                                                        {/* Floating count badge */}
+                                                        <motion.div
+                                                            initial={{ scale: 0 }}
+                                                            animate={{ scale: 1 }}
+                                                            transition={{ delay: 0.8, type: 'spring' }}
+                                                            className={`absolute -top-2 -right-2 lg:right-4 w-16 h-16 rounded-full flex items-center justify-center shadow-xl ${theme === 'dark'
+                                                                ? 'bg-gradient-to-br from-dark-accent to-amber-500 text-dark-bg'
+                                                                : 'bg-gradient-to-br from-brand-green-500 to-brand-green-600 text-white'
+                                                                }`}
+                                                        >
+                                                            <span className="text-2xl font-black">+{BLOG_POSTS.length - 6}</span>
+                                                        </motion.div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Center: Content */}
+                                                <div className="flex-1 text-center lg:text-left">
+                                                    <motion.div
+                                                        initial={{ opacity: 0, x: -20 }}
+                                                        animate={{ opacity: 1, x: 0 }}
+                                                        transition={{ delay: 0.5 }}
+                                                    >
+                                                        <h3 className={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                                                            More Insights Await
+                                                        </h3>
+                                                        <p className={`text-lg mb-6 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                                                            Explore deep technical articles and industry perspectives from our team.
+                                                        </p>
+
+                                                        {/* Category Pills */}
+                                                        <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-6">
+                                                            {['Trends', 'Technical', 'Best Practices', 'Research'].map((cat, i) => (
+                                                                <motion.span
+                                                                    key={cat}
+                                                                    initial={{ opacity: 0, scale: 0.8 }}
+                                                                    animate={{ opacity: 1, scale: 1 }}
+                                                                    transition={{ delay: 0.6 + i * 0.1 }}
+                                                                    className={`px-3 py-1.5 text-xs font-semibold rounded-full ${theme === 'dark'
+                                                                        ? 'bg-dark-accent/10 text-dark-accent border border-dark-accent/20'
+                                                                        : 'bg-brand-green-50 text-brand-green-700 border border-brand-green-200'
+                                                                        }`}
+                                                                >
+                                                                    {cat}
+                                                                </motion.span>
+                                                            ))}
+                                                        </div>
+                                                    </motion.div>
+                                                </div>
+
+                                                {/* Right: CTA Button */}
+                                                <motion.div
+                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    transition={{ delay: 0.7 }}
+                                                    className="flex-shrink-0"
+                                                >
+                                                    <motion.button
+                                                        onClick={() => setIsExpanded(true)}
+                                                        whileHover={{ scale: 1.05, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}
+                                                        whileTap={{ scale: 0.98 }}
+                                                        className={`group relative px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 ${theme === 'dark'
+                                                            ? 'bg-dark-accent text-dark-bg hover:bg-amber-400'
+                                                            : 'bg-brand-green-600 text-white hover:bg-brand-green-700'
+                                                            }`}
+                                                    >
+                                                        {/* Shimmer effect */}
+                                                        <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                                                            <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                                                        </div>
+                                                        <span className="relative z-10 flex items-center gap-3">
+                                                            Explore All
+                                                            <motion.div
+                                                                className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-dark-bg/30' : 'bg-white/20'}`}
+                                                                whileHover={{ rotate: 45 }}
+                                                            >
+                                                                <ArrowUpRight className="w-5 h-5" />
+                                                            </motion.div>
+                                                        </span>
+                                                    </motion.button>
+                                                </motion.div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
                             )}
                         </motion.div>
                     )}
@@ -314,12 +574,13 @@ const ResourcesPage = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-hidden touch-none"
                         onClick={() => setSelectedStudy(null)}
+                        onWheel={(e) => e.stopPropagation()}
                     >
                         <motion.div
                             layoutId={`card-${selectedStudy.id}`}
-                            className={`rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
+                            className={`rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto overscroll-contain touch-auto relative ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
@@ -429,12 +690,13 @@ const ResourcesPage = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-hidden touch-none"
                         onClick={() => setSelectedBlog(null)}
+                        onWheel={(e) => e.stopPropagation()}
                     >
                         <motion.div
                             layoutId={`blog-${selectedBlog.id}`}
-                            className={`rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
+                            className={`rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto overscroll-contain touch-auto relative ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
