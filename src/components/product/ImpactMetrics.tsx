@@ -100,7 +100,7 @@ const CircularProgress = ({ value, label, delay, theme, index = 0 }: { value: st
     );
 };
 
-const BarChart = ({ value, label, delay, theme, index = 0 }: { value: string, label: string, delay: number, theme: string, index?: number }) => {
+const BarChart = ({ value, label, delay, theme, index: _index = 0 }: { value: string, label: string, delay: number, theme: string, index?: number }) => {
     // Determine height based on value if possible, else default
     let heightPercent = 80;
     const numValue = parseFloat(value.replace(/[^0-9.]/g, ''));
@@ -147,7 +147,7 @@ const BarChart = ({ value, label, delay, theme, index = 0 }: { value: string, la
 };
 
 // Trend Line
-const TrendChart = ({ value, label, delay, theme, index = 0 }: { value: string, label: string, delay: number, theme: string, index?: number }) => {
+const TrendChart = ({ value, label, delay, theme, index: _index = 0 }: { value: string, label: string, delay: number, theme: string, index?: number }) => {
     return (
         <div className="flex flex-col items-center justify-center h-full p-4 relative group">
             <div className="relative w-full h-28 mb-3 flex items-center justify-center">

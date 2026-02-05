@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, MapPin, Send, Check, Loader2, ArrowRight, MessageCircle } from 'lucide-react';
+import { Mail, MapPin, Send, Check, Loader2, ArrowRight, MessageCircle, Building } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import CuteBackground from '../components/ui/CuteBackground';
@@ -130,7 +130,7 @@ const ContactPage = () => {
                         initial={{ opacity: 0, x: -30 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="space-y-8"
+                        className="space-y-8 pt-8 md:pt-12"
                     >
                         <div>
                             <h1 className="text-5xl md:text-6xl font-bold mb-6 font-display tracking-tight">
@@ -142,29 +142,48 @@ const ContactPage = () => {
                             </p>
                         </div>
 
-                        <div className="space-y-6">
-                            <ContactItem
-                                icon={<Mail className="w-6 h-6" />}
-                                label="Email Us"
-                                value="info@frostrek.com"
-                                href="mailto:info@frostrek.com"
-                                theme={theme}
-                            />
-                            <ContactItem
-                                icon={<MapPin className="w-6 h-6" />}
-                                label="Visit Us"
-                                value="Sector 65, Success Suncity Tower, Gurgaon"
-                                href="https://maps.google.com"
-                                theme={theme}
-                            />
-                            <ContactItem
-                                icon={<MessageCircle className="w-6 h-6" />}
-                                label="WhatsApp Us"
-                                value="+1 17574722491"
-                                href="https://wa.me/17574722491"
-                                theme={theme}
-                            />
-                            {/* Added Phone placeholder if needed, otherwise optional */}
+                        <div className="space-y-8">
+                            {/* Contact Methods Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <ContactItem
+                                    icon={<Mail className="w-5 h-5" />}
+                                    label="Email Us"
+                                    value="info@frostrek.com"
+                                    href="mailto:info@frostrek.com"
+                                    theme={theme}
+                                />
+                                <ContactItem
+                                    icon={<MessageCircle className="w-5 h-5" />}
+                                    label="WhatsApp Us"
+                                    value="+1 17574722491"
+                                    href="https://wa.me/17574722491"
+                                    theme={theme}
+                                />
+                            </div>
+
+                            {/* Offices Section */}
+                            <div>
+                                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                                    <MapPin className="w-5 h-5 text-[#B07552]" /> Our Offices
+                                </h3>
+                                <div className="space-y-4">
+                                    <OfficeCard
+                                        title="India Office"
+                                        address="422, Suncity Success Tower, Golf Course Ext. Road, Sector - 65, Gurugram, Haryana, 122002"
+                                        theme={theme}
+                                    />
+                                    <OfficeCard
+                                        title="USA Office"
+                                        address="701 Tillery Street Unit 12-3227, Austin, Texas 78702, United States"
+                                        theme={theme}
+                                    />
+                                    <OfficeCard
+                                        title="UK Office"
+                                        address="24-26 Arcadia Avenue, Fin009/8701, London, United Kingdom, N3 2JU"
+                                        theme={theme}
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         <div className="pt-8">
@@ -182,7 +201,7 @@ const ContactPage = () => {
                     >
                         <div className={`p-5 md:p-6 rounded-2xl backdrop-blur-xl border shadow-2xl ${theme === 'dark'
                             ? 'bg-white/5 border-white/10 shadow-black/20'
-                            : 'bg-white/60 border-white/40 shadow-xl'
+                            : 'bg-[#FDFBF7]/90 border-[#E6D0C6]/50 shadow-xl'
                             }`}>
                             <h3 className="text-xl font-bold mb-3">Send us a message</h3>
 
@@ -360,6 +379,26 @@ const ContactPage = () => {
         </div>
     );
 };
+
+const OfficeCard = ({ title, address, theme }: any) => (
+    <a
+        href={`https://maps.google.com/?q=${encodeURIComponent(address)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 border border-transparent hover:border-current group w-full ${theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-[#B07552]/50 hover:bg-white/10' : 'bg-white/60 border-white/40 hover:border-[#B07552]/50 hover:bg-white/80 shadow-sm hover:shadow-md'
+            }`}
+    >
+        <div className={`p-3 rounded-xl flex-shrink-0 ${theme === 'dark' ? 'bg-white/10 text-[#B07552]' : 'bg-[#F3E9CD] text-[#8A5A35]'}`}>
+            <Building className="w-5 h-5" />
+        </div>
+        <div>
+            <h4 className={`font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h4>
+            <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-gray-400 group-hover:text-gray-300' : 'text-gray-600 group-hover:text-gray-800'}`}>
+                {address}
+            </p>
+        </div>
+    </a>
+);
 
 const ContactItem = ({ icon, label, value, href, theme }: any) => (
     <a

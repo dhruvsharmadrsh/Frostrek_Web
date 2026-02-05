@@ -989,9 +989,9 @@ const About = () => {
             flagImg: 'https://flagcdn.com/w40/in.png',
             image: '/Suncity-Success-Tower.jpg',
             companyName: 'India Office',
-            address: '422, Suncity-Success-Tower, Golf Course Ext. Road, Sector - 65, Gurugram, Haryana, 122002',
+            address: '4th Floor, Unit No. 455 JMD Empire, Sector 62, Gurgaon',
             phone: '+91 124 123 4567',
-            mapUrl: 'https://www.google.com/maps/search/?api=1&query=422+Suncity+Success+Tower+Golf+Course+Ext+Road+Gurugram+Haryana+122002'
+            mapUrl: 'https://www.google.com/maps/search/?api=1&query=4th Floor, Unit No. 455 JMD Empire, Sector 62, Gurgaon'
         },
         {
             name: 'USA',
@@ -1180,11 +1180,11 @@ const About = () => {
                                 <div className="absolute bottom-0 left-[-1px] w-[1px] h-8 bg-black"></div>
 
                                 <div className="flex flex-wrap gap-4">
-                                    <MagneticButton variant="primary" className={`px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase ${theme === 'dark' ? '!bg-[#bf8441] !text-dark-bg hover:!bg-[#bf8441]/90' : '!bg-gray-950 !text-white hover:!bg-brand-green-600'}`}>
+                                    <MagneticButton variant="primary" onClick={() => navigate("/experience")} className={`px-8 py-4 !rounded-none !shadow-none font-bold text-xs tracking-widest uppercase ${theme === 'dark' ? '!bg-[#bf8441] !text-dark-bg hover:!bg-[#bf8441]/90' : '!bg-gray-950 !text-white hover:!bg-brand-green-600'}`}>
                                         <span className="flex items-center gap-2">VIEW OUR AGENT PLATFORM <span className={theme === 'dark' ? 'text-dark-bg' : 'text-brand-green-400'}>•</span></span>
                                     </MagneticButton>
 
-                                    <MagneticButton variant="secondary" className="px-8 py-4 font-bold text-xs tracking-widest uppercase">
+                                    <MagneticButton variant="secondary" onClick={() => navigate("/contact")} className="px-8 py-4 font-bold text-xs tracking-widest uppercase">
                                         CONTACT US
                                     </MagneticButton>
                                 </div>

@@ -76,7 +76,7 @@ const ProductCard = ({ product, index, isActive, onClick }: {
     onClick: () => void;
 }) => {
     const { theme } = useTheme();
-    const IconComponent = product.icon;
+    const IconComponent = product.icon as any;
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
 

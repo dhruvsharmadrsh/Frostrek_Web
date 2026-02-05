@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Sparkles, Mic, Square, Paperclip } from 'lucide-react';
+import { motion, AnimatePresence, useDragControls } from 'framer-motion';
+import { X, Send, Sparkles, Mic, Square, Paperclip, Trash2, Minus} from 'lucide-react';
 
 // Webhook URL
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
@@ -33,6 +33,8 @@ const Chatbot: React.FC = () => {
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const dragControls = useDragControls();
+
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,18 +44,65 @@ const Chatbot: React.FC = () => {
         scrollToBottom();
     }, [messages]);
 
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen]);
+
+
     const toggleChat = () => setIsOpen(!isOpen);
+
+    const clearChat = () => {
+        setMessages([]);
+        setMessage('');
+        setSelectedFile(null);
+
+        setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+    };
+
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
-            setSelectedFile(file);
+
+        if (!file) return;
+
+        // 20MB size limit
+        const MAX_SIZE = 20 * 1024 * 1024; // 20MB in bytes
+
+        if (file.size > MAX_SIZE) {
             setMessages(prev => [
                 ...prev,
-                { type: 'user', content: `📎 File selected: ${file.name}` }
+                {
+                    type: 'bot',
+                    content: `⚠️ File too large. Maximum allowed size is 20MB. Your file size: ${(file.size / (1024 * 1024)).toFixed(2)}MB`
+                }
             ]);
+
+            // Reset input so user can reselect
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+
+            return;
         }
+
+        setSelectedFile(file);
+
+        setMessages(prev => [
+            ...prev,
+            { type: 'user', content: `📎 File selected: ${file.name}` }
+        ]);
     };
+
 
     const startRecording = async () => {
         try {
@@ -284,6 +333,10 @@ const Chatbot: React.FC = () => {
     return (
         <>
             <style>{`
+                .ai-copilot-chat {
+                    touch-action: pan-y !important;
+                    pointer-events: auto !important;
+                }
                 .ai-copilot-button:hover {
                     background-color: ${COLORS.primaryDark} !important;
                 }
@@ -372,6 +425,7 @@ const Chatbot: React.FC = () => {
                         <motion.div
                             ref={chatContainerRef}
                             drag
+                            dragControls={dragControls}
                             dragElastic={0.15}
                             dragMomentum={false}
                             initial={{ opacity: 0 }}
@@ -388,7 +442,7 @@ const Chatbot: React.FC = () => {
                             {/* Header - Draggable Area */}
                             <div
                                 className="p-4 flex items-center justify-between text-white rounded-t-2xl cursor-grab active:cursor-grabbing select-none touch-none"
-                                style={{ backgroundColor: COLORS.primary }}
+                                style={{ backgroundColor: COLORS.primary }} onPointerDown={(e) => dragControls.start(e)}
                             >
                                 <div className="flex items-center gap-3 pointer-events-none">
                                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
@@ -399,34 +453,78 @@ const Chatbot: React.FC = () => {
                                         <p className="text-xs opacity-90">Online • Ready to help</p>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={toggleChat}
-                                    className="pointer-events-auto hover:bg-white/20 p-1 rounded transition"
-                                >
-                                    <X className="w-5 h-5" />
-                                </button>
-                            </div>
+                                <div className="flex items-center gap-2 pointer-events-auto">
 
+    {/* Show Clear Chat Button ONLY if chat exists */}
+    <AnimatePresence>
+        {messages.length > 0 && (
+            <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                onClick={clearChat}
+                title="Clear Chat"
+                className="p-1.5 rounded-lg transition-all duration-200 
+                           hover:bg-red-500/20 group"
+            >
+                <Trash2 className="w-5 h-5 text-white/80 group-hover:text-red-400 transition" />
+            </motion.button>
+        )}
+    </AnimatePresence>
+
+    {/* Close Chat Button */}
+    <button
+        onClick={toggleChat}
+        title="Close Chat"
+        className="p-1.5 rounded-lg transition-all duration-200 hover:bg-white/20"
+    >
+        <Minus className="w-5 h-5 text-white" />
+    </button>
+</div>
+</div>
                             {/* Chat Body (Messages) */}
                             <div
                                 className="ai-copilot-chat flex-1 overflow-y-auto p-6 flex flex-col gap-4"
-                                style={{ backgroundColor: COLORS.background, overscrollBehavior: 'contain' }}
-                            >
-                                <div className="text-center px-6 py-6">
-                                    <img src="/robo2.gif" className="w-32 mx-auto mb-4" alt="Robot" />
-                                    <h4 className="text-lg font-semibold" style={{ color: COLORS.text }}>
-                                        Hi, I'm Frostry 👋
-                                    </h4>
-                                    <p className="text-sm mt-2" style={{ color: COLORS.textLight }}>
-                                        Ask me anything about your business, support, or innovation.
-                                    </p>
+                                style={{
+                                    backgroundColor: COLORS.background,
+                                    overscrollBehavior: 'contain',
+                                    touchAction: 'pan-y',
+                                    pointerEvents: 'auto'
+                                }}
 
-                                    <div className="flex flex-wrap justify-center gap-2 mt-4">
-                                        <button className="ai-copilot-suggestion">💡 Get ideas</button>
-                                        <button className="ai-copilot-suggestion">📊 Analytics</button>
-                                        <button className="ai-copilot-suggestion">🛠 Support</button>
-                                    </div>
-                                </div>
+                                onWheel={(e) => {
+                                    e.stopPropagation();
+                                }}
+
+                                onTouchMove={(e) => {
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <AnimatePresence>
+                                    {messages.length === 0 && (
+                                    <motion.div
+                                        initial={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.5 }}
+                                        className="text-center px-6 py-6"
+                                    >
+                                        <img src="/robo2.gif" className="w-32 mx-auto mb-4" alt="Robot" />
+                                        <h4 className="text-lg font-semibold" style={{ color: COLORS.text }}>
+                                            Hi, I'm Frostry 👋
+                                        </h4>
+                                        <p className="text-sm mt-2" style={{ color: COLORS.textLight }}>
+                                            Ask me anything about your business, support, or innovation.
+                                        </p>
+
+                                        <div className="flex flex-wrap justify-center gap-2 mt-4">
+                                            <button className="ai-copilot-suggestion">💡 Get ideas</button>
+                                            <button className="ai-copilot-suggestion">📊 Analytics</button>
+                                            <button className="ai-copilot-suggestion">🛠 Support</button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                                </AnimatePresence>
+
 
                                 {messages.map((msg, idx) => (
                                     <div

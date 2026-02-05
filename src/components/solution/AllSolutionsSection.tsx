@@ -61,7 +61,7 @@ const SolutionCard = ({ solution, index, isActive, onClick }: {
     onClick: () => void;
 }) => {
     const { theme } = useTheme();
-    const IconComponent = solution.icon;
+    const IconComponent = solution.icon as any;
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
 
