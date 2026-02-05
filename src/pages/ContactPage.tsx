@@ -5,6 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import CuteBackground from '../components/ui/CuteBackground';
 
 import emailjs from '@emailjs/browser';
+import { getMessageValidationError } from '../utils/validation';
 
 const ContactPage = () => {
     const { theme } = useTheme();
@@ -12,8 +13,11 @@ const ContactPage = () => {
         name: '',
         email: '',
         subject: '',
-        message: ''
+        message: '',
+        inquiryType: 'project', // 'project', 'careers', 'general'
+        careerRole: 'Frontend Developer'
     });
+    const [resume, setResume] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState('');
@@ -23,22 +27,52 @@ const ContactPage = () => {
         setIsSubmitting(true);
         setError('');
 
+        // Validation
+        if (!formData.name.trim() || !formData.email.trim()) {
+            setError('Name and Email are required.');
+            setIsSubmitting(false);
+            return;
+        }
+
+        const msgError = getMessageValidationError(formData.message);
+        if (msgError) {
+            setError(msgError);
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
+            // Prepare template params
+            const templateParams: Record<string, unknown> = {
+                to_email: 'dhruv.sharma@frostrek.com',
+                from_name: formData.name,
+                from_email: formData.email,
+                subject: formData.inquiryType === 'careers'
+                    ? `[Career Application] ${formData.careerRole} - ${formData.name}`
+                    : formData.subject || 'General Inquiry',
+                message: `Inquiry Type: ${formData.inquiryType}\n\n${formData.message}`,
+                // Note: File attachment usually requires paid EmailJS or specific config. 
+                // We're just handling the UI as requested for now.
+                resume_name: resume ? resume.name : 'No resume uploaded'
+            };
+
             await emailjs.send(
                 'service_jia14ic',
                 'template_hygc11p',
-                {
-                    to_email: 'dhruv.sharma@frostrek.com',
-                    from_name: formData.name,
-                    from_email: formData.email,
-                    subject: formData.subject,
-                    message: formData.message,
-                },
+                templateParams,
                 'BiiX__h7V1vLoyEQb'
             );
 
             setIsSuccess(true);
-            setFormData({ name: '', email: '', subject: '', message: '' });
+            setFormData({
+                name: '',
+                email: '',
+                subject: '',
+                message: '',
+                inquiryType: 'project',
+                careerRole: 'Frontend Developer'
+            });
+            setResume(null);
             setTimeout(() => setIsSuccess(false), 5000);
         } catch (err) {
             console.error('EmailJS Error:', err);
@@ -48,7 +82,13 @@ const ContactPage = () => {
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setResume(e.target.files[0]);
+        }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
@@ -133,14 +173,74 @@ const ContactPage = () => {
                                             theme={theme}
                                         />
                                     </div>
-                                    <InputGroup
-                                        label="Subject"
-                                        name="subject"
-                                        value={formData.subject}
-                                        onChange={handleChange}
-                                        placeholder="Project Inquiry"
-                                        theme={theme}
-                                    />
+                                    {/* Inquiry Type Selection */}
+                                    <div className="flex flex-wrap gap-4 mb-4">
+                                        {['project', 'careers', 'general'].map((type) => (
+                                            <label key={type} className="flex items-center gap-2 cursor-pointer">
+                                                <input
+                                                    type="radio"
+                                                    name="inquiryType"
+                                                    value={type}
+                                                    checked={formData.inquiryType === type}
+                                                    onChange={handleChange}
+                                                    className="accent-[#B07552] w-4 h-4"
+                                                />
+                                                <span className={`capitalize ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                    {type === 'project' ? 'Project Inquiry' : type}
+                                                </span>
+                                            </label>
+                                        ))}
+                                    </div>
+
+                                    {formData.inquiryType === 'careers' ? (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                            <div className="space-y-2">
+                                                <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                    Position
+                                                </label>
+                                                <select
+                                                    name="careerRole"
+                                                    value={formData.careerRole}
+                                                    onChange={handleChange}
+                                                    className={`w-full px-4 py-3 rounded-xl outline-none border transition-all duration-300 appearance-none ${theme === 'dark'
+                                                        ? 'bg-black/20 border-white/10 focus:border-[#B07552] text-white'
+                                                        : 'bg-white/50 border-gray-200 focus:border-[#B07552] text-gray-900'
+                                                        }`}
+                                                >
+                                                    <option value="Frontend Developer">Frontend Developer</option>
+                                                    <option value="Backend Developer">Backend Developer</option>
+                                                    <option value="Full Stack Developer">Full Stack Developer</option>
+                                                    <option value="UI/UX Designer">UI/UX Designer</option>
+                                                    <option value="Product Manager">Product Manager</option>
+                                                    <option value="Sales/Marketing">Sales & Marketing</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                    Resume (Optional)
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    onChange={handleFileChange}
+                                                    accept=".pdf,.doc,.docx"
+                                                    className={`w-full px-4 py-2.5 rounded-xl outline-none border transition-all duration-300 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#B07552] file:text-white hover:file:bg-[#8A5A35] ${theme === 'dark'
+                                                        ? 'bg-black/20 border-white/10 text-gray-300'
+                                                        : 'bg-white/50 border-gray-200 text-gray-700'
+                                                        }`}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <InputGroup
+                                            label="Subject"
+                                            name="subject"
+                                            value={formData.subject}
+                                            onChange={handleChange}
+                                            placeholder="Project Inquiry"
+                                            theme={theme}
+                                        />
+                                    )}
                                     <div className="space-y-2">
                                         <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Message</label>
                                         <textarea
