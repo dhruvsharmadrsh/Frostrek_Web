@@ -87,12 +87,9 @@ const ChatbotDemo: React.FC = () => {
             if (textInput) {
                 formData.append('chatInput', textInput);
                 formData.append('Type', 'text');
-            }
-
-            if (audioBlob) {
+            } else if (audioBlob) {
                 formData.append('voice', audioBlob, 'recording.webm');
                 formData.append('Type', 'voice');
-                if (!textInput) formData.append('chatInput', 'Voice message');
             }
 
             const response = await fetch(WEBHOOK_URL, {

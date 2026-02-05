@@ -204,7 +204,7 @@ const VoiceCallWidget: React.FC<VoiceCallWidgetProps> = ({ onCallStateChange }) 
             const formData = new FormData();
             formData.append('voice', audioBlob, 'recording.webm');
             formData.append('Type', 'voice');
-            formData.append('chatInput', 'Voice message');
+            // Remove chatInput to be consistent or keep empty if needed, logic above didn't force it for voice-only in Chatbot.tsx but here it seems safer to rely on 'Type': 'voice'
 
             const response = await fetch(WEBHOOK_URL, {
                 method: 'POST',
