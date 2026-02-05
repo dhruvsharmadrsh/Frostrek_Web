@@ -11,7 +11,8 @@ import {
     MoreHorizontal,
     Play,
     GitBranch,
-    Search
+    Search,
+    CheckCircle2
 } from 'lucide-react';
 import type { ProductProcessStep } from '../../utils/productData';
 import { useTheme } from '../../context/ThemeContext';
@@ -70,13 +71,15 @@ const CanvasNode = ({
     );
 };
 
-// Dynamic Connection Line
+// Dynamic Connection Line with execution animation
 const DynamicConnection = ({
     startX, startY, endX, endY, delay,
     startOffset = { x: 240, y: 36 }, // Center-ish of the ports
     endOffset = { x: 0, y: 36 },
     theme,
-    isVertical = false
+    isVertical = false,
+    isExecuting = false,
+    executionDelay = 0
 }: {
     startX: MotionValue<number>, startY: MotionValue<number>,
     endX: MotionValue<number>, endY: MotionValue<number>,
@@ -84,7 +87,9 @@ const DynamicConnection = ({
     startOffset?: { x: number, y: number },
     endOffset?: { x: number, y: number },
     theme: string,
-    isVertical?: boolean
+    isVertical?: boolean,
+    isExecuting?: boolean,
+    executionDelay?: number
 }) => {
 
     const [pathD, setPathD] = useState('');
@@ -131,22 +136,72 @@ const DynamicConnection = ({
             className="absolute inset-0 pointer-events-none z-10"
             style={{ width: '100%', height: '100%', overflow: 'visible' }}
         >
+            <defs>
+                <linearGradient id="executionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#10B981" />
+                    <stop offset="50%" stopColor="#34D399" />
+                    <stop offset="100%" stopColor="#10B981" />
+                </linearGradient>
+                <filter id="glowGreen" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                    <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            {/* Background track */}
             <motion.path
                 d={pathD}
                 fill="none"
                 stroke={theme === 'dark' ? '#3a3025' : '#E5E7EB'}
                 strokeWidth="4"
             />
+
+            {/* Default connector (amber) */}
             <motion.path
                 d={pathD}
                 fill="none"
-                stroke="#B07552"
+                stroke={isExecuting ? '#10B981' : '#B07552'}
                 strokeWidth="2"
                 strokeLinecap="round"
                 initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
+                animate={{
+                    pathLength: 1,
+                    stroke: isExecuting ? '#10B981' : '#B07552'
+                }}
                 transition={{ duration: 1.5, delay, ease: "easeInOut" }}
             />
+
+            {/* Execution flow animation (green pulse traveling along the path) */}
+            {isExecuting && (
+                <>
+                    {/* Glowing green overlay */}
+                    <motion.path
+                        d={pathD}
+                        fill="none"
+                        stroke="#10B981"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        filter="url(#glowGreen)"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 0.8, delay: executionDelay, ease: "easeOut" }}
+                    />
+
+                    {/* Traveling dot */}
+                    <motion.circle
+                        r="6"
+                        fill="#10B981"
+                        filter="url(#glowGreen)"
+                        initial={{ offsetDistance: "0%" }}
+                        animate={{ offsetDistance: "100%" }}
+                        transition={{ duration: 0.8, delay: executionDelay, ease: "easeInOut" }}
+                        style={{ offsetPath: `path("${pathD}")` }}
+                    />
+                </>
+            )}
         </svg>
     );
 };
@@ -155,9 +210,27 @@ export const WorkflowBuilder = ({ steps }: { steps: ProductProcessStep[] }) => {
     const { theme } = useTheme();
     const [zoom, setZoom] = useState(100);
     const [isVertical, setIsVertical] = useState(false);
+    const [isExecuting, setIsExecuting] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(false);
 
     const handleZoomIn = () => setZoom(prev => Math.min(prev + 10, 150));
     const handleZoomOut = () => setZoom(prev => Math.max(prev - 10, 50));
+
+    const handleExecute = () => {
+        if (isExecuting || isCompleted) return; // Prevent multiple clicks
+        setIsExecuting(true);
+
+        // Reset after animation completes
+        setTimeout(() => {
+            setIsExecuting(false);
+            setIsCompleted(true);
+
+            // Reset back to initial state after showing success message
+            setTimeout(() => {
+                setIsCompleted(false);
+            }, 3000);
+        }, 3000);
+    };
 
     // Initial positions - Tighter layout to fit container
     const x1 = useMotionValue(20);
@@ -238,13 +311,62 @@ export const WorkflowBuilder = ({ steps }: { steps: ProductProcessStep[] }) => {
                         ))}
                     </div>
 
-                    <div className={`mt-auto p-4 rounded-xl border ${theme === 'dark' ? 'bg-dark-accent/10 border-dark-accent/30' : 'bg-brand-green-50 border-brand-green-100'}`}>
-                        <div className={`flex items-center gap-2 mb-2 font-bold text-sm ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-700'}`}>
-                            <Play className="w-4 h-4 fill-current" />
-                            Ready to automate?
+                    <motion.div
+                        onClick={handleExecute}
+                        whileHover={{ scale: (isExecuting || isCompleted) ? 1 : 1.02 }}
+                        whileTap={{ scale: (isExecuting || isCompleted) ? 1 : 0.98 }}
+                        className={`mt-auto p-4 rounded-xl border cursor-pointer transition-all duration-300 ${isExecuting
+                            ? 'bg-emerald-500/10 border-emerald-500/30'
+                            : isCompleted
+                                ? 'bg-blue-500/10 border-blue-500/30'
+                                : theme === 'dark'
+                                    ? 'bg-dark-accent/10 border-dark-accent/30 hover:bg-dark-accent/20 hover:border-dark-accent/50'
+                                    : 'bg-brand-green-50 border-brand-green-100 hover:bg-brand-green-100 hover:border-brand-green-200'
+                            }`}
+                    >
+                        <div className={`flex items-center gap-2 mb-2 font-bold text-sm transition-colors duration-300 ${isExecuting
+                            ? 'text-emerald-500'
+                            : isCompleted
+                                ? 'text-blue-500'
+                                : theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-700'
+                            }`}>
+                            {isExecuting ? (
+                                <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                    className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full"
+                                />
+                            ) : isCompleted ? (
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="w-4 h-4"
+                                >
+                                    <CheckCircle2 className="w-4 h-4 text-blue-500" />
+                                </motion.div>
+                            ) : (
+                                <Play className="w-4 h-4 fill-current" />
+                            )}
+
+                            {isExecuting
+                                ? 'Running Workflow...'
+                                : isCompleted
+                                    ? 'Workflow Completed!'
+                                    : 'Ready to automate?'}
                         </div>
-                        <p className={`text-xs mb-3 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-brand-green-600'}`}>Drag workflow nodes to reorganize the process.</p>
-                    </div>
+                        <p className={`text-xs transition-colors duration-300 ${isExecuting
+                            ? 'text-emerald-600/80 dark:text-emerald-400/80'
+                            : isCompleted
+                                ? 'text-blue-600/80 dark:text-blue-400/80'
+                                : theme === 'dark' ? 'text-dark-text-muted' : 'text-brand-green-600'
+                            }`}>
+                            {isExecuting
+                                ? 'Optimizing logic paths...'
+                                : isCompleted
+                                    ? 'Process successfully automated.'
+                                    : 'Click here to see the workflow in action!'}
+                        </p>
+                    </motion.div>
                 </div>
 
                 {/* 2. Main Canvas */}
@@ -265,8 +387,8 @@ export const WorkflowBuilder = ({ steps }: { steps: ProductProcessStep[] }) => {
                         transition={{ duration: 0.3 }}
                     >
                         {/* Dynamic Lines */}
-                        <DynamicConnection startX={x1} startY={y1} endX={x2} endY={y2} delay={0.5} theme={theme} isVertical={isVertical} />
-                        <DynamicConnection startX={x2} startY={y2} endX={x3} endY={y3} delay={1.0} theme={theme} isVertical={isVertical} />
+                        <DynamicConnection startX={x1} startY={y1} endX={x2} endY={y2} delay={0.5} theme={theme} isVertical={isVertical} isExecuting={isExecuting} executionDelay={0} />
+                        <DynamicConnection startX={x2} startY={y2} endX={x3} endY={y3} delay={1.0} theme={theme} isVertical={isVertical} isExecuting={isExecuting} executionDelay={0.8} />
 
                         {/* Draggable Nodes */}
                         <CanvasNode step={steps[0]} index={0} x={x1} y={y1} icon={Search} theme={theme} />

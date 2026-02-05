@@ -4,39 +4,103 @@ import type { ProductStatistic } from '../../utils/productData';
 import { LayoutDashboard, BarChart3, PieChart, ArrowUpRight, Activity } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
-// Reusable Circular Progress for Percentages
-const CircularProgress = ({ value, label, delay, theme }: { value: string, label: string, delay: number, theme: string }) => {
+// Color palette for metrics - clean pie chart colors
+const METRIC_COLORS = [
+    { fill: '#4A6FA5', light: '#C5D5E8', name: 'blue' },       // Blue (like reference)
+    { fill: '#5B8A72', light: '#B8D4C8', name: 'teal' },       // Teal/Green
+    { fill: '#E8A849', light: '#F5DDB8', name: 'amber' },      // Amber/Gold  
+    { fill: '#8B6B9E', light: '#D4C5DB', name: 'purple' },     // Purple
+];
+
+// Clean Filled Pie Chart Component
+const CircularProgress = ({ value, label, delay, theme, index = 0 }: { value: string, label: string, delay: number, theme: string, index?: number }) => {
     const numValue = parseFloat(value.replace(/[^0-9.]/g, ''));
     const isPercentage = value.includes('%');
-    const displayValue = isPercentage ? numValue : 100;
+    const percentage = isPercentage ? numValue : 100;
+    const colorIndex = index % METRIC_COLORS.length;
+    const colors = METRIC_COLORS[colorIndex];
+
+    // SVG dimensions
+    const size = 100;
+    const center = size / 2;
+    const radius = 40;
+
+    // Calculate pie slice
+    const angle = (percentage / 100) * 360;
+    const startAngle = -90;
+    const endAngle = startAngle + angle;
+
+    const startRad = (startAngle * Math.PI) / 180;
+    const endRad = (endAngle * Math.PI) / 180;
+
+    const x1 = center + radius * Math.cos(startRad);
+    const y1 = center + radius * Math.sin(startRad);
+    const x2 = center + radius * Math.cos(endRad);
+    const y2 = center + radius * Math.sin(endRad);
+
+    const largeArc = angle > 180 ? 1 : 0;
+
+    // Pie slice path
+    const slicePath = percentage >= 100
+        ? `M ${center} ${center - radius} A ${radius} ${radius} 0 1 1 ${center - 0.001} ${center - radius} Z`
+        : `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
 
     return (
-        <div className="flex flex-col items-center justify-center h-full p-4 relative group">
-            <div className="relative w-28 h-28 mb-3">
-                <svg className="w-full h-full transform -rotate-90">
-                    <circle cx="56" cy="56" r="50" stroke={theme === 'dark' ? '#3a3025' : '#F2E8DF'} strokeWidth="8" fill="transparent" />
-                    <motion.circle
-                        cx="56" cy="56" r="50"
-                        stroke="#B07552"
-                        strokeWidth="8"
-                        strokeLinecap="round"
-                        fill="transparent"
-                        initial={{ pathLength: 0 }}
-                        whileInView={{ pathLength: displayValue / 100 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.5, delay, ease: "easeOut" }}
+        <div className="flex flex-col items-center justify-center h-full p-3">
+            {/* Pie Chart */}
+            <div className="relative w-24 h-24 mb-2">
+                <motion.svg
+                    viewBox={`0 0 ${size} ${size}`}
+                    className="w-full h-full drop-shadow-md"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay }}
+                >
+                    {/* Background circle (remaining %) */}
+                    <circle
+                        cx={center}
+                        cy={center}
+                        r={radius}
+                        fill={colors.light}
+                        stroke={theme === 'dark' ? '#555' : '#999'}
+                        strokeWidth="0.5"
                     />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <span className={`text-2xl font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>{value}</span>
-                </div>
+
+                    {/* Filled slice (main %) */}
+                    <motion.path
+                        d={slicePath}
+                        fill={colors.fill}
+                        stroke={theme === 'dark' ? '#333' : '#fff'}
+                        strokeWidth="1"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: delay + 0.2 }}
+                    />
+                </motion.svg>
             </div>
-            <p className={`font-medium text-sm text-center ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>{label}</p>
+
+            {/* Label */}
+            <motion.div
+                className="text-center"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: delay + 0.3 }}
+            >
+                <p className={`text-sm font-bold leading-tight ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>
+                    {label}
+                </p>
+                <p className={`text-xs font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
+                    {value}
+                </p>
+            </motion.div>
         </div>
     );
 };
 
-const BarChart = ({ value, label, delay, theme }: { value: string, label: string, delay: number, theme: string }) => {
+const BarChart = ({ value, label, delay, theme, index = 0 }: { value: string, label: string, delay: number, theme: string, index?: number }) => {
     // Determine height based on value if possible, else default
     let heightPercent = 80;
     const numValue = parseFloat(value.replace(/[^0-9.]/g, ''));
@@ -83,7 +147,7 @@ const BarChart = ({ value, label, delay, theme }: { value: string, label: string
 };
 
 // Trend Line
-const TrendChart = ({ value, label, delay, theme }: { value: string, label: string, delay: number, theme: string }) => {
+const TrendChart = ({ value, label, delay, theme, index = 0 }: { value: string, label: string, delay: number, theme: string, index?: number }) => {
     return (
         <div className="flex flex-col items-center justify-center h-full p-4 relative group">
             <div className="relative w-full h-28 mb-3 flex items-center justify-center">
@@ -148,7 +212,7 @@ const DashboardWidget = ({ stat, index, theme, activeView }: { stat: ProductStat
                 <ArrowUpRight className={`w-3 h-3 ${theme === 'dark' ? 'text-dark-accent/50' : 'text-gray-300'}`} />
             </div>
             <div className="h-40">
-                <Content value={stat.value} label={stat.label} delay={index * 0.15} theme={theme} />
+                <Content value={stat.value} label={stat.label} delay={index * 0.15} theme={theme} index={index} />
             </div>
         </div>
     );

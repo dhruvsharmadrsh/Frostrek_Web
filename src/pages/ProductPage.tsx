@@ -9,6 +9,7 @@ import { ImpactMetrics } from '../components/product/ImpactMetrics';
 import { WorkflowBuilder } from '../components/product/WorkflowBuilder';
 import { CapabilitiesSystem } from '../components/product/CapabilitiesSystem';
 import ProductHero from '../components/product/ProductHero';
+import AllProductsSection from '../components/product/AllProductsSection';
 import { useTheme } from '../context/ThemeContext';
 import CTASection from '../components/home/CTASection';
 
@@ -35,6 +36,9 @@ const ProductPage = () => {
                 description={product.description}
                 tagline={product.tagline}
             />
+
+            {/* 2. All Products Section - Showcases all available products */}
+            {location.pathname === '/products' && <AllProductsSection />}
 
             {/* 2. Stats Section - "Turn Efficiency into Profit" */}
             <section className={`py-24 transition-colors ${theme === 'dark' ? 'bg-dark-card' : 'bg-brand-green-50'}`}>

@@ -6,6 +6,7 @@ import { SOLUTION_DATA } from '../utils/solutionData';
 import Button from '../components/ui/Button';
 import CommonChallenges from '../components/solution/CommonChallenges';
 import FrostrekAdvantage from '../components/solution/FrostrekAdvantage';
+import AllSolutionsSection from '../components/solution/AllSolutionsSection';
 import { useTheme } from '../context/ThemeContext';
 import CTASection from '../components/home/CTASection';
 
@@ -144,6 +145,9 @@ const SolutionPage = () => {
                     <div className="absolute top-0 right-0 w-[1000px] h-full bg-gradient-to-l from-white/5 to-transparent skew-x-12 blur-3xl opacity-30" />
                 </div>
             </section>
+
+            {/* All Solutions Section - Only on /solutions */}
+            {location.pathname === '/solutions' && <AllSolutionsSection />}
 
             {/* Challenges vs Solutions */}
             <CommonChallenges key={location.pathname} challenges={solution.challenges} />
