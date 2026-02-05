@@ -260,7 +260,7 @@ const ContactPage = () => {
                                             Who are you trying to reach?*
                                         </label>
 
-                                        {["Careers", "Partnerships", "Press", "Support", "Other"].map((option) => (
+                                        {["Sales Enquiry", "Project Enquiry", "Partnerships", "Support", "Careers", "General Enquiry", "Other"].map((option) => (
                                             <label key={option} className="flex items-center gap-3 cursor-pointer">
                                                 <input
                                                     type="radio"
@@ -281,7 +281,7 @@ const ContactPage = () => {
                                     {/* Project Details */}
                                     <div className="space-y-2">
                                         <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                            Please provide details on your project.*
+                                            Please provide details regarding your enquiry.*
                                         </label>
 
                                         <textarea
@@ -290,7 +290,7 @@ const ContactPage = () => {
                                             onChange={handleChange}
                                             rows={3}
                                             required
-                                            placeholder="Please provide details on your project."
+                                            placeholder="Tell us a bit more about what you're looking for..."
                                             className={`w-full px-3 py-2 rounded-lg outline-none border transition-all duration-300 resize-none ${theme === 'dark'
                                                 ? 'bg-black/20 border-white/10 focus:border-[#B07552] text-white placeholder-gray-500'
                                                 : 'bg-white/50 border-gray-200 focus:border-[#B07552] text-gray-900 placeholder-gray-400'
