@@ -28,7 +28,7 @@ const FAQS = [
 
 const FAQSection = () => {
     const { theme } = useTheme();
-    const [activeIndex, setActiveIndex] = useState<number | null>(0);
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     return (
         <section className={`py-20 relative overflow-hidden ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gray-50'}`}>
