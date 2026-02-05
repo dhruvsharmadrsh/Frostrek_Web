@@ -508,10 +508,117 @@ const AISolutionsShowcase = () => {
 
                 {/* Main Content */}
                 <div className="max-w-6xl mx-auto">
-                    <div className="flex flex-col lg:flex-row gap-8">
+                    {/* MOBILE VIEW - Horizontal Icons */}
+                    <div className="lg:hidden mb-8">
+                        {/* Horizontal Icon Navigation - FIXED */}
+                        <div 
+                            ref={tabsRef}
+                            className="flex justify-center gap-4 mb-6 overflow-x-auto p-2"
+                            style={{
+                                scrollbarWidth: 'none',
+                                msOverflowStyle: 'none',
+                            }}
+                        >
+                            <style>{`
+                                div::-webkit-scrollbar {
+                                    display: none;
+                                }
+                            `}</style>
+                            {SOLUTIONS.map((solution, index) => {
+                                const Icon = solution.icon;
+                                const isActive = index === activeIndex;
+
+                                return (
+                                    <button
+                                        key={solution.id}
+                                        onClick={() => handleTabChange(index)}
+                                        className={`flex-shrink-0 relative transition-all duration-300 ${isActive ? 'scale-110' : 'scale-100 active:scale-95'}`}
+                                    >
+                                        <div
+                                            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${isActive
+                                                ? 'bg-gradient-to-br from-[#B07552] to-[#8A5A35] shadow-lg'
+                                                : `${theme === 'dark' ? 'bg-dark-card border border-dark-accent/40' : 'bg-white border border-gray-300'}`
+                                                }`}
+                                        >
+                                            <Icon className={`w-6 h-6 transition-colors ${isActive ? 'text-white' : theme === 'dark' ? 'text-dark-text' : 'text-[#B07552]'}`} />
+                                        </div>
+                                        {isActive && (
+                                            <motion.div
+                                                className="absolute inset-0 rounded-full border-2 border-[#B07552]"
+                                                initial={{ scale: 1 }}
+                                                animate={{ scale: 1.25 }}
+                                                transition={{ duration: 0.5, repeat: Infinity }}
+                                                style={{ opacity: 0.4 }}
+                                            />
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Active Solution Title */}
+                        <div className="text-center mb-4">
+                            <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                                {activeSolution.title}
+                            </h3>
+                            <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                                {activeSolution.tagline}
+                            </p>
+                        </div>
+
+                        {/* Mobile Content Panel */}
+                        <div ref={contentRef} className={`rounded-2xl border shadow-lg overflow-hidden ${theme === 'dark' ? 'bg-dark-card border-dark-accent/10' : 'bg-white border-gray-200'}`}>
+                            {/* Content Header */}
+                            <div className={`p-4 border-b ${theme === 'dark' ? 'border-dark-accent/10' : 'border-gray-100'}`}>
+                                <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                                    {activeSolution.description}
+                                </p>
+                            </div>
+
+                            {/* Demo */}
+                            <div className="p-4">
+                                <DemoComponent type={activeSolution.demo.type} />
+                            </div>
+
+                            {/* Features */}
+                            <div className="px-4 pb-4 space-y-2">
+                                {activeSolution.features.map((feature, i) => (
+                                    <div
+                                        key={i}
+                                        className="flex items-start gap-2 animate-fade-in"
+                                        style={{ animationDelay: `${i * 0.1}s` }}
+                                    >
+                                        <CheckCircle2 className="w-4 h-4 text-[#B07552] mt-0.5 flex-shrink-0" />
+                                        <span className={`text-xs ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>{feature}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* CTA */}
+                            <div className="px-4 pb-4 flex flex-col gap-2">
+                                <Link
+                                    to={activeSolution.link}
+                                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#8A5A35] hover:bg-[#B07552] text-white rounded-lg font-medium text-sm transition-all hover:shadow-lg"
+                                >
+                                    Learn More
+                                    <ArrowRight className="w-4 h-4" />
+                                </Link>
+                                <Link
+                                    to="/contact"
+                                    className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 border rounded-lg font-medium text-sm transition-all ${theme === 'dark' ? 'border-dark-accent/50 text-dark-text hover:border-dark-accent hover:text-dark-accent' : 'border-gray-300 hover:border-[#B07552] text-gray-700 hover:text-[#B07552]'}`}
+                                >
+                                    <MessageCircle className="w-4 h-4" />
+                                    Book Demo
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* DESKTOP VIEW - Original Layout */}
+                    <div className="hidden lg:flex gap-8">
 
                         {/* Left Panel - Tabs */}
-                        <div ref={tabsRef} className="lg:w-1/3">
+                        <div className="lg:w-1/3">
                             <div className="space-y-2">
                                 {SOLUTIONS.map((solution, index) => {
                                     const Icon = solution.icon;
