@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useMotionValue, AnimatePresence } from 'framer-motion';
-import { Target, Award, Zap, Shield, Globe, MapPin, Phone, ArrowRight, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, MousePointer2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, ChevronDown, type LucideIcon } from 'lucide-react';
+import { Target, Award, Zap, Shield, Globe, ArrowRight, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, ChevronDown, type LucideIcon } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useRef, useState, useEffect, useMemo, memo } from 'react';
 import { TIMELINE_DATA } from '../utils/aboutData';
@@ -477,14 +477,14 @@ const TechIcon = memo(({ icon: Icon, label, delay }: { icon: LucideIcon; label: 
 });
 
 // ============ SCROLL INDICATOR ============
-const ScrollIndicator = memo(() => (
-    <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer animate-bounce-slow"
-        onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}
-    >
-        <MousePointer2 className="w-5 h-5 text-brand-green-500" />
-    </div>
-));
+// const ScrollIndicator = memo(() => (
+//     <div
+//         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer animate-bounce-slow"
+//         onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}
+//     >
+//         <MousePointer2 className="w-5 h-5 text-brand-green-500" />
+//     </div>
+// ));
 
 // ============ TEAM FLIP CARD ============
 const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; delay: number }) => {
@@ -885,7 +885,7 @@ const About = () => {
     const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
     const opacity = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
 
-    const [activeOffice, setActiveOffice] = useState<number>(0);
+    // const [activeOffice, setActiveOffice] = useState<number>(0);
     const [flippedCard, setFlippedCard] = useState<number | null>(null);
     const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
     const dotsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -1663,7 +1663,7 @@ const About = () => {
                                     className={`group relative rounded-2xl overflow-hidden shadow-xl cursor-pointer h-[470px] w-[92%] mx-auto ${
                                         theme === 'dark' ? 'bg-dark-card' : 'bg-white'
                                     }`}
-                                    onClick={() => setActiveOffice(i)}
+                                    // onClick={() => setActiveOffice(i)}
                                 >
                                     {/* Image with Hover Overlay ONLY on Image */}
                                 <motion.div className="h-[70%] overflow-hidden relative group">
