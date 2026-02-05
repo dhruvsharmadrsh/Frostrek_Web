@@ -147,6 +147,36 @@ const ScheduleDemo = () => {
         return date < today;
     };
 
+    const isTimeDisabled = (timeStr: string) => {
+        if (!selectedDate) return true;
+
+        const now = new Date();
+        const selected = new Date(selectedDate);
+
+        // Check if selected date is today
+        const isToday =
+            selected.getDate() === now.getDate() &&
+            selected.getMonth() === now.getMonth() &&
+            selected.getFullYear() === now.getFullYear();
+
+        if (!isToday) return false;
+
+        // Parse timeStr "09:00 AM" => Hours/Minutes
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':').map(Number);
+
+        if (hours === 12) {
+            hours = modifier === 'AM' ? 0 : 12;
+        } else if (modifier === 'PM') {
+            hours += 12;
+        }
+
+        const slotTime = new Date();
+        slotTime.setHours(hours, minutes, 0, 0);
+
+        return slotTime < now;
+    };
+
     if (isSubmitted) {
         return (
             <div className={`min-h-screen pt-20 relative ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
@@ -296,11 +326,14 @@ const ScheduleDemo = () => {
                                         <button
                                             key={time}
                                             onClick={() => setSelectedTime(time)}
+                                            disabled={isTimeDisabled(time)}
                                             className={`
                                                 py-2 px-3 rounded-lg text-sm font-medium transition-all
                                                 ${selectedTime === time
                                                     ? theme === 'dark' ? 'bg-dark-accent text-dark-bg' : 'bg-brand-green-600 text-white'
-                                                    : theme === 'dark' ? 'bg-dark-bg text-dark-text hover:bg-dark-accent/20' : 'bg-gray-50 text-gray-700 hover:bg-brand-green-100'}
+                                                    : isTimeDisabled(time)
+                                                        ? theme === 'dark' ? 'bg-dark-bg text-dark-text-muted/20 cursor-not-allowed opacity-50' : 'bg-gray-50 text-gray-300 cursor-not-allowed'
+                                                        : theme === 'dark' ? 'bg-dark-bg text-dark-text hover:bg-dark-accent/20' : 'bg-gray-50 text-gray-700 hover:bg-brand-green-100'}
                                             `}
                                         >
                                             {time}
@@ -315,7 +348,7 @@ const ScheduleDemo = () => {
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
-                                        Full Name *
+                                        Full Name <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -329,7 +362,7 @@ const ScheduleDemo = () => {
 
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
-                                        Email Address *
+                                        Email Address <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="email"

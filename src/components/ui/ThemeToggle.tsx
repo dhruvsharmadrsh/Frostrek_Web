@@ -9,7 +9,7 @@ const ThemeToggle = () => {
     return (
         <button
             onClick={toggleTheme}
-            className={`relative h-10 w-44 rounded-full cursor-pointer transition-colors duration-500 border-2 overflow-hidden ${isDark
+            className={`relative h-10 w-32 rounded-full cursor-pointer transition-colors duration-500 border-2 overflow-hidden ${isDark
                     ? 'bg-black border-black'
                     : 'bg-gray-100 border-gray-200'
                 }`}
@@ -21,12 +21,7 @@ const ThemeToggle = () => {
                 layout
                 initial={false}
                 animate={{
-                    x: isDark ? 6 : 140 // w-44 (176px) - thumb(28) - padding(4) - border(2) approx adjustments
-                    // Container w-44 = 176px.
-                    // Border 2px on each side -> inner width approx 172px.
-                    // Thumb 28px.
-                    // Left pos: ~4-6px.
-                    // Right pos: 176 - 28 - 6 = 142px approx. Let's try 138.
+                    x: isDark ? 6 : 94 // w-32 (128px) - thumb(28) - padding(6) approx
                 }}
                 transition={{
                     type: "spring",
@@ -59,12 +54,12 @@ const ThemeToggle = () => {
             </motion.div>
 
             {/* Labels */}
-            <div className="absolute inset-0 flex items-center justify-between px-4 z-10 w-full h-full text-[11px] font-bold tracking-wider select-none font-sans whitespace-nowrap">
+            <div className="absolute inset-0 flex items-center justify-between px-3 z-10 w-full h-full text-[10px] font-bold tracking-wider select-none font-sans whitespace-nowrap">
                 <span className={`transition-opacity duration-300 flex items-center gap-1 ${!isDark ? 'opacity-100 text-gray-800 ml-1' : 'opacity-0'}`}>
-                    DAY MODE
+                    DAY
                 </span>
-                <span className={`transition-opacity duration-300 flex items-center gap-1 ${isDark ? 'opacity-100 text-white translate-x-3 mr-1' : 'opacity-0'}`}>
-                    NIGHT MODE
+                <span className={`transition-opacity duration-300 flex items-center gap-1 ${isDark ? 'opacity-100 text-white translate-x-1 mr-1' : 'opacity-0'}`}>
+                    NIGHT
                 </span>
             </div>
 

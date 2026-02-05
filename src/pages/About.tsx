@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform, useMotionValue, AnimatePresence } from 'framer-motion';
 import { Target, Award, Zap, Shield, Globe, ArrowRight, Code, Brain, Cpu, Database, Layers, Sparkles, CheckCircle2, Trophy, Star, BadgeCheck, Lock, ShieldCheck, Linkedin, Twitter, Github, Cloud, ChevronDown, type LucideIcon } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
-import { useRef, useState, useEffect, useMemo, memo } from 'react';
+import { useRef, useState, useEffect, useMemo, memo, useCallback } from 'react';
 import { TIMELINE_DATA } from '../utils/aboutData';
 import InnovationProcess from '../components/about/InnovationProcess';
 import { useTheme } from '../context/ThemeContext';
@@ -176,8 +176,29 @@ const TypewriterText = memo(({ texts }: { texts: string[] }) => {
     const [index, setIndex] = useState(0);
     const [text, setText] = useState(texts[0]);
     const [phase, setPhase] = useState<'show' | 'delete' | 'type'>('show');
+    const isVisibleRef = useRef(true);
+
+    // Track visibility to pause animations when tab is hidden
+    useEffect(() => {
+        const handleVisibility = () => {
+            isVisibleRef.current = !document.hidden;
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+        return () => document.removeEventListener('visibilitychange', handleVisibility);
+    }, []);
 
     useEffect(() => {
+        // Skip animations when tab is hidden
+        if (!isVisibleRef.current) {
+            const checkVisibility = setInterval(() => {
+                if (isVisibleRef.current) {
+                    clearInterval(checkVisibility);
+                    setPhase('show'); // Resume from show phase
+                }
+            }, 500);
+            return () => clearInterval(checkVisibility);
+        }
+
         if (phase === 'show') {
             const t = setTimeout(() => setPhase('delete'), 2500);
             return () => clearTimeout(t);
@@ -265,17 +286,42 @@ const TiltCard = memo(({ children, className, color = 'brand-green' }: {
     const [hover, setHover] = useState(false);
     const rotateX = useMotionValue(0);
     const rotateY = useMotionValue(0);
+    const rafId = useRef<number | null>(null);
 
-    const handleMouse = (e: React.MouseEvent) => {
-        if (!ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        rotateX.set((e.clientY - centerY) / 15);
-        rotateY.set((centerX - e.clientX) / 15);
-    };
+    // Throttled mouse handler using rAF to prevent layout thrashing
+    const handleMouse = useCallback((e: React.MouseEvent) => {
+        if (rafId.current) return; // Skip if already pending
 
-    const reset = () => { rotateX.set(0); rotateY.set(0); setHover(false); };
+        rafId.current = requestAnimationFrame(() => {
+            if (!ref.current) {
+                rafId.current = null;
+                return;
+            }
+            const rect = ref.current.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            rotateX.set((e.clientY - centerY) / 15);
+            rotateY.set((centerX - e.clientX) / 15);
+            rafId.current = null;
+        });
+    }, [rotateX, rotateY]);
+
+    const reset = useCallback(() => {
+        if (rafId.current) {
+            cancelAnimationFrame(rafId.current);
+            rafId.current = null;
+        }
+        rotateX.set(0);
+        rotateY.set(0);
+        setHover(false);
+    }, [rotateX, rotateY]);
+
+    // Cleanup rAF on unmount
+    useEffect(() => {
+        return () => {
+            if (rafId.current) cancelAnimationFrame(rafId.current);
+        };
+    }, []);
 
     return (
         <motion.div
@@ -309,6 +355,7 @@ const Counter = memo(({ value, suffix = '' }: { value: number; suffix?: string }
     const [count, setCount] = useState(0);
     const [started, setStarted] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
+    const rafId = useRef<number | null>(null);
 
     useEffect(() => {
         const obs = new IntersectionObserver(([e]) => {
@@ -318,14 +365,27 @@ const Counter = memo(({ value, suffix = '' }: { value: number; suffix?: string }
                 const step = value / 40;
                 const loop = () => {
                     n += step;
-                    if (n >= value) setCount(value);
-                    else { setCount(Math.floor(n)); requestAnimationFrame(loop); }
+                    if (n >= value) {
+                        setCount(value);
+                        rafId.current = null;
+                    } else {
+                        setCount(Math.floor(n));
+                        rafId.current = requestAnimationFrame(loop);
+                    }
                 };
-                requestAnimationFrame(loop);
+                rafId.current = requestAnimationFrame(loop);
             }
         }, { threshold: 0.5 });
         if (ref.current) obs.observe(ref.current);
-        return () => obs.disconnect();
+
+        return () => {
+            obs.disconnect();
+            // Cleanup rAF on unmount
+            if (rafId.current) {
+                cancelAnimationFrame(rafId.current);
+                rafId.current = null;
+            }
+        };
     }, [value, started]);
 
     return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
@@ -922,7 +982,7 @@ const About = () => {
                 },
                 {
                     root: null,
-                    rootMargin: "-45% 0px -45% 0px", 
+                    rootMargin: "-45% 0px -45% 0px",
                     threshold: 0
                 }
             );
@@ -947,34 +1007,34 @@ const About = () => {
     ], []);
 
     const features = useMemo(() => [
-        { 
-            num: '01', 
-            title: 'Trusted Expertise', 
-            desc: 'World-class AI research team with proven track record in enterprise AI deployments. Our experts bring decades of experience ensuring robust solutions.', 
+        {
+            num: '01',
+            title: 'Trusted Expertise',
+            desc: 'World-class AI research team with proven track record in enterprise AI deployments. Our experts bring decades of experience ensuring robust solutions.',
             stat: '5000+ Sessions',
             details: 'Former researchers from Google, Meta, and DeepMind with 15+ years in AI/ML. Successfully deployed solutions serving millions worldwide.',
             highlights: ['PhD-level researchers', '200+ published papers', 'Enterprise solutions']
         },
-        { 
-            num: '02', 
-            title: 'Innovation-Driven', 
-            desc: 'Pushing technology boundaries with cutting-edge research in LLMs and autonomous agents. We invest heavily in R&D to deliver next-gen AI capabilities.', 
+        {
+            num: '02',
+            title: 'Innovation-Driven',
+            desc: 'Pushing technology boundaries with cutting-edge research in LLMs and autonomous agents. We invest heavily in R&D to deliver next-gen AI capabilities.',
             stat: 'Cutting-Edge',
             details: 'We invest 30% of resources in R&D, staying ahead with latest advancements in LLMs, autonomous agents, and neural networks.',
             highlights: ['Latest LLM technology', 'Real-time processing', 'Custom model training']
         },
-        { 
-            num: '03', 
-            title: 'Client-Centered', 
-            desc: 'Your success is our priority with dedicated support and customized solutions. We deliver tailored AI systems that integrate seamlessly with workflows.', 
+        {
+            num: '03',
+            title: 'Client-Centered',
+            desc: 'Your success is our priority with dedicated support and customized solutions. We deliver tailored AI systems that integrate seamlessly with workflows.',
             stat: 'Tailored',
             details: 'Every solution customized to your unique needs. Dedicated support ensures 99.9% uptime with 24/7 monitoring and assistance.',
             highlights: ['24/7 dedicated support', '99.9% uptime SLA', 'Custom integrations']
         },
-        { 
-            num: '04', 
-            title: 'Production-Ready', 
-            desc: 'Scale without limits on cloud-native infrastructure handling billions of requests. Battle-tested architecture ensures zero downtime and automatic scaling.', 
+        {
+            num: '04',
+            title: 'Production-Ready',
+            desc: 'Scale without limits on cloud-native infrastructure handling billions of requests. Battle-tested architecture ensures zero downtime and automatic scaling.',
             stat: 'Enterprise',
             details: 'Cloud-native architecture handling billions of requests. Infrastructure scales automatically to meet growing demands with zero downtime.',
             highlights: ['Auto-scaling infrastructure', 'Billions of requests', 'Zero-downtime deploys']
@@ -1073,11 +1133,11 @@ const About = () => {
                                 variant="primary"
                                 className="px-8 py-4"
                                 onClick={() => navigate('/contact')}
-                                >
+                            >
                                 <span className="flex items-center gap-2">
                                     Get Started <ArrowRight className="w-5 h-5" />
                                 </span>
-                                </MagneticButton>
+                            </MagneticButton>
                             <MagneticButton variant="secondary" className="px-8 py-4" onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}>
                                 Learn More
                             </MagneticButton>
@@ -1478,7 +1538,7 @@ const About = () => {
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                         {features.map((f, i) => (
                             <motion.div key={i} variants={fadeUp} className="perspective-1000" style={{ height: '280px' }}>
-                                <div 
+                                <div
                                     className="relative w-full h-full cursor-pointer"
                                     style={{ transformStyle: 'preserve-3d' }}
                                     onClick={() => setFlippedCard(flippedCard === i ? null : i)}
@@ -1490,47 +1550,44 @@ const About = () => {
                                         style={{ transformStyle: 'preserve-3d' }}
                                     >
                                         {/* Front Side */}
-                                        <div 
-                                            className={`absolute inset-0 w-full h-full rounded-lg shadow-lg border transition-shadow duration-300 hover:shadow-xl overflow-hidden ${
-                                                theme === 'dark'
-                                                    ? i % 2 === 0 
-                                                        ? 'bg-dark-card border-brand-green-500/30'
-                                                        : 'bg-dark-card border-brand-yellow-500/30'
-                                                    : i % 2 === 0
-                                                        ? 'bg-white border-brand-green-100'
-                                                        : 'bg-white border-brand-yellow-100'
-                                            }`}
-                                            style={{ 
+                                        <div
+                                            className={`absolute inset-0 w-full h-full rounded-lg shadow-lg border transition-shadow duration-300 hover:shadow-xl overflow-hidden ${theme === 'dark'
+                                                ? i % 2 === 0
+                                                    ? 'bg-dark-card border-brand-green-500/30'
+                                                    : 'bg-dark-card border-brand-yellow-500/30'
+                                                : i % 2 === 0
+                                                    ? 'bg-white border-brand-green-100'
+                                                    : 'bg-white border-brand-yellow-100'
+                                                }`}
+                                            style={{
                                                 backfaceVisibility: 'hidden',
                                                 WebkitBackfaceVisibility: 'hidden'
                                             }}
                                         >
                                             {/* Decorative gradient background */}
-                                            <div className={`absolute inset-0 opacity-5 ${
-                                                i % 2 === 0 
-                                                    ? 'bg-gradient-to-br from-brand-green-500 via-transparent to-brand-green-500/30'
-                                                    : 'bg-gradient-to-br from-brand-yellow-500 via-transparent to-brand-yellow-500/30'
-                                            }`} />
-                                            
+                                            <div className={`absolute inset-0 opacity-5 ${i % 2 === 0
+                                                ? 'bg-gradient-to-br from-brand-green-500 via-transparent to-brand-green-500/30'
+                                                : 'bg-gradient-to-br from-brand-yellow-500 via-transparent to-brand-yellow-500/30'
+                                                }`} />
+
                                             {/* Decorative pattern */}
                                             <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                                                <div className={`absolute inset-0 ${i % 2 === 0 ? 'bg-brand-green-500' : 'bg-brand-yellow-500'}`} 
-                                                     style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }} />
+                                                <div className={`absolute inset-0 ${i % 2 === 0 ? 'bg-brand-green-500' : 'bg-brand-yellow-500'}`}
+                                                    style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }} />
                                             </div>
-                                            
+
                                             <div className="relative p-6 pb-8 flex flex-col h-full">
                                                 {/* Number badge */}
                                                 <div className="flex items-start gap-4 mb-4">
                                                     <motion.div
-                                                        className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg ${
-                                                            i % 2 === 0 
-                                                                ? theme === 'dark'
-                                                                    ? 'bg-brand-green-500/20 text-brand-green-400 border border-brand-green-500/30'
-                                                                    : 'bg-gradient-to-br from-brand-green-400 to-brand-green-600 text-white'
-                                                                : theme === 'dark'
-                                                                    ? 'bg-brand-yellow-500/20 text-brand-yellow-400 border border-brand-yellow-500/30'
-                                                                    : 'bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600 text-white'
-                                                        }`}
+                                                        className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg ${i % 2 === 0
+                                                            ? theme === 'dark'
+                                                                ? 'bg-brand-green-500/20 text-brand-green-400 border border-brand-green-500/30'
+                                                                : 'bg-gradient-to-br from-brand-green-400 to-brand-green-600 text-white'
+                                                            : theme === 'dark'
+                                                                ? 'bg-brand-yellow-500/20 text-brand-yellow-400 border border-brand-yellow-500/30'
+                                                                : 'bg-gradient-to-br from-brand-yellow-400 to-brand-yellow-600 text-white'
+                                                            }`}
                                                         whileHover={{ scale: 1.05, rotate: 5 }}
                                                     >
                                                         {f.num}
@@ -1540,27 +1597,25 @@ const About = () => {
                                                         <div className={`h-1 w-12 rounded-full ${i % 2 === 0 ? 'bg-brand-green-500' : 'bg-brand-yellow-500'}`} />
                                                     </div>
                                                 </div>
-                                                
+
                                                 {/* Description */}
                                                 <p className={`text-sm leading-relaxed flex-1 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
                                                     {f.desc}
                                                 </p>
-                                                
+
                                                 {/* Footer with stat */}
-                                                <div className={`flex items-center justify-between pt-5 mt-4 mb-1 border-t ${
-                                                    theme === 'dark'
-                                                        ? i % 2 === 0 ? 'border-brand-green-500/20' : 'border-brand-yellow-500/20'
-                                                        : i % 2 === 0 ? 'border-brand-green-100' : 'border-brand-yellow-100'
-                                                }`}>
+                                                <div className={`flex items-center justify-between pt-5 mt-4 mb-1 border-t ${theme === 'dark'
+                                                    ? i % 2 === 0 ? 'border-brand-green-500/20' : 'border-brand-yellow-500/20'
+                                                    : i % 2 === 0 ? 'border-brand-green-100' : 'border-brand-yellow-100'
+                                                    }`}>
                                                     <span className={`text-xs font-semibold ${i % 2 === 0 ? 'text-brand-green-600' : 'text-brand-yellow-600'}`}>
                                                         {f.stat}
                                                     </span>
                                                     <motion.div
-                                                        className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                                            i % 2 === 0 
-                                                                ? 'bg-brand-green-100 text-brand-green-600' 
-                                                                : 'bg-brand-yellow-100 text-brand-yellow-600'
-                                                        }`}
+                                                        className={`w-8 h-8 rounded-full flex items-center justify-center ${i % 2 === 0
+                                                            ? 'bg-brand-green-100 text-brand-green-600'
+                                                            : 'bg-brand-yellow-100 text-brand-yellow-600'
+                                                            }`}
                                                         whileHover={{ scale: 1.1, rotate: 90 }}
                                                     >
                                                         →
@@ -1570,17 +1625,16 @@ const About = () => {
                                         </div>
 
                                         {/* Back Side */}
-                                        <div 
-                                            className={`absolute inset-0 w-full h-full rounded-lg shadow-lg border overflow-hidden ${
-                                                theme === 'dark'
-                                                    ? i % 2 === 0 
-                                                        ? 'bg-dark-card border-brand-green-500/30'
-                                                        : 'bg-dark-card border-brand-yellow-500/30'
-                                                    : i % 2 === 0
-                                                        ? 'bg-white border-brand-green-100'
-                                                        : 'bg-white border-brand-yellow-100'
-                                            }`}
-                                            style={{ 
+                                        <div
+                                            className={`absolute inset-0 w-full h-full rounded-lg shadow-lg border overflow-hidden ${theme === 'dark'
+                                                ? i % 2 === 0
+                                                    ? 'bg-dark-card border-brand-green-500/30'
+                                                    : 'bg-dark-card border-brand-yellow-500/30'
+                                                : i % 2 === 0
+                                                    ? 'bg-white border-brand-green-100'
+                                                    : 'bg-white border-brand-yellow-100'
+                                                }`}
+                                            style={{
                                                 backfaceVisibility: 'hidden',
                                                 WebkitBackfaceVisibility: 'hidden',
                                                 transform: 'rotateY(180deg)'
@@ -1613,9 +1667,9 @@ const About = () => {
                 </div>
             </section>
 
-           {/* ===== GLOBAL PRESENCE ===== */}
+            {/* ===== GLOBAL PRESENCE ===== */}
             <section className={`py-16 md:py-24 relative overflow-hidden ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-white via-slate-50/50 to-white'}`}>
-                
+
                 {/* Decorative background */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     <div className={`absolute top-20 -left-20 w-96 h-96 rounded-full blur-3xl opacity-20 ${theme === 'dark' ? 'bg-brand-green-500' : 'bg-brand-green-200'}`} />
@@ -1623,7 +1677,7 @@ const About = () => {
                 </div>
 
                 <div className="container mx-auto px-4 relative z-10">
-                    
+
                     {/* Header */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -1660,100 +1714,93 @@ const About = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className={`group relative rounded-2xl overflow-hidden shadow-xl cursor-pointer h-[470px] w-[92%] mx-auto ${
-                                        theme === 'dark' ? 'bg-dark-card' : 'bg-white'
-                                    }`}
-                                    // onClick={() => setActiveOffice(i)}
+                                    className={`group relative rounded-2xl overflow-hidden shadow-xl cursor-pointer h-[470px] w-[92%] mx-auto ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'
+                                        }`}
+                                // onClick={() => setActiveOffice(i)}
                                 >
                                     {/* Image with Hover Overlay ONLY on Image */}
-                                <motion.div className="h-[70%] overflow-hidden relative group">
+                                    <motion.div className="h-[70%] overflow-hidden relative group">
 
-                                    <motion.img
-                                        src={o.image}
-                                        alt={o.city}
-                                        className="w-full h-full object-cover"
-                                        whileHover={{ scale: 1.05 }}
-                                        transition={{ duration: 0.4 }}
-                                    />
+                                        <motion.img
+                                            src={o.image}
+                                            alt={o.city}
+                                            className="w-full h-full object-cover"
+                                            whileHover={{ scale: 1.05 }}
+                                            transition={{ duration: 0.4 }}
+                                        />
 
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
-                                    {/* Hover Overlay - NOW CENTERED ONLY ON IMAGE */}
-                                    <motion.div
-                                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                        initial={{ opacity: 0 }}
-                                        whileHover={{ opacity: 1 }}
-                                    >
-                                        <div
-                                            className={`m-6 p-5 rounded-xl w-[88%] max-w-[320px] shadow-xl backdrop-blur-md ${
-                                                theme === 'dark'
+                                        {/* Hover Overlay - NOW CENTERED ONLY ON IMAGE */}
+                                        <motion.div
+                                            className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                            initial={{ opacity: 0 }}
+                                            whileHover={{ opacity: 1 }}
+                                        >
+                                            <div
+                                                className={`m-6 p-5 rounded-xl w-[88%] max-w-[320px] shadow-xl backdrop-blur-md ${theme === 'dark'
                                                     ? 'bg-dark-card/95 border border-white/10'
                                                     : 'bg-white/95 border border-gray-100'
-                                            }`}
-                                        >
-                                            <p className={`text-sm mb-3 text-center ${
-                                                theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'
-                                            }`}>
-                                                {o.address}
-                                            </p>
+                                                    }`}
+                                            >
+                                                <p className={`text-sm mb-3 text-center ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'
+                                                    }`}>
+                                                    {o.address}
+                                                </p>
 
-                                            <p className={`font-semibold mb-4 text-center ${
-                                                theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
-                                            }`}>
-                                                {o.phone}
-                                            </p>
+                                                <p className={`font-semibold mb-4 text-center ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
+                                                    }`}>
+                                                    {o.phone}
+                                                </p>
 
-                                            <div className="flex justify-center">
-                                                <motion.a
-                                                    href={o.mapUrl}
-                                                    target="_blank"
-                                                    className="px-5 py-2 bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white rounded-lg font-semibold text-sm"
-                                                    whileHover={{ scale: 1.05 }}
-                                                    whileTap={{ scale: 0.95 }}
-                                                >
-                                                    Get Directions
-                                                </motion.a>
+                                                <div className="flex justify-center">
+                                                    <motion.a
+                                                        href={o.mapUrl}
+                                                        target="_blank"
+                                                        className="px-5 py-2 bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white rounded-lg font-semibold text-sm"
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                    >
+                                                        Get Directions
+                                                    </motion.a>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
+
                                     </motion.div>
 
-                                </motion.div>
+                                    {/* Info Section - Unaffected */}
+                                    <div className="h-[26%] p-5 flex flex-col justify-between">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <img src={o.flagImg} alt="flag" className="w-6 h-4 rounded" />
+                                                <span className={`text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-brand-green-400' : 'text-brand-green-600'
+                                                    }`}>
+                                                    {o.name}
+                                                </span>
+                                            </div>
 
-                                {/* Info Section - Unaffected */}
-                                <div className="h-[26%] p-5 flex flex-col justify-between">
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <img src={o.flagImg} alt="flag" className="w-6 h-4 rounded" />
-                                            <span className={`text-xs font-bold uppercase tracking-wider ${
-                                                theme === 'dark' ? 'text-brand-green-400' : 'text-brand-green-600'
-                                            }`}>
-                                                {o.name}
-                                            </span>
+                                            <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
+                                                }`}>
+                                                {o.city}
+                                            </h3>
+
+                                            <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'
+                                                }`}>
+                                                {o.country}
+                                            </p>
                                         </div>
-
-                                        <h3 className={`text-xl font-bold ${
-                                            theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
-                                        }`}>
-                                            {o.city}
-                                        </h3>
-
-                                        <p className={`text-sm ${
-                                            theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'
-                                        }`}>
-                                            {o.country}
-                                        </p>
+                                        {/* MOBILE ONLY BUTTON */}
+                                        <div className="lg:hidden mt-2">
+                                            <a
+                                                href={o.mapUrl}
+                                                target="_blank"
+                                                className="block w-full text-center px-4 py-2 bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white rounded-lg font-semibold text-sm"
+                                            >
+                                                Get Directions
+                                            </a>
+                                        </div>
                                     </div>
-                                    {/* MOBILE ONLY BUTTON */}
-                            <div className="lg:hidden mt-2">
-                                <a
-                                    href={o.mapUrl}
-                                    target="_blank"
-                                    className="block w-full text-center px-4 py-2 bg-gradient-to-r from-brand-green-500 to-brand-green-600 text-white rounded-lg font-semibold text-sm"
-                                >
-                                    Get Directions
-                                </a>
-                            </div>
-                                </div>
                                 </motion.div>
                             ))}
                         </div>

@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 // import Plasma from "./Plasma";
 // Lazy load 3D component to prevent blocking initial page load
-import HeroRobot from './HeroRobot';
+const HeroRobot = lazy(() => import('./HeroRobot'));
 
 const ROTATING_TEXTS = [
     { part1: "Employee Experiences", part2: "AI Copilots" },
@@ -28,24 +28,71 @@ const HeroSection = () => {
     const [showMessage, setShowMessage] = useState(true);
     const { theme } = useTheme();
 
-    // Text Rotation Interval
+    // Text Rotation Interval - visibility aware
     useEffect(() => {
-        const interval = setInterval(() => {
-            setIndex((prev) => (prev + 1) % ROTATING_TEXTS.length);
-        }, 3500);
-        return () => clearInterval(interval);
+        let interval: ReturnType<typeof setInterval> | null = null;
+
+        const startInterval = () => {
+            if (interval) clearInterval(interval);
+            interval = setInterval(() => {
+                setIndex((prev) => (prev + 1) % ROTATING_TEXTS.length);
+            }, 3500);
+        };
+
+        const handleVisibility = () => {
+            if (document.hidden) {
+                if (interval) clearInterval(interval);
+                interval = null;
+            } else {
+                startInterval();
+            }
+        };
+
+        startInterval();
+        document.addEventListener('visibilitychange', handleVisibility);
+
+        return () => {
+            if (interval) clearInterval(interval);
+            document.removeEventListener('visibilitychange', handleVisibility);
+        };
     }, []);
 
-    // Robot Message Cycling
+    // Robot Message Cycling - visibility aware
     useEffect(() => {
-        const interval = setInterval(() => {
-            setShowMessage(false);
-            setTimeout(() => {
-                setMessageIndex((prev) => (prev + 1) % ROBOT_MESSAGES.length);
-                setShowMessage(true);
-            }, 500);
-        }, 4000);
-        return () => clearInterval(interval);
+        let interval: ReturnType<typeof setInterval> | null = null;
+        let timeout: ReturnType<typeof setTimeout> | null = null;
+
+        const startInterval = () => {
+            if (interval) clearInterval(interval);
+            interval = setInterval(() => {
+                setShowMessage(false);
+                timeout = setTimeout(() => {
+                    setMessageIndex((prev) => (prev + 1) % ROBOT_MESSAGES.length);
+                    setShowMessage(true);
+                }, 500);
+            }, 4000);
+        };
+
+        const handleVisibility = () => {
+            if (document.hidden) {
+                if (interval) clearInterval(interval);
+                if (timeout) clearTimeout(timeout);
+                interval = null;
+                timeout = null;
+            } else {
+                setShowMessage(true); // Reset to visible state
+                startInterval();
+            }
+        };
+
+        startInterval();
+        document.addEventListener('visibilitychange', handleVisibility);
+
+        return () => {
+            if (interval) clearInterval(interval);
+            if (timeout) clearTimeout(timeout);
+            document.removeEventListener('visibilitychange', handleVisibility);
+        };
     }, []);
 
     return (

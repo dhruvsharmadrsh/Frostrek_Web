@@ -276,7 +276,7 @@ const ContactPage = () => {
                                     {/* Radio Options */}
                                     <div className="">
                                         <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                            Who are you trying to reach?*
+                                            Who are you trying to reach?<span className="text-red-500">*</span>
                                         </label>
 
                                         {["Sales Enquiry", "Project Enquiry", "Partnerships", "Support", "Careers", "General Enquiry", "Other"].map((option) => (
@@ -300,7 +300,7 @@ const ContactPage = () => {
                                     {/* Project Details */}
                                     <div className="space-y-2">
                                         <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                            Please provide details regarding your enquiry.*
+                                            Please provide details regarding your enquiry.<span className="text-red-500">*</span>
                                         </label>
 
                                         <textarea
@@ -428,7 +428,15 @@ const InputGroup = ({
     theme
 }: any) => (
     <div className="space-y-2">
-        <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{label}</label>
+        <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+            {typeof label === 'string' && label.endsWith('*') ? (
+                <>
+                    {label.slice(0, -1)}<span className="text-red-500">*</span>
+                </>
+            ) : (
+                label
+            )}
+        </label>
         <input
             type={type}
             name={name}

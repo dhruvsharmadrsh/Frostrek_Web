@@ -37,11 +37,14 @@ const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
         // Sync Lenis with GSAP ScrollTrigger
         lenis.on('scroll', ScrollTrigger.update);
 
-        // Use GSAP ticker for smooth animation loop
-        gsap.ticker.add((time) => {
+        // Store handler reference for proper cleanup
+        const rafHandler = (time: number) => {
             lenis.raf(time * 1000);
-        });
-        
+        };
+
+        // Use GSAP ticker for smooth animation loop
+        gsap.ticker.add(rafHandler);
+
         gsap.ticker.lagSmoothing(0);
 
         // Handle route changes - scroll to top instantly
@@ -52,7 +55,7 @@ const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
         window.addEventListener('popstate', handleRouteChange);
 
         return () => {
-            gsap.ticker.remove((time) => lenis.raf(time * 1000));
+            gsap.ticker.remove(rafHandler); // Now removes correct reference
             window.removeEventListener('popstate', handleRouteChange);
             lenis.destroy();
             lenisRef.current = null;

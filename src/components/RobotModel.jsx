@@ -1,5 +1,5 @@
 import { useGLTF } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
@@ -17,16 +17,15 @@ export default function RobotModel({ isSpeaking = false, ...props }) {
   const blinking = useRef(false);
 
   const { scene } = useGLTF("/models/genkub_greeting_robot.glb", true);
-  const { invalidate } = useThree();
 
   useEffect(() => {
     // Pause animations when tab is hidden
     const handleVisibility = () => {
       isVisible.current = !document.hidden;
     };
-    
+
     document.addEventListener("visibilitychange", handleVisibility);
-    
+
     return () => {
       document.removeEventListener("visibilitychange", handleVisibility);
     };
@@ -114,7 +113,7 @@ export default function RobotModel({ isSpeaking = false, ...props }) {
   useFrame((state, delta) => {
     // Skip processing when tab is hidden
     if (!isVisible.current || !group.current) return;
-    
+
     const t = state.clock.getElapsedTime();
 
     // Floating animation (always runs - cheap operation)
@@ -174,9 +173,7 @@ export default function RobotModel({ isSpeaking = false, ...props }) {
         0.1
       );
     }
-    
-    // Request next frame render
-    invalidate();
+    // Removed invalidate() - frameloop="always" in HeroRobot handles this
   });
 
   return (

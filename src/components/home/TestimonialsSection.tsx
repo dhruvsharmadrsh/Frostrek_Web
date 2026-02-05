@@ -49,16 +49,20 @@ const TestimonialsSection = () => {
     const cardRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLDivElement>(null);
 
-    // Auto-rotation
-    useEffect(() => {
-        if (isPaused) return;
+    // Use ref for isPaused to avoid interval recreation
+    const isPausedRef = useRef(isPaused);
+    isPausedRef.current = isPaused;
 
+    // Auto-rotation - fixed to not recreate on every index change
+    useEffect(() => {
         const interval = setInterval(() => {
-            goToNext();
+            if (!isPausedRef.current) {
+                goToNext();
+            }
         }, ROTATION_INTERVAL);
 
         return () => clearInterval(interval);
-    }, [currentIndex, isPaused]);
+    }, []); // Empty deps - interval runs once, checks ref
 
     // Animate on index change
     const animateTransition = useCallback((direction: 'next' | 'prev') => {

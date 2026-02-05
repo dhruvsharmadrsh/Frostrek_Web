@@ -112,7 +112,7 @@ const LinkedinOutreachDemo = () => {
                             <div className="space-y-4">
                                 <div className="space-y-2">
                                     <label className={`text-sm font-medium ml-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        Target Industry / Niche
+                                        Target Industry / Niche <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -133,7 +133,7 @@ const LinkedinOutreachDemo = () => {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <label className={`text-sm font-medium ml-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                            Location
+                                            Location <span className="text-red-500">*</span>
                                         </label>
                                         <div className="relative">
                                             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -153,7 +153,7 @@ const LinkedinOutreachDemo = () => {
 
                                     <div className="space-y-2">
                                         <label className={`text-sm font-medium ml-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                            Company Size
+                                            Company Size <span className="text-red-500">*</span>
                                         </label>
                                         <div className="relative">
                                             <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
