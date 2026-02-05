@@ -15,7 +15,7 @@ const ROTATING_TEXTS = [
 
 const ROBOT_MESSAGES = [
     "Hi there! 👋",
-    "I'm Frostry 🤖",
+    "I'm Frosty 🤖",
     "Ask me anything! 💡",
     "How can I help? 🚀"
 ];
