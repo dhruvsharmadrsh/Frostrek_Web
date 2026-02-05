@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Linkedin, Twitter, Facebook, ArrowUp, Sparkles, MapPin } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { NAV_ITEMS, COMPANY_INFO } from '../../utils/constants';
@@ -123,7 +124,8 @@ const Footer = () => {
       {/* Careers Card - Keep unchanged */}
       <div className={`py-6 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
         <div className="container mx-auto px-4 md:px-6">
-          <a href="/contact" className="block max-w-4xl mx-auto">
+          <Link to="/contact" className="block max-w-4xl mx-auto">
+            {/* ... (content remains same) ... */}
             <div className={`careers-card border-2 rounded-2xl p-6 cursor-pointer transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30 hover:border-dark-accent' : 'bg-white border-gray-200'}`}>
               <div className="flex items-center gap-6">
                 <div className="flex-shrink-0">
@@ -155,7 +157,7 @@ const Footer = () => {
                 </div>
               </div>
             </div>
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -170,12 +172,12 @@ const Footer = () => {
             <div className="lg:col-span-3 space-y-4">
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 group">
-                  <a href="/" className="flex items-center gap-2">
+                  <Link to="/" className="flex items-center gap-2">
                     <img src="/logo.png" alt="Frostrek Logo" className="h-8 w-8 transition-transform group-hover:scale-110" />
                     <span className={`text-xl font-bold font-sans tracking-tight ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
                       Frostrek
                     </span>
-                  </a>
+                  </Link>
                   {/* ISO Badges - Now Next to Logo */}
                   <div className="flex items-center gap-2">
                     <div className={`iso-badge px-2 py-0.5 border rounded text-[10px] font-bold tracking-wide transition-colors ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30 text-dark-accent' : 'bg-[#FDFBF7] border-[#E6D0C6] text-[#8A5A35]'}`}>
@@ -209,7 +211,7 @@ const Footer = () => {
                 <ul className="space-y-2">
                   {NAV_ITEMS.find(n => n.label === 'Products')?.megaMenu?.flatMap(s => s.items).slice(0, 5).map(item => (
                     <li key={item.name}>
-                      <a href={item.href} className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>{item.name}</a>
+                      <Link to={item.href} className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>{item.name}</Link>
                     </li>
                   ))}
                 </ul>
@@ -221,7 +223,7 @@ const Footer = () => {
                 <ul className="space-y-2">
                   {NAV_ITEMS.find(n => n.label === 'Solutions')?.megaMenu?.flatMap(s => s.items).map(item => (
                     <li key={item.name}>
-                      <a href={item.href} className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>{item.name}</a>
+                      <Link to={item.href} className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>{item.name}</Link>
                     </li>
                   ))}
                 </ul>
@@ -231,11 +233,10 @@ const Footer = () => {
               <div className="space-y-3">
                 <h4 className={`section-title font-semibold mb-2 text-sm uppercase tracking-wider ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>Company</h4>
                 <ul className="space-y-2">
-                  <li><a href="/about" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>About Us</a></li>
-                  <li><a href="/services" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>Services</a></li>
-                  <li><a href="/resources" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>Resources</a></li>
-                  <li><a href="/careers" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>Careers</a></li>
-                  <li><a href="/contact" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>Contact</a></li>
+                  <li><Link to="/about" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>About Us</Link></li>
+                  <li><Link to="/resources" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>Resources</Link></li>
+                  <li><Link to="/careers" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>Careers</Link></li>
+                  <li><Link to="/contact" className={`footer-link text-sm ${theme === 'dark' ? 'text-dark-text-muted hover:text-dark-accent' : 'text-gray-600 hover:text-[#B07552]'}`}>Contact</Link></li>
                 </ul>
               </div>
 
