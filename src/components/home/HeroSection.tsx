@@ -3,7 +3,7 @@ import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
-import Plasma from "./Plasma";
+// import Plasma from "./Plasma";
 // Lazy load 3D component to prevent blocking initial page load
 import HeroRobot from './HeroRobot';
 
@@ -15,7 +15,7 @@ const ROTATING_TEXTS = [
 
 const ROBOT_MESSAGES = [
     "Hi there! 👋",
-    "I'm Frostry 🤖",
+    "I'm Frosty 🤖",
     "Ask me anything! 💡",
     "How can I help? 🚀"
 ];
@@ -62,19 +62,7 @@ const HeroSection = () => {
                 <div className="absolute bottom-[-20%] right-[-10%] w-[700px] h-[700px] rounded-full bg-[#F3E9CD]/15 blur-[120px]" />
             </div>
 
-            <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-                <div className="relative w-[100%] h-[100%] lg:w-[100%] lg:h-[100%] rounded-3xl overflow-hidden shadow-2xl pointer-events-auto">
-                    <Plasma
-                        color="#B07552"       // Main bronze
-                        speed={0.6}           // Slower = calmer
-                        direction="forward"
-                        scale={1.8}           // Slightly wider
-                        opacity={0.55}        // Softer
-                        mouseInteractive
-                    />
 
-                </div>
-            </div>
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
 

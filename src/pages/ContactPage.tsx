@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, MapPin, Send, Check, Loader2, ArrowRight, MessageCircle  } from 'lucide-react';
+import { Mail, MapPin, Send, Check, Loader2, ArrowRight, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import CuteBackground from '../components/ui/CuteBackground';
@@ -68,35 +68,35 @@ const ContactPage = () => {
 
 
     const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+        e.preventDefault();
+        setError('');
 
-    if (!validateForm()) {
-        return;
-    }
+        if (!validateForm()) {
+            return;
+        }
 
-    setIsSubmitting(true);
+        setIsSubmitting(true);
 
         try {
             await emailjs.send(
                 'service_jia14ic',
                 'template_hygc11p',
                 {
-                to_email: 'dhruv.sharma@frostrek.com',
-                first_name: formData.firstName,
-                last_name: formData.lastName,
-                company: formData.company,
-                job_title: formData.jobTitle,
-                work_email: formData.workEmail,
-                // country: formData.country,
-                reach_type: formData.reachType,
-                project_details: formData.projectDetails
+                    to_email: 'dhruv.sharma@frostrek.com',
+                    first_name: formData.firstName,
+                    last_name: formData.lastName,
+                    company: formData.company,
+                    job_title: formData.jobTitle,
+                    work_email: formData.workEmail,
+                    // country: formData.country,
+                    reach_type: formData.reachType,
+                    project_details: formData.projectDetails
                 },
                 'BiiX__h7V1vLoyEQb'
             );
 
             setIsSuccess(true);
-            setFormData({ 
+            setFormData({
                 firstName: '',
                 lastName: '',
                 company: '',
@@ -158,7 +158,7 @@ const ContactPage = () => {
                                 theme={theme}
                             />
                             <ContactItem
-                                icon={<MessageCircle  className="w-6 h-6" />}
+                                icon={<MessageCircle className="w-6 h-6" />}
                                 label="WhatsApp Us"
                                 value="+1 17574722491"
                                 href="https://wa.me/17574722491"
@@ -188,64 +188,64 @@ const ContactPage = () => {
 
                             {!isSuccess ? (
                                 <form onSubmit={handleSubmit} className="space-y-2">
-  
-  {/* Row 1 */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-    <InputGroup
-      label="First name*"
-      name="firstName"
-      value={formData.firstName}
-      onChange={handleChange}
-      placeholder="First name"
-      theme={theme}
-    />
 
-    <InputGroup
-      label="Last name*"
-      name="lastName"
-      value={formData.lastName}
-      onChange={handleChange}
-      placeholder="Last name"
-      theme={theme}
-    />
-  </div>
+                                    {/* Row 1 */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <InputGroup
+                                            label="First name*"
+                                            name="firstName"
+                                            value={formData.firstName}
+                                            onChange={handleChange}
+                                            placeholder="First name"
+                                            theme={theme}
+                                        />
 
-  {/* Row 2 */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-    <InputGroup
-      label="Company name"
-      name="company"
-      value={formData.company}
-      onChange={handleChange}
-      placeholder="Company name"
-      theme={theme}
-      required={false}
-    />
+                                        <InputGroup
+                                            label="Last name*"
+                                            name="lastName"
+                                            value={formData.lastName}
+                                            onChange={handleChange}
+                                            placeholder="Last name"
+                                            theme={theme}
+                                        />
+                                    </div>
 
-    <InputGroup
-      label="Job title"
-      name="jobTitle"
-      value={formData.jobTitle}
-      onChange={handleChange}
-      placeholder="Job title"
-      theme={theme}
-      required={false}
-    />
-  </div>
+                                    {/* Row 2 */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                        <InputGroup
+                                            label="Company name"
+                                            name="company"
+                                            value={formData.company}
+                                            onChange={handleChange}
+                                            placeholder="Company name"
+                                            theme={theme}
+                                            required={false}
+                                        />
 
-  {/* Work Email */}
-  <InputGroup
-    label="Work email*"
-    name="workEmail"
-    type="email"
-    value={formData.workEmail}
-    onChange={handleChange}
-    placeholder="Work email"
-    theme={theme}
-  />
+                                        <InputGroup
+                                            label="Job title"
+                                            name="jobTitle"
+                                            value={formData.jobTitle}
+                                            onChange={handleChange}
+                                            placeholder="Job title"
+                                            theme={theme}
+                                            required={false}
+                                        />
+                                    </div>
 
-  {/* Country */}
-  {/* <InputGroup
+                                    {/* Work Email */}
+                                    <InputGroup
+                                        label="Work email*"
+                                        name="workEmail"
+                                        type="email"
+                                        value={formData.workEmail}
+                                        onChange={handleChange}
+                                        placeholder="Work email"
+                                        theme={theme}
+                                    />
+
+                                    {/* Country */}
+                                    {/* <InputGroup
     label="Country*"
     name="country"
     value={formData.country}
@@ -254,86 +254,83 @@ const ContactPage = () => {
     theme={theme}
   /> */}
 
-  {/* Radio Options */}
-  <div className="">
-    <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-      Who are you trying to reach?*
-    </label>
+                                    {/* Radio Options */}
+                                    <div className="">
+                                        <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            Who are you trying to reach?*
+                                        </label>
 
-    {["Careers", "Partnerships", "Press", "Support", "Other"].map((option) => (
-      <label key={option} className="flex items-center gap-3 cursor-pointer">
-        <input
-          type="radio"
-          name="reachType"
-          value={option}
-          checked={formData.reachType === option}
-          onChange={handleChange}
-          required
-          className="accent-[#B07552]"
-        />
-        <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}>
-          {option}
-        </span>
-      </label>
-    ))}
-  </div>
+                                        {["Sales Enquiry", "Project Enquiry", "Partnerships", "Support", "Careers", "General Enquiry", "Other"].map((option) => (
+                                            <label key={option} className="flex items-center gap-3 cursor-pointer">
+                                                <input
+                                                    type="radio"
+                                                    name="reachType"
+                                                    value={option}
+                                                    checked={formData.reachType === option}
+                                                    onChange={handleChange}
+                                                    required
+                                                    className="accent-[#B07552]"
+                                                />
+                                                <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}>
+                                                    {option}
+                                                </span>
+                                            </label>
+                                        ))}
+                                    </div>
 
-  {/* Project Details */}
-  <div className="space-y-2">
-    <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-      Please provide details on your project.*
-    </label>
+                                    {/* Project Details */}
+                                    <div className="space-y-2">
+                                        <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            Please provide details regarding your enquiry.*
+                                        </label>
 
-    <textarea
-      name="projectDetails"
-      value={formData.projectDetails}
-      onChange={handleChange}
-      rows={3}
-      required
-      placeholder="Please provide details on your project."
-      className={`w-full px-3 py-2 rounded-lg outline-none border transition-all duration-300 resize-none ${
-        theme === 'dark'
-          ? 'bg-black/20 border-white/10 focus:border-[#B07552] text-white placeholder-gray-500'
-          : 'bg-white/50 border-gray-200 focus:border-[#B07552] text-gray-900 placeholder-gray-400'
-      }`}
-    />
-  </div>
+                                        <textarea
+                                            name="projectDetails"
+                                            value={formData.projectDetails}
+                                            onChange={handleChange}
+                                            rows={3}
+                                            required
+                                            placeholder="Tell us a bit more about what you're looking for..."
+                                            className={`w-full px-3 py-2 rounded-lg outline-none border transition-all duration-300 resize-none ${theme === 'dark'
+                                                ? 'bg-black/20 border-white/10 focus:border-[#B07552] text-white placeholder-gray-500'
+                                                : 'bg-white/50 border-gray-200 focus:border-[#B07552] text-gray-900 placeholder-gray-400'
+                                                }`}
+                                        />
+                                    </div>
 
-  {/* Privacy Text */}
-  <p className={`text-xs ${
-    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-  }`}>
-    By submitting this form, your information will be processed in accordance with our Privacy Policy.
-  </p>
+                                    {/* Privacy Text */}
+                                    <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                                        }`}>
+                                        By submitting this form, your information will be processed in accordance with our Privacy Policy.
+                                    </p>
 
-  {/* Error */}
-  {error && (
-    <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
-      {error}
-    </div>
-  )}
+                                    {/* Error */}
+                                    {error && (
+                                        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
+                                            {error}
+                                        </div>
+                                    )}
 
-  {/* Submit Button */}
-  <button
-    type="submit"
-    disabled={isSubmitting}
-    className={`w-full py-2.5 rounded-lg font-semibold text-sm text-white shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-2 ${
-      isSubmitting ? 'opacity-70 cursor-wait' : 'hover:shadow-xl'
-    }`}
-    style={{ background: 'linear-gradient(135deg, #B07552 0%, #8A5A35 100%)' }}
-  >
-    {isSubmitting ? (
-      <>
-        <Loader2 className="w-5 h-5 animate-spin" /> Sending...
-      </>
-    ) : (
-      <>
-        Send Message <Send className="w-5 h-5" />
-      </>
-    )}
-  </button>
+                                    {/* Submit Button */}
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className={`w-full py-2.5 rounded-lg font-semibold text-sm text-white shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:shadow-xl'
+                                            }`}
+                                        style={{ background: 'linear-gradient(135deg, #B07552 0%, #8A5A35 100%)' }}
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <Loader2 className="w-5 h-5 animate-spin" /> Sending...
+                                            </>
+                                        ) : (
+                                            <>
+                                                Send Message <Send className="w-5 h-5" />
+                                            </>
+                                        )}
+                                    </button>
 
-</form>
+                                </form>
 
                             ) : (
                                 <motion.div
@@ -383,13 +380,13 @@ const ContactItem = ({ icon, label, value, href, theme }: any) => (
 );
 
 const InputGroup = ({
-  label,
-  name,
-  type = "text",
-  value,
-  onChange,
-  placeholder,
-  theme
+    label,
+    name,
+    type = "text",
+    value,
+    onChange,
+    placeholder,
+    theme
 }: any) => (
     <div className="space-y-2">
         <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{label}</label>

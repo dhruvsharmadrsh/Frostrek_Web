@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import Button from '../ui/Button';
 import { useTheme } from '../../context/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 
 const ProductHero = ({
     description,
@@ -13,6 +14,7 @@ const ProductHero = ({
     tagline: string
 }) => {
     const { theme } = useTheme();
+    const navigate = useNavigate();
     
     return (
         <section className="relative min-h-[90vh] flex items-center pt-32 pb-20 overflow-hidden bg-transparent">
@@ -64,6 +66,7 @@ const ProductHero = ({
                 >
                     <Button
                         size="lg"
+                        onClick={() => navigate('/schedule-demo')}
                         className={`font-semibold rounded-full px-8 h-14 text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${theme === 'dark' ? 'bg-dark-accent text-dark-bg hover:bg-dark-accent/90' : 'bg-brand-green-600 text-white hover:bg-brand-green-700'}`}
                     >
                         Get Started

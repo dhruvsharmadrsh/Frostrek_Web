@@ -38,7 +38,7 @@ export const NAV_ITEMS = [
             },
         ],
     },
-    { label: 'Services', href: '/services' },
+    { label: 'Contact', href: '/contact' },
     { label: 'Resources', href: '/resources' },
 ];
 

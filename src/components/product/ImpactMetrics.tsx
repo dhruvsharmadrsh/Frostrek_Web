@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { ProductStatistic } from '../../utils/productData';
-import { LayoutDashboard, BarChart3, PieChart, Settings, ArrowUpRight, Activity } from 'lucide-react';
+import { LayoutDashboard, BarChart3, PieChart, ArrowUpRight, Activity } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 // Reusable Circular Progress for Percentages
@@ -35,8 +36,20 @@ const CircularProgress = ({ value, label, delay, theme }: { value: string, label
     );
 };
 
-// Bar Chart
 const BarChart = ({ value, label, delay, theme }: { value: string, label: string, delay: number, theme: string }) => {
+    // Determine height based on value if possible, else default
+    let heightPercent = 80;
+    const numValue = parseFloat(value.replace(/[^0-9.]/g, ''));
+    if (!isNaN(numValue)) {
+        // Simple normalization: if > 100 assume 100, if < 0 assume 0
+        // If it's a multiplier (e.g. 3x), map 1x->20%, 5x->100%
+        if (value.toLowerCase().includes('x')) {
+            heightPercent = Math.min(Math.max(numValue * 20, 20), 100);
+        } else if (value.includes('%')) {
+            heightPercent = Math.min(Math.max(numValue, 10), 100);
+        }
+    }
+
     return (
         <div className="flex flex-col justify-end h-full p-4 relative group">
             <div className="flex items-end justify-center gap-3 h-28 mb-3 w-full px-2">
@@ -50,7 +63,7 @@ const BarChart = ({ value, label, delay, theme }: { value: string, label: string
                 <motion.div
                     className="w-8 bg-gradient-to-t from-brand-yellow-500 to-brand-yellow-400 rounded-t-lg relative"
                     initial={{ height: 0 }}
-                    whileInView={{ height: '80%' }}
+                    whileInView={{ height: `${heightPercent}%` }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: delay + 0.2 }}
                 >
@@ -109,14 +122,23 @@ const TrendChart = ({ value, label, delay, theme }: { value: string, label: stri
     );
 };
 
-const DashboardWidget = ({ stat, index, theme }: { stat: ProductStatistic, index: number, theme: string }) => {
+const DashboardWidget = ({ stat, index, theme, activeView }: { stat: ProductStatistic, index: number, theme: string, activeView: 'grid' | 'bar' | 'pie' }) => {
     const isPercentage = stat.value.includes('%');
     const isMultiplier = stat.value.toLowerCase().includes('x');
     const isHighPercentage = isPercentage && parseFloat(stat.value) > 90;
 
-    let Content = TrendChart;
-    if (isHighPercentage) Content = CircularProgress;
-    else if (isMultiplier) Content = BarChart;
+    let Content;
+
+    if (activeView === 'bar') {
+        Content = BarChart;
+    } else if (activeView === 'pie') {
+        Content = CircularProgress;
+    } else {
+        // Grid / Default logic
+        Content = TrendChart;
+        if (isHighPercentage) Content = CircularProgress;
+        else if (isMultiplier) Content = BarChart;
+    }
 
     return (
         <div className={`rounded-2xl border shadow-sm p-2 hover:shadow-md transition-shadow duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-white border-gray-100'}`}>
@@ -134,6 +156,7 @@ const DashboardWidget = ({ stat, index, theme }: { stat: ProductStatistic, index
 
 export const ImpactMetrics = ({ statistics }: { statistics: ProductStatistic[] }) => {
     const { theme } = useTheme();
+    const [activeView, setActiveView] = useState<'grid' | 'bar' | 'pie'>('grid');
 
     return (
         <div className="max-w-5xl mx-auto">
@@ -145,15 +168,28 @@ export const ImpactMetrics = ({ statistics }: { statistics: ProductStatistic[] }
                 transition={{ duration: 0.8 }}
                 className={`rounded-3xl border shadow-2xl overflow-hidden flex ${theme === 'dark' ? 'bg-dark-navbar/80 backdrop-blur-xl border-dark-accent/20' : 'bg-white/80 backdrop-blur-xl border-white/50'}`}
             >
-                {/* 1. Fake Sidebar */}
                 <div className={`w-16 md:w-20 border-r flex flex-col items-center py-6 gap-6 hidden sm:flex ${theme === 'dark' ? 'bg-dark-bg/50 border-dark-accent/20' : 'bg-gray-50/50 border-gray-100'}`}>
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${theme === 'dark' ? 'bg-dark-accent text-dark-bg' : 'bg-gray-900 text-white'}`}>F</div>
                     <div className="flex flex-col gap-4 mt-4 w-full px-4">
-                        <div className={`p-2 rounded-lg shadow-sm ${theme === 'dark' ? 'bg-dark-card text-dark-accent' : 'bg-white text-brand-green-600'}`}><LayoutDashboard className="w-5 h-5" /></div>
-                        <div className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-dark-card text-dark-text-muted' : 'hover:bg-white/50 text-gray-400'}`}><BarChart3 className="w-5 h-5" /></div>
-                        <div className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-dark-card text-dark-text-muted' : 'hover:bg-white/50 text-gray-400'}`}><PieChart className="w-5 h-5" /></div>
+                        <button
+                            onClick={() => setActiveView('grid')}
+                            className={`p-2 rounded-lg shadow-sm transition-all ${activeView === 'grid' ? (theme === 'dark' ? 'bg-dark-card text-dark-accent' : 'bg-white text-brand-green-600 shadow-md') : (theme === 'dark' ? 'text-dark-text-muted hover:bg-dark-card' : 'text-gray-400 hover:bg-white/50')}`}
+                        >
+                            <LayoutDashboard className="w-5 h-5" />
+                        </button>
+                        <button
+                            onClick={() => setActiveView('bar')}
+                            className={`p-2 rounded-lg transition-all ${activeView === 'bar' ? (theme === 'dark' ? 'bg-dark-card text-dark-accent' : 'bg-white text-brand-green-600 shadow-md') : (theme === 'dark' ? 'text-dark-text-muted hover:bg-dark-card' : 'text-gray-400 hover:bg-white/50')}`}
+                        >
+                            <BarChart3 className="w-5 h-5" />
+                        </button>
+                        <button
+                            onClick={() => setActiveView('pie')}
+                            className={`p-2 rounded-lg transition-all ${activeView === 'pie' ? (theme === 'dark' ? 'bg-dark-card text-dark-accent' : 'bg-white text-brand-green-600 shadow-md') : (theme === 'dark' ? 'text-dark-text-muted hover:bg-dark-card' : 'text-gray-400 hover:bg-white/50')}`}
+                        >
+                            <PieChart className="w-5 h-5" />
+                        </button>
                     </div>
-                    <div className={`mt-auto p-2 rounded-lg cursor-pointer ${theme === 'dark' ? 'hover:bg-dark-card text-dark-text-muted' : 'hover:bg-white/50 text-gray-400'}`}><Settings className="w-5 h-5" /></div>
                 </div>
 
                 {/* 2. Main Dashboard Area */}
@@ -176,13 +212,36 @@ export const ImpactMetrics = ({ statistics }: { statistics: ProductStatistic[] }
                                 <Activity className="w-3 h-3" />
                                 +24% YoY
                             </div>
+
                         </div>
+                    </div>
+
+                    {/* Mobile Controls (Visible only on small screens) */}
+                    <div className="flex sm:hidden gap-2 mb-6 p-1 rounded-lg bg-gray-100/50 border border-gray-200 w-fit mx-auto dark:bg-dark-card dark:border-dark-accent/10">
+                        <button
+                            onClick={() => setActiveView('grid')}
+                            className={`p-1.5 rounded-md transition-all ${activeView === 'grid' ? 'bg-white shadow text-brand-green-600 dark:bg-dark-bg dark:text-dark-accent' : 'text-gray-400 dark:text-gray-500'}`}
+                        >
+                            <LayoutDashboard className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() => setActiveView('bar')}
+                            className={`p-1.5 rounded-md transition-all ${activeView === 'bar' ? 'bg-white shadow text-brand-green-600 dark:bg-dark-bg dark:text-dark-accent' : 'text-gray-400 dark:text-gray-500'}`}
+                        >
+                            <BarChart3 className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() => setActiveView('pie')}
+                            className={`p-1.5 rounded-md transition-all ${activeView === 'pie' ? 'bg-white shadow text-brand-green-600 dark:bg-dark-bg dark:text-dark-accent' : 'text-gray-400 dark:text-gray-500'}`}
+                        >
+                            <PieChart className="w-4 h-4" />
+                        </button>
                     </div>
 
                     {/* Metrics Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         {statistics.map((stat, idx) => (
-                            <DashboardWidget key={idx} stat={stat} index={idx} theme={theme} />
+                            <DashboardWidget key={idx} stat={stat} index={idx} theme={theme} activeView={activeView} />
                         ))}
                     </div>
                 </div>
