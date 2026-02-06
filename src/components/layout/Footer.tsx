@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Linkedin, Twitter, Facebook, ArrowUp, Sparkles, MapPin } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { NAV_ITEMS, COMPANY_INFO } from '../../utils/constants';
@@ -8,6 +8,7 @@ import { NAV_ITEMS, COMPANY_INFO } from '../../utils/constants';
 
 const Footer = () => {
   const { theme } = useTheme();
+  const location = useLocation();
   const currentYear = new Date().getFullYear();
   const [isVisible, setIsVisible] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -121,45 +122,47 @@ const Footer = () => {
         }
       `}</style>
 
-      {/* Careers Card - Keep unchanged */}
-      <div className={`py-6 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
-        <div className="container mx-auto px-4 md:px-6">
-          <Link to="/contact" className="block max-w-4xl mx-auto">
-            {/* ... (content remains same) ... */}
-            <div className={`careers-card border-2 rounded-2xl p-6 cursor-pointer transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30 hover:border-dark-accent' : 'bg-white border-gray-200'}`}>
-              <div className="flex items-center gap-6">
-                <div className="flex-shrink-0">
-                  <svg className="careers-icon w-12 h-12 opacity-80" viewBox="0 0 64 64" fill="none">
-                    <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
-                    <circle cx="32" cy="16" r="4" fill="currentColor" className={`${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8A5A35]'} network-node`} />
-                    <circle cx="16" cy="32" r="4" fill="currentColor" className={`${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8A5A35]'} network-node`} />
-                    <circle cx="48" cy="32" r="4" fill="currentColor" className={`${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8A5A35]'} network-node`} />
-                    <circle cx="32" cy="48" r="4" fill="currentColor" className={`${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8A5A35]'} network-node`} />
-                    <line x1="32" y1="20" x2="32" y2="28" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
-                    <line x1="20" y1="32" x2="28" y2="32" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
-                    <line x1="36" y1="32" x2="44" y2="32" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
-                    <line x1="32" y1="36" x2="32" y2="44" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
-                  </svg>
-                </div>
-                <div className="flex-grow">
-                  <h3 className={`text-xl font-bold mb-1 flex items-center gap-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
-                    Build the Future of AI at Frostrek
-                    <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`} />
-                  </h3>
-                  <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
-                    Join our team of innovators solving real-world problems.
-                  </p>
-                </div>
-                <div className="flex-shrink-0 hidden md:block">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-dark-accent/20 text-dark-accent' : 'bg-[#F3E9CD] text-[#8A5A35]'}`}>
-                    →
+      {/* Careers Card - Hide on contact page */}
+      {location.pathname !== '/contact' && (
+        <div className={`py-6 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
+          <div className="container mx-auto px-4 md:px-6">
+            <Link to="/contact" className="block max-w-4xl mx-auto">
+              {/* ... (content remains same) ... */}
+              <div className={`careers-card border-2 rounded-2xl p-6 cursor-pointer transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30 hover:border-dark-accent' : 'bg-white border-gray-200'}`}>
+                <div className="flex items-center gap-6">
+                  <div className="flex-shrink-0">
+                    <svg className="careers-icon w-12 h-12 opacity-80" viewBox="0 0 64 64" fill="none">
+                      <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
+                      <circle cx="32" cy="16" r="4" fill="currentColor" className={`${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8A5A35]'} network-node`} />
+                      <circle cx="16" cy="32" r="4" fill="currentColor" className={`${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8A5A35]'} network-node`} />
+                      <circle cx="48" cy="32" r="4" fill="currentColor" className={`${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8A5A35]'} network-node`} />
+                      <circle cx="32" cy="48" r="4" fill="currentColor" className={`${theme === 'dark' ? 'text-dark-text-muted' : 'text-[#8A5A35]'} network-node`} />
+                      <line x1="32" y1="20" x2="32" y2="28" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
+                      <line x1="20" y1="32" x2="28" y2="32" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
+                      <line x1="36" y1="32" x2="44" y2="32" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
+                      <line x1="32" y1="36" x2="32" y2="44" stroke="currentColor" strokeWidth="2" className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
+                    </svg>
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className={`text-xl font-bold mb-1 flex items-center gap-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-900'}`}>
+                      Build the Future of AI at Frostrek
+                      <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'}`} />
+                    </h3>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                      Join our team of innovators solving real-world problems.
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0 hidden md:block">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-dark-accent/20 text-dark-accent' : 'bg-[#F3E9CD] text-[#8A5A35]'}`}>
+                      →
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Footer */}
       <footer
@@ -263,7 +266,7 @@ const Footer = () => {
                     <div className={`px-2 py-1 rounded-md shadow-lg backdrop-blur-md flex flex-col gap-0.5 ${theme === 'dark' ? 'bg-dark-card/90 text-white border border-dark-accent/30' : 'bg-white/90 text-gray-900 border border-gray-200'}`}>
                       <div className="flex items-center gap-1">
                         <MapPin size={10} className={theme === 'dark' ? 'text-dark-accent' : 'text-[#B07552]'} />
-                        <span className="text-[10px] font-bold">Success Suncity Tower</span>
+                        <span className="text-[10px] font-bold">JMD Empire, Sector 62</span>
                       </div>
                     </div>
                   </div>

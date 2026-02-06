@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Phone, MessageSquare, Sparkles, Zap } from 'lucide-react';
+import { Phone, MessageSquare, Sparkles, Zap, Linkedin } from 'lucide-react';
 import VoiceCallWidget from '../components/experience/VoiceCallWidget';
 import ChatbotDemo from '../components/experience/ChatbotDemo';
 import LinkedinOutreachDemo from '../components/demos/LinkedinOutreachDemo';
@@ -113,28 +113,63 @@ const ExperiencePage = () => {
                         </motion.div>
                     </div>
 
-                    {/* LinkedIn Outreach Demo (Full Width) */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="w-full"
-                    >
-                        <div className="mb-8 text-center lg:text-left">
-                            <span className="inline-block py-1 px-3 rounded-full bg-[#0077B5]/10 text-[#0077B5] text-xs font-bold tracking-wide mb-3">
-                                NEW PLAYGROUND
-                            </span>
-                            <h2 className={`text-3xl font-bold font-heading mb-3 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>
-                                LinkedIn Outreach Automation
-                            </h2>
-                            <p className={`max-w-2xl ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
-                                See how our agents scrape, identify, and extract verified leads from LinkedIn in real-time.
-                            </p>
-                        </div>
+                    {/* Bottom Row: LinkedIn Outreach & Future Products */}
+                    <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+                        {/* LinkedIn Outreach Card */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6 }}
+                            className="space-y-6"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg bg-[#0077B5]">
+                                    <Linkedin className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <span className="inline-block py-0.5 px-2 rounded-full bg-[#0077B5]/10 text-[#0077B5] text-[10px] font-bold tracking-wide mb-1">
+                                        NEW
+                                    </span>
+                                    <h2 className={`text-2xl font-bold font-heading ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>LinkedIn Outreach</h2>
+                                    <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>Automated lead generation</p>
+                                </div>
+                            </div>
 
-                        <LinkedinOutreachDemo />
-                    </motion.div>
+                            <LinkedinOutreachDemo />
+
+                            <div className={`rounded-2xl p-4 border ${theme === 'dark' ? 'bg-dark-card border-dark-accent/20' : 'bg-gradient-to-r from-blue-50 to-[#fdfbf7] border-blue-100'}`}>
+                                <h4 className={`font-semibold mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-700'}`}>
+                                    <Zap className={`w-4 h-4 ${theme === 'dark' ? 'text-dark-accent' : 'text-[#0077B5]'}`} />
+                                    Features:
+                                </h4>
+                                <ul className={`text-sm space-y-1 ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'}`}>
+                                    <li>• Target industry & location filtering</li>
+                                    <li>• Decision maker identification</li>
+                                    <li>• Verified contact extraction</li>
+                                </ul>
+                            </div>
+                        </motion.div>
+
+                        {/* Placeholder for Future Product */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6 }}
+                            className="space-y-6 flex flex-col items-center justify-center"
+                        >
+                            <div className={`w-full h-full min-h-[400px] rounded-3xl border-2 border-dashed flex flex-col items-center justify-center p-8 ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-gray-200 bg-gray-50/50'}`}>
+                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-gray-100'}`}>
+                                    <Sparkles className={`w-8 h-8 ${theme === 'dark' ? 'text-dark-accent' : 'text-gray-400'}`} />
+                                </div>
+                                <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-dark-text' : 'text-gray-600'}`}>More Coming Soon</h3>
+                                <p className={`text-center text-sm max-w-xs ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-400'}`}>
+                                    We're building more AI-powered tools. Stay tuned for exciting new demos!
+                                </p>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 

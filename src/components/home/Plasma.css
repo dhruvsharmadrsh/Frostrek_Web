@@ -1,22 +1,20 @@
-.plasma-container {
+/* .plasma-container {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
   border-radius: inherit;
-
-  /* Theme aligned softness */
   filter: blur(12px) saturate(0.85) brightness(1.05);
   mix-blend-mode: multiply;
-}
+} */
 
 
-.plasma-container canvas {
+/* .plasma-container canvas {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     display: block;
-}
+} */

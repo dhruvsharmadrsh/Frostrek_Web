@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, Users, ArrowRight, Linkedin, CheckCircle2, User } from 'lucide-react';
+import { Search, MapPin, Users, ArrowRight, CheckCircle2, User } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import Button from '../ui/Button';
 
@@ -78,25 +78,8 @@ const LinkedinOutreachDemo = () => {
             ? 'bg-white/5 border-white/10 shadow-black/30'
             : 'bg-white border-white/40 shadow-xl'
             }`}>
-            {/* Header */}
-            <div className={`p-6 border-b ${theme === 'dark' ? 'border-white/5' : 'border-gray-100'}`}>
-                <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-[#0077B5] text-white shadow-lg shadow-blue-900/20">
-                        <Linkedin className="w-6 h-6" />
-                    </div>
-                    <div>
-                        <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                            LinkedIn Outreach Automation
-                        </h3>
-                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                            Automated lead generation & extraction playground
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Content Area */}
-            <div className="p-6 md:p-8 min-h-[400px] flex flex-col justify-center">
+            {/* Content Area - Compact */}
+            <div className="p-5 md:p-6 min-h-[320px] flex flex-col justify-center">
                 <AnimatePresence mode="wait">
 
                     {/* STEP 1: INPUT */}

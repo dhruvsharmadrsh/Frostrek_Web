@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, MapPin, Send, Check, Loader2, ArrowRight, MessageCircle, Building } from 'lucide-react';
+import { Mail, Send, Check, Loader2, ArrowRight, MessageCircle, Phone, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import CuteBackground from '../components/ui/CuteBackground';
@@ -142,53 +142,87 @@ const ContactPage = () => {
                             </p>
                         </div>
 
-                        <div className="space-y-8">
-                            {/* Contact Methods Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <ContactItem
-                                    icon={<Mail className="w-5 h-5" />}
-                                    label="Email Us"
-                                    value="info@frostrek.com"
-                                    href="mailto:info@frostrek.com"
-                                    theme={theme}
-                                />
-                                <ContactItem
-                                    icon={<MessageCircle className="w-5 h-5" />}
-                                    label="WhatsApp Us"
-                                    value="+1 17574722491"
-                                    href="https://wa.me/17574722491"
-                                    theme={theme}
-                                />
-                            </div>
-
-                            {/* Offices Section */}
-                            <div>
-                                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                    <MapPin className="w-5 h-5 text-[#B07552]" /> Our Offices
+                        {/* Contact Methods - Redesigned */}
+                        <div className="space-y-4">
+                            {/* Primary Contact Cards */}
+                            <div className={`p-6 rounded-3xl ${theme === 'dark' ? 'bg-gradient-to-br from-white/10 to-white/5 border border-white/10' : 'bg-gradient-to-br from-white to-gray-50/80 shadow-lg border border-gray-100'}`}>
+                                <h3 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    Get in Touch
                                 </h3>
                                 <div className="space-y-4">
-                                    <OfficeCard
-                                        title="India Office"
-                                        address="422, Suncity Success Tower, Golf Course Ext. Road, Sector - 65, Gurugram, Haryana, 122002"
-                                        theme={theme}
-                                    />
-                                    <OfficeCard
-                                        title="USA Office"
-                                        address="701 Tillery Street Unit 12-3227, Austin, Texas 78702, United States"
-                                        theme={theme}
-                                    />
-                                    <OfficeCard
-                                        title="UK Office"
-                                        address="24-26 Arcadia Avenue, Fin009/8701, London, United Kingdom, N3 2JU"
-                                        theme={theme}
-                                    />
+                                    {/* Call Us - Featured */}
+                                    <a
+                                        href="tel:+916399999955"
+                                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 group ${theme === 'dark' ? 'bg-[#B07552]/20 hover:bg-[#B07552]/30' : 'bg-gradient-to-r from-[#B07552] to-[#C4896D] hover:shadow-lg'}`}
+                                    >
+                                        <div className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-[#B07552]/30' : 'bg-white/20'}`}>
+                                            <Phone className={`w-6 h-6 ${theme === 'dark' ? 'text-[#B07552]' : 'text-white'}`} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-white'}`}>Call Us</h4>
+                                            <p className={`font-medium ${theme === 'dark' ? 'text-[#B07552]' : 'text-white/90'}`}>+91 6399999955</p>
+                                        </div>
+                                        <ArrowRight className={`w-5 h-5 group-hover:translate-x-1 transition-transform ${theme === 'dark' ? 'text-[#B07552]' : 'text-white'}`} />
+                                    </a>
+
+                                    {/* Email & WhatsApp Row */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <a
+                                            href="mailto:info@frostrek.com"
+                                            className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-300 group ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 border border-white/5' : 'bg-white hover:shadow-md border border-gray-100'}`}
+                                        >
+                                            <div className={`p-2.5 rounded-lg ${theme === 'dark' ? 'bg-white/10 text-[#B07552]' : 'bg-[#F3E9CD] text-[#8A5A35]'}`}>
+                                                <Mail className="w-5 h-5" />
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <h4 className={`font-semibold text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Email Us</h4>
+                                                <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>info@frostrek.com</p>
+                                            </div>
+                                        </a>
+                                        <a
+                                            href="https://wa.me/17574722491"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-300 group ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 border border-white/5' : 'bg-white hover:shadow-md border border-gray-100'}`}
+                                        >
+                                            <div className={`p-2.5 rounded-lg ${theme === 'dark' ? 'bg-white/10 text-[#25D366]' : 'bg-green-50 text-[#25D366]'}`}>
+                                                <MessageCircle className="w-5 h-5" />
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <h4 className={`font-semibold text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>WhatsApp (US)</h4>
+                                                <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>+1 757 472 2491</p>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="pt-8">
-                            <div className="flex items-center gap-4">
-                                {/* Socials can go here if extra needed, but they are in footer too */}
+                            {/* Offices Section - Compact */}
+                            <div className={`p-6 rounded-3xl ${theme === 'dark' ? 'bg-white/5 border border-white/5' : 'bg-white/60 backdrop-blur-sm border border-gray-100'}`}>
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Globe className={`w-4 h-4 ${theme === 'dark' ? 'text-[#B07552]' : 'text-[#B07552]'}`} />
+                                    <h3 className={`text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                        Global Offices
+                                    </h3>
+                                </div>
+                                <div className="grid grid-cols-1 gap-3">
+                                    {[
+                                        { flag: '🇮🇳', title: 'India (HQ)', address: 'JMD Empire, Sector 62, Gurgaon' },
+                                        { flag: '🇺🇸', title: 'USA', address: 'Austin, Texas' },
+                                        { flag: '🇬🇧', title: 'UK', address: 'London' },
+                                    ].map((office, i) => (
+                                        <div
+                                            key={i}
+                                            className={`flex items-center gap-3 p-3 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}
+                                        >
+                                            <span className="text-2xl">{office.flag}</span>
+                                            <div className="min-w-0 flex-1">
+                                                <h4 className={`font-semibold text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{office.title}</h4>
+                                                <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{office.address}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </motion.div>
@@ -380,43 +414,9 @@ const ContactPage = () => {
     );
 };
 
-const OfficeCard = ({ title, address, theme }: any) => (
-    <a
-        href={`https://maps.google.com/?q=${encodeURIComponent(address)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 border border-transparent hover:border-current group w-full ${theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-[#B07552]/50 hover:bg-white/10' : 'bg-white/60 border-white/40 hover:border-[#B07552]/50 hover:bg-white/80 shadow-sm hover:shadow-md'
-            }`}
-    >
-        <div className={`p-3 rounded-xl flex-shrink-0 ${theme === 'dark' ? 'bg-white/10 text-[#B07552]' : 'bg-[#F3E9CD] text-[#8A5A35]'}`}>
-            <Building className="w-5 h-5" />
-        </div>
-        <div>
-            <h4 className={`font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h4>
-            <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-gray-400 group-hover:text-gray-300' : 'text-gray-600 group-hover:text-gray-800'}`}>
-                {address}
-            </p>
-        </div>
-    </a>
-);
 
-const ContactItem = ({ icon, label, value, href, theme }: any) => (
-    <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 border border-transparent hover:border-current group ${theme === 'dark' ? 'hover:bg-white/5 hover:border-white/10' : 'hover:bg-white/60 hover:border-gray-200'
-            }`}
-    >
-        <div className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-white/10 text-[#B07552]' : 'bg-[#F3E9CD] text-[#8A5A35]'}`}>
-            {icon}
-        </div>
-        <div>
-            <h4 className={`font-semibold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{label}</h4>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400 group-hover:text-gray-300' : 'text-gray-600 group-hover:text-gray-800'}`}>{value}</p>
-        </div>
-    </a>
-);
+
+
 
 const InputGroup = ({
     label,

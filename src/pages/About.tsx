@@ -330,7 +330,7 @@ const TiltCard = memo(({ children, className, color = 'brand-green' }: {
             onMouseEnter={() => setHover(true)}
             onMouseLeave={reset}
             style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-            className={`relative cursor-pointer ${className}`}
+            className={`relative ${className}`}
             animate={{
                 y: hover ? -8 : 0,
                 boxShadow: hover ? `0 20px 40px -15px ${color === 'brand-green' ? 'rgba(176,117,82,0.3)' : 'rgba(212,187,117,0.3)'}` : '0 4px 20px -5px rgba(0,0,0,0.1)'
@@ -351,45 +351,7 @@ const TiltCard = memo(({ children, className, color = 'brand-green' }: {
 });
 
 // ============ ANIMATED COUNTER ============
-const Counter = memo(({ value, suffix = '' }: { value: number; suffix?: string }) => {
-    const [count, setCount] = useState(0);
-    const [started, setStarted] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
-    const rafId = useRef<number | null>(null);
 
-    useEffect(() => {
-        const obs = new IntersectionObserver(([e]) => {
-            if (e.isIntersecting && !started) {
-                setStarted(true);
-                let n = 0;
-                const step = value / 40;
-                const loop = () => {
-                    n += step;
-                    if (n >= value) {
-                        setCount(value);
-                        rafId.current = null;
-                    } else {
-                        setCount(Math.floor(n));
-                        rafId.current = requestAnimationFrame(loop);
-                    }
-                };
-                rafId.current = requestAnimationFrame(loop);
-            }
-        }, { threshold: 0.5 });
-        if (ref.current) obs.observe(ref.current);
-
-        return () => {
-            obs.disconnect();
-            // Cleanup rAF on unmount
-            if (rafId.current) {
-                cancelAnimationFrame(rafId.current);
-                rafId.current = null;
-            }
-        };
-    }, [value, started]);
-
-    return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
-});
 
 // ============ FLOATING ICON ============
 const FloatingIcon = memo(({ icon: Icon, delay, x, y }: { icon: LucideIcon; delay: number; x: string; y: string }) => (
@@ -423,7 +385,7 @@ const InteractiveGlobe = memo(() => {
 
             {/* Globe center */}
             <motion.div
-                className="relative w-24 h-24 bg-gradient-to-br from-brand-green-400 via-brand-green-500 to-brand-green-600 rounded-full flex items-center justify-center shadow-2xl cursor-pointer z-10"
+                className="relative w-24 h-24 bg-gradient-to-br from-brand-green-400 via-brand-green-500 to-brand-green-600 rounded-full flex items-center justify-center shadow-2xl z-10"
                 onMouseEnter={() => setIsGlobeHovered(true)}
                 onMouseLeave={() => setIsGlobeHovered(false)}
                 animate={{
@@ -510,7 +472,7 @@ const TechIcon = memo(({ icon: Icon, label, delay }: { icon: LucideIcon; label: 
             onMouseLeave={() => setHover(false)}
         >
             <motion.div
-                className="w-16 h-16 bg-white rounded-2xl border-2 border-brand-green-500/20 flex items-center justify-center shadow-lg cursor-pointer"
+                className="w-16 h-16 bg-white rounded-2xl border-2 border-brand-green-500/20 flex items-center justify-center shadow-lg"
                 animate={{
                     y: hover ? -8 : 0,
                     borderColor: hover ? 'rgb(176 117 82)' : 'rgba(176 117 82 / 0.2)',
@@ -561,7 +523,7 @@ const TeamFlipCard = memo(({ member, delay }: { member: typeof TEAM_DATA[0]; del
             onMouseLeave={() => setIsFlipped(false)}
         >
             <motion.div
-                className="relative w-full h-full preserve-3d cursor-pointer"
+                className="relative w-full h-full preserve-3d"
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                 transition={{ type: 'spring', stiffness: 120, damping: 20 }}
                 style={{ transformStyle: 'preserve-3d' }}
@@ -672,7 +634,7 @@ const CertificationBadge = memo(({ cert, delay }: { cert: typeof CERTIFICATIONS_
             onMouseLeave={() => setShowTooltip(false)}
         >
             <motion.div
-                className={`relative px-6 py-4 rounded-2xl bg-gradient-to-br ${cert.color} cursor-pointer overflow-hidden`}
+                className={`relative px-6 py-4 rounded-2xl bg-gradient-to-br ${cert.color} overflow-hidden`}
                 whileHover={{ scale: 1.05, y: -5 }}
                 transition={{ type: 'spring', stiffness: 300 }}
             >
@@ -1049,9 +1011,9 @@ const About = () => {
             flagImg: 'https://flagcdn.com/w40/in.png',
             image: '/Suncity-Success-Tower.jpg',
             companyName: 'India Office',
-            address: '4th Floor, Unit No. 455 JMD Empire, Sector 62, Gurgaon',
+            address: '4th Floor, Unit No. 455, JMD Empire, Sector 62, Gurgaon (Beyond Just Work)',
             phone: '+91 124 123 4567',
-            mapUrl: 'https://www.google.com/maps/search/?api=1&query=4th Floor, Unit No. 455 JMD Empire, Sector 62, Gurgaon'
+            mapUrl: 'https://www.google.com/maps/search/?api=1&query=JMD Empire Sector 62 Gurgaon'
         },
         {
             name: 'USA',
@@ -1166,20 +1128,20 @@ const About = () => {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
                             {[
-                                { value: 5000, suffix: '+', label: 'Training Sessions' },
-                                { value: 200, suffix: '+', label: 'AI Specialists' },
-                                { value: 99, suffix: '%', label: 'Accuracy Rate' },
-                                { value: 50, suffix: '+', label: 'Enterprise Clients' },
+                                { value: '5000+', label: 'Training Sessions' },
+                                { value: '200+', label: 'AI Specialists' },
+                                { value: '99%', label: 'Accuracy Rate' },
+                                { value: '50+', label: 'Enterprise Clients' },
                             ].map((s, i) => (
-                                <motion.div key={i} variants={fadeUp}>
-                                    <TiltCard color={i % 2 === 0 ? 'brand-green' : 'brand-yellow'}>
-                                        <div className="p-6 text-center">
-                                            <div className="text-3xl md:text-4xl font-bold text-brand-green-600 mb-1">
-                                                <Counter value={s.value} suffix={s.suffix} />
-                                            </div>
-                                            <div className="text-sm text-gray-500">{s.label}</div>
-                                        </div>
-                                    </TiltCard>
+                                <motion.div
+                                    key={i}
+                                    variants={fadeUp}
+                                    className={`p-6 text-center rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}
+                                >
+                                    <div className="text-3xl md:text-4xl font-bold text-brand-green-600 mb-1">
+                                        {s.value}
+                                    </div>
+                                    <div className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>{s.label}</div>
                                 </motion.div>
                             ))}
                         </div>
@@ -1277,7 +1239,7 @@ const About = () => {
                                 >
                                     <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50">
                                         <div className="text-2xl font-bold tracking-tight text-gray-900">
-                                            Frostrek<span className={theme === 'dark' ? 'text-[#bf8441]' : 'text-brand-green-500'}>.ai</span>
+                                            Frostrek
                                         </div>
                                     </div>
                                 </motion.div>
@@ -1352,7 +1314,7 @@ const About = () => {
                                         className={`ml-12 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pr-16 text-left md:text-right' : 'md:pl-16 text-left'}`}
                                     >
                                         <motion.div
-                                            className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 cursor-pointer"
+                                            className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6"
                                             whileHover={{
                                                 y: -4,
                                                 borderColor: item.color.border,

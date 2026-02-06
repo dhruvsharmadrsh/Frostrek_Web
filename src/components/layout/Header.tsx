@@ -57,7 +57,7 @@ const Header = () => {
                 </Link>
 
                 {/* 2. Desktop Nav (Center) */}
-                <nav className="hidden lg:flex items-center justify-center gap-8 flex-1">
+                <nav className="hidden xl:flex items-center justify-center gap-5 flex-1">
                     {NAV_ITEMS.map((item) => (
                         <div key={item.label} className="relative group">
                             <Link
@@ -97,10 +97,10 @@ const Header = () => {
                 </nav>
 
                 {/* 3. CTAs (Right) */}
-                <div className="hidden lg:flex items-center justify-end gap-4 min-w-[180px]">
+                <div className="hidden xl:flex items-center justify-end gap-3 min-w-[160px] shrink-0">
                     <Link to="/schedule-demo">
                         <Button size="sm" className={cn(
-                            "px-6 rounded-md font-semibold border-none shadow-md",
+                            "px-4 text-sm rounded-md font-semibold border-none shadow-md whitespace-nowrap",
                             theme === 'dark'
                                 ? "bg-dark-accent text-dark-bg hover:bg-dark-accent/90"
                                 : "bg-background text-[#B07552]"
@@ -116,7 +116,7 @@ const Header = () => {
                 {/* Mobile Menu Toggle */}
                 <button
                     className={cn(
-                        "lg:hidden p-2 transition-colors",
+                        "xl:hidden p-2 transition-colors",
                         theme === 'dark' ? "text-dark-text" : "text-primary"
                     )}
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -134,7 +134,7 @@ const Header = () => {
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.2 }}
                         className={cn(
-                            "lg:hidden absolute top-full left-0 w-full border-b shadow-xl z-50",
+                            "xl:hidden absolute top-full left-0 w-full border-b shadow-xl z-50",
                             theme === 'dark' ? "bg-dark-navbar border-dark-accent/20" : "bg-[#FDFBF7] border-gray-100"
                         )}
                     >
