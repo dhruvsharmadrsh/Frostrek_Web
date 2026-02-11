@@ -6,9 +6,13 @@ import LinkedinOutreachDemo from '../components/demos/LinkedinOutreachDemo';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useTheme } from '../context/ThemeContext';
 import CTASection from '../components/home/CTASection';
+import { useEffect } from 'react';
 
 const ExperiencePage = () => {
     const { theme } = useTheme();
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className={`min-h-screen relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>

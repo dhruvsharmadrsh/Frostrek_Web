@@ -5,6 +5,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import SmoothScrollProvider from './components/providers/SmoothScrollProvider';
 import { ThemeProvider } from './context/ThemeContext';
+import ScrollToTop from './components/ScrollToTop';
 
 // Lazy load pages to split code chunks and reduce initial bundle size
 const Home = lazy(() => import('./pages/Home'));
@@ -43,6 +44,7 @@ function App() {
             <Header />
             <main className="flex-grow">
               <Suspense fallback={<PageLoader />}>
+               <ScrollToTop/>
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/schedule-demo" element={<ScheduleDemo />} />
