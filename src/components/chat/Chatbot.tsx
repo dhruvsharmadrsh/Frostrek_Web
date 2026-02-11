@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
-import { X, Send, Sparkles, Mic, Square, Paperclip, Trash2, Minus} from 'lucide-react';
+import { X, Send, Sparkles, Mic, Square, Paperclip, Trash2, Minus } from 'lucide-react';
 
 // Webhook URL
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
@@ -24,6 +24,17 @@ const Chatbot: React.FC = () => {
     const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string, image?: string }>>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [sessionId, setSessionId] = useState<string>('');
+
+    // Initialize Session ID
+    useEffect(() => {
+        let storedSessionId = localStorage.getItem('chatSessionId');
+        if (!storedSessionId) {
+            storedSessionId = crypto.randomUUID();
+            localStorage.setItem('chatSessionId', storedSessionId);
+        }
+        setSessionId(storedSessionId);
+    }, []);
 
     // Audio Recording State
     const [isRecording, setIsRecording] = useState(false);
@@ -65,8 +76,8 @@ const Chatbot: React.FC = () => {
         setSelectedFile(null);
 
         setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
     };
 
 
@@ -159,6 +170,7 @@ const Chatbot: React.FC = () => {
                 const formData = new FormData();
                 formData.append('voice', audioBlob, 'recording.webm');
                 formData.append('Type', 'voice');
+                formData.append('sessionId', sessionId);
 
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
@@ -169,6 +181,7 @@ const Chatbot: React.FC = () => {
                 const formData = new FormData();
                 formData.append('image', selectedFile);
                 formData.append('Type', 'text');
+                formData.append('sessionId', sessionId);
 
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
@@ -179,8 +192,9 @@ const Chatbot: React.FC = () => {
                 const formData = new FormData();
                 formData.append('chatInput', textInput || '');
                 formData.append('Type', 'text');
+                formData.append('sessionId', sessionId);
 
-                console.log('Sending FormData payload:', { chatInput: textInput, Type: 'text' });
+                console.log('Sending FormData payload:', { chatInput: textInput, Type: 'text', sessionId });
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     body: formData,
@@ -455,33 +469,33 @@ const Chatbot: React.FC = () => {
                                 </div>
                                 <div className="flex items-center gap-2 pointer-events-auto">
 
-    {/* Show Clear Chat Button ONLY if chat exists */}
-    <AnimatePresence>
-        {messages.length > 0 && (
-            <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                onClick={clearChat}
-                title="Clear Chat"
-                className="p-1.5 rounded-lg transition-all duration-200 
+                                    {/* Show Clear Chat Button ONLY if chat exists */}
+                                    <AnimatePresence>
+                                        {messages.length > 0 && (
+                                            <motion.button
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                onClick={clearChat}
+                                                title="Clear Chat"
+                                                className="p-1.5 rounded-lg transition-all duration-200 
                            hover:bg-red-500/20 group"
-            >
-                <Trash2 className="w-5 h-5 text-white/80 group-hover:text-red-400 transition" />
-            </motion.button>
-        )}
-    </AnimatePresence>
+                                            >
+                                                <Trash2 className="w-5 h-5 text-white/80 group-hover:text-red-400 transition" />
+                                            </motion.button>
+                                        )}
+                                    </AnimatePresence>
 
-    {/* Close Chat Button */}
-    <button
-        onClick={toggleChat}
-        title="Close Chat"
-        className="p-1.5 rounded-lg transition-all duration-200 hover:bg-white/20"
-    >
-        <Minus className="w-5 h-5 text-white" />
-    </button>
-</div>
-</div>
+                                    {/* Close Chat Button */}
+                                    <button
+                                        onClick={toggleChat}
+                                        title="Close Chat"
+                                        className="p-1.5 rounded-lg transition-all duration-200 hover:bg-white/20"
+                                    >
+                                        <Minus className="w-5 h-5 text-white" />
+                                    </button>
+                                </div>
+                            </div>
                             {/* Chat Body (Messages) */}
                             <div
                                 className="ai-copilot-chat flex-1 overflow-y-auto p-6 flex flex-col gap-4"
@@ -502,27 +516,27 @@ const Chatbot: React.FC = () => {
                             >
                                 <AnimatePresence>
                                     {messages.length === 0 && (
-                                    <motion.div
-                                        initial={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.5 }}
-                                        className="text-center px-6 py-6"
-                                    >
-                                        <img src="/robo2.gif" className="w-32 mx-auto mb-4" alt="Robot" />
-                                        <h4 className="text-lg font-semibold" style={{ color: COLORS.text }}>
-                                            Hi, I'm Frostry 👋
-                                        </h4>
-                                        <p className="text-sm mt-2" style={{ color: COLORS.textLight }}>
-                                            Ask me anything about your business, support, or innovation.
-                                        </p>
+                                        <motion.div
+                                            initial={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ duration: 0.5 }}
+                                            className="text-center px-6 py-6"
+                                        >
+                                            <img src="/robo2.gif" className="w-32 mx-auto mb-4" alt="Robot" />
+                                            <h4 className="text-lg font-semibold" style={{ color: COLORS.text }}>
+                                                Hi, I'm Frostry 👋
+                                            </h4>
+                                            <p className="text-sm mt-2" style={{ color: COLORS.textLight }}>
+                                                Ask me anything about your business, support, or innovation.
+                                            </p>
 
-                                        <div className="flex flex-wrap justify-center gap-2 mt-4">
-                                            <button className="ai-copilot-suggestion">💡 Get ideas</button>
-                                            <button className="ai-copilot-suggestion">📊 Analytics</button>
-                                            <button className="ai-copilot-suggestion">🛠 Support</button>
-                                        </div>
-                                    </motion.div>
-                                )}
+                                            <div className="flex flex-wrap justify-center gap-2 mt-4">
+                                                <button className="ai-copilot-suggestion">💡 Get ideas</button>
+                                                <button className="ai-copilot-suggestion">📊 Analytics</button>
+                                                <button className="ai-copilot-suggestion">🛠 Support</button>
+                                            </div>
+                                        </motion.div>
+                                    )}
                                 </AnimatePresence>
 
 
