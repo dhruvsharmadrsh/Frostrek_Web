@@ -1400,6 +1400,8 @@ const About = () => {
             </section>
 
             {/* ===== TEAM / LEADERSHIP ===== */}
+            {/* Hidden as per requirement */}
+            {false && (
             <section className={`py-16 md:py-24 ${theme === 'dark' ? 'bg-dark-bg' : 'bg-gradient-to-b from-white via-slate-50/50 to-white'}`}>
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
@@ -1437,6 +1439,7 @@ const About = () => {
                     </div>
                 </div>
             </section>
+            )}
 
             {/* ===== CORE VALUES ===== */}
             <section className="py-12 md:py-20">

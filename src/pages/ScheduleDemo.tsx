@@ -3,6 +3,7 @@ import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Check, Loader2 } fr
 import Button from '../components/ui/Button';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useTheme } from '../context/ThemeContext';
+import emailjs from '@emailjs/browser';
 
 const ScheduleDemo = () => {
     const { theme } = useTheme();
@@ -56,7 +57,7 @@ const ScheduleDemo = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
-    // Production Webhook URL
+    // n8n Webhook URL for automated meeting scheduling
     const WEBHOOK_URL = 'https://frostysandy.app.n8n.cloud/webhook/schedule-demo';
 
     const formatTimeForWebhook = (timeStr: string) => {
@@ -96,6 +97,7 @@ const ScheduleDemo = () => {
         setSubmitError(null);
 
         if (!selectedDate || !selectedTime || !formData.name || !formData.email) {
+            setSubmitError('Please fill in all required fields.');
             return;
         }
 
@@ -114,22 +116,73 @@ const ScheduleDemo = () => {
             const payload = {
                 name: formData.name,
                 email: formData.email,
-                notes: formData.notes,
+                notes: formData.notes || '',
                 date: dateStr,
                 time: timeStr,
                 endTime: endTimeStr
             };
 
-            // Send data to n8n webhook
-            const response = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            // Try to send to n8n webhook for automated meeting scheduling
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-            if (!response.ok) {
-                throw new Error('Failed to schedule demo. Please try again.');
+                if (response.ok) {
+                    // Webhook succeeded - meeting link will be sent automatically
+                    setIsSubmitted(true);
+                    return;
+                }
+            } catch (webhookError) {
+                console.warn('Webhook failed, using email fallback:', webhookError);
             }
+
+            // Fallback: Send via EmailJS if webhook fails
+            const dateOptions: Intl.DateTimeFormatOptions = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const formattedDate = selectedDate.toLocaleDateString('en-US', dateOptions);
+
+            const messageContent = `
+Demo Booking Request
+
+Name: ${formData.name}
+Email: ${formData.email}
+Preferred Date: ${formattedDate}
+Preferred Time: ${selectedTime}
+
+Additional Notes:
+${formData.notes || 'N/A'}
+            `.trim();
+
+            await emailjs.send(
+                'service_jia14ic',
+                'template_hygc11p',
+                {
+                    to_email: 'contact@frostrek.com',
+                    from_name: formData.name,
+                    user_name: formData.name,
+                    name: formData.name,
+                    from_email: formData.email,
+                    user_email: formData.email,
+                    email: formData.email,
+                    reply_to: formData.email,
+                    subject: `Demo Request - ${formattedDate} at ${selectedTime}`,
+                    message: messageContent,
+                    demo_date: formattedDate,
+                    demo_time: selectedTime,
+                    notes: formData.notes
+                },
+                'BiiX__h7V1vLoyEQb'
+            );
 
             setIsSubmitted(true);
         } catch (error) {

@@ -78,17 +78,38 @@ const ContactPage = () => {
         setIsSubmitting(true);
 
         try {
+            // Prepare formatted message
+            const fullName = `${formData.firstName} ${formData.lastName}`;
+            const messageContent = `
+Name: ${fullName}
+Company: ${formData.company || 'N/A'}
+Job Title: ${formData.jobTitle || 'N/A'}
+Email: ${formData.workEmail}
+Inquiry Type: ${formData.reachType}
+
+Message:
+${formData.projectDetails}
+            `.trim();
+
             await emailjs.send(
                 'service_jia14ic',
                 'template_hygc11p',
                 {
-                    to_email: 'dhruv.sharma@frostrek.com',
+                    to_email: 'contact@frostrek.com',
+                    from_name: fullName,
+                    user_name: fullName,
+                    name: fullName,
+                    from_email: formData.workEmail,
+                    user_email: formData.workEmail,
+                    email: formData.workEmail,
+                    reply_to: formData.workEmail,
+                    subject: `New Contact Inquiry: ${formData.reachType}`,
+                    message: messageContent,
                     first_name: formData.firstName,
                     last_name: formData.lastName,
                     company: formData.company,
                     job_title: formData.jobTitle,
                     work_email: formData.workEmail,
-                    // country: formData.country,
                     reach_type: formData.reachType,
                     project_details: formData.projectDetails
                 },
@@ -142,85 +163,131 @@ const ContactPage = () => {
                             </p>
                         </div>
 
-                        {/* Contact Methods - Redesigned */}
-                        <div className="space-y-4">
-                            {/* Primary Contact Cards */}
-                            <div className={`p-6 rounded-3xl ${theme === 'dark' ? 'bg-gradient-to-br from-white/10 to-white/5 border border-white/10' : 'bg-gradient-to-br from-white to-gray-50/80 shadow-lg border border-gray-100'}`}>
-                                <h3 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                    Get in Touch
+                        {/* Contact Methods - Enhanced Design */}
+                        <div className="space-y-6">
+                            {/* GET IN TOUCH Section */}
+                            <div className={`p-8 rounded-2xl ${theme === 'dark' ? 'bg-white/5 border border-white/10' : 'bg-white shadow-xl border border-gray-100'}`}>
+                                <h3 className={`text-xs font-bold uppercase tracking-widest mb-6 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    GET IN TOUCH
                                 </h3>
                                 <div className="space-y-4">
-                                    {/* Call Us - Featured */}
+                                    {/* Call Us - Primary Featured Button */}
                                     <a
                                         href="tel:+916399999955"
-                                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 group ${theme === 'dark' ? 'bg-[#B07552]/20 hover:bg-[#B07552]/30' : 'bg-gradient-to-r from-[#B07552] to-[#C4896D] hover:shadow-lg'}`}
+                                        className={`flex items-center justify-between gap-4 p-5 rounded-xl transition-all duration-300 group ${theme === 'dark' ? 'bg-[#B07552] hover:bg-[#8A5A35]' : 'bg-[#B07552] hover:bg-[#8A5A35]'} shadow-lg hover:shadow-xl transform hover:scale-[1.02]`}
                                     >
-                                        <div className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-[#B07552]/30' : 'bg-white/20'}`}>
-                                            <Phone className={`w-6 h-6 ${theme === 'dark' ? 'text-[#B07552]' : 'text-white'}`} />
+                                        <div className="flex items-center gap-4">
+                                            <div className="p-3 rounded-lg bg-white/20">
+                                                <Phone className="w-7 h-7 text-white" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-lg text-white">Call Us</h4>
+                                                <p className="font-semibold text-white/90 text-base">+91 6399999955</p>
+                                            </div>
                                         </div>
-                                        <div className="flex-1">
-                                            <h4 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-white'}`}>Call Us</h4>
-                                            <p className={`font-medium ${theme === 'dark' ? 'text-[#B07552]' : 'text-white/90'}`}>+91 6399999955</p>
-                                        </div>
-                                        <ArrowRight className={`w-5 h-5 group-hover:translate-x-1 transition-transform ${theme === 'dark' ? 'text-[#B07552]' : 'text-white'}`} />
+                                        <ArrowRight className="w-6 h-6 text-white group-hover:translate-x-1 transition-transform" />
                                     </a>
 
-                                    {/* Email & WhatsApp Row */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    {/* Email & WhatsApp in Row */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <a
                                             href="mailto:info@frostrek.com"
-                                            className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-300 group ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 border border-white/5' : 'bg-white hover:shadow-md border border-gray-100'}`}
+                                            className={`flex items-start gap-3 p-4 rounded-lg transition-all duration-300 group ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10' : 'bg-gray-50 hover:bg-gray-100'}`}
                                         >
-                                            <div className={`p-2.5 rounded-lg ${theme === 'dark' ? 'bg-white/10 text-[#B07552]' : 'bg-[#F3E9CD] text-[#8A5A35]'}`}>
-                                                <Mail className="w-5 h-5" />
+                                            <div className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-white/10' : 'bg-white'}`}>
+                                                <Mail className={`w-5 h-5 ${theme === 'dark' ? 'text-[#B07552]' : 'text-[#8A5A35]'}`} />
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <h4 className={`font-semibold text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Email Us</h4>
-                                                <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>info@frostrek.com</p>
+                                                <h4 className={`font-semibold text-sm mb-0.5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Email Us</h4>
+                                                <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>info@frostrek.com</p>
                                             </div>
                                         </a>
                                         <a
                                             href="https://wa.me/17574722491"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-300 group ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 border border-white/5' : 'bg-white hover:shadow-md border border-gray-100'}`}
+                                            className={`flex items-start gap-3 p-4 rounded-lg transition-all duration-300 group ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10' : 'bg-gray-50 hover:bg-gray-100'}`}
                                         >
-                                            <div className={`p-2.5 rounded-lg ${theme === 'dark' ? 'bg-white/10 text-[#25D366]' : 'bg-green-50 text-[#25D366]'}`}>
-                                                <MessageCircle className="w-5 h-5" />
+                                            <div className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-white/10' : 'bg-white'}`}>
+                                                <MessageCircle className="w-5 h-5 text-[#25D366]" />
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <h4 className={`font-semibold text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>WhatsApp (US)</h4>
-                                                <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>+1 757 472 2491</p>
+                                                <h4 className={`font-semibold text-sm mb-0.5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>WhatsApp (US)</h4>
+                                                <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>+1 757 472 2491</p>
                                             </div>
                                         </a>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Offices Section - Compact */}
-                            <div className={`p-6 rounded-3xl ${theme === 'dark' ? 'bg-white/5 border border-white/5' : 'bg-white/60 backdrop-blur-sm border border-gray-100'}`}>
-                                <div className="flex items-center gap-2 mb-4">
-                                    <Globe className={`w-4 h-4 ${theme === 'dark' ? 'text-[#B07552]' : 'text-[#B07552]'}`} />
-                                    <h3 className={`text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                        Global Offices
+                            {/* GLOBAL OFFICES Section */}
+                            <div className={`p-8 rounded-2xl ${theme === 'dark' ? 'bg-white/5 border border-white/10' : 'bg-white shadow-xl border border-gray-100'}`}>
+                                <div className="flex items-center justify-center gap-2 mb-6">
+                                    <Globe className={`w-5 h-5 ${theme === 'dark' ? 'text-[#B07552]' : 'text-[#B07552]'}`} />
+                                    <h3 className={`text-xs font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                        GLOBAL OFFICES
                                     </h3>
                                 </div>
-                                <div className="grid grid-cols-1 gap-3">
+                                <div className="space-y-3">
                                     {[
-                                        { flag: '🇮🇳', title: 'India (HQ)', address: 'JMD Empire, Sector 62, Gurgaon' },
-                                        { flag: '🇺🇸', title: 'USA', address: 'Austin, Texas' },
-                                        { flag: '🇬🇧', title: 'UK', address: 'London' },
+                                        {
+                                            title: 'India (HQ)',
+                                            address: '4th Floor, Unit No. 455, JMD Empire, Sector 62, Gurgaon',
+                                            mapUrl: 'https://www.google.com/maps/search/?api=1&query=4th+Floor+Unit+No+455+JMD+Empire+Sector+62+Gurgaon+India',
+                                            isHQ: true
+                                        },
+                                        {
+                                            title: 'USA',
+                                            address: '701 Tillery Street Unit 12-3227, Austin, Texas 78702, United States',
+                                            mapUrl: 'https://www.google.com/maps/search/?api=1&query=701+Tillery+Street+Unit+12-3227+Austin+Texas+78702+United+States',
+                                            isHQ: false
+                                        },
+                                        {
+                                            title: 'UK',
+                                            address: '24–26 Arcadia Avenue, Fin009/8701, London, United Kingdom, N3 2JU',
+                                            mapUrl: 'https://www.google.com/maps/search/?api=1&query=24-26+Arcadia+Avenue+London+N3+2JU+United+Kingdom',
+                                            isHQ: false
+                                        },
                                     ].map((office, i) => (
-                                        <div
+                                        <a
                                             key={i}
-                                            className={`flex items-center gap-3 p-3 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}
+                                            href={office.mapUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`flex items-center justify-center gap-4 p-4 rounded-xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 hover:shadow-lg border-2 ${theme === 'dark'
+                                                    ? 'bg-white/5 border-transparent hover:bg-[#B07552]/20 hover:border-[#B07552]/40'
+                                                    : 'bg-gray-50 border-transparent hover:bg-[#B07552]/10 hover:border-[#B07552]/30'
+                                                }`}
                                         >
-                                            <span className="text-2xl">{office.flag}</span>
-                                            <div className="min-w-0 flex-1">
-                                                <h4 className={`font-semibold text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{office.title}</h4>
-                                                <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{office.address}</p>
+                                            <div className="flex items-center gap-3 flex-1">
+                                                <div className="flex-1 min-w-0 text-center">
+                                                    <div className="flex items-center justify-center gap-2 mb-1">
+                                                        <h4 className={`font-bold text-base transition-colors ${theme === 'dark'
+                                                                ? 'text-white group-hover:text-[#B07552]'
+                                                                : 'text-gray-900 group-hover:text-[#8A5A35]'
+                                                            }`}>
+                                                            {office.title}
+                                                        </h4>
+                                                        {office.isHQ && (
+                                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${theme === 'dark' ? 'bg-[#B07552]/30 text-[#B07552]' : 'bg-[#B07552]/20 text-[#8A5A35]'
+                                                                }`}>
+                                                                HQ
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <p className={`text-sm transition-colors ${theme === 'dark'
+                                                            ? 'text-gray-400 group-hover:text-[#E6D0C6]'
+                                                            : 'text-gray-600 group-hover:text-[#8A5A35]'
+                                                        }`}>
+                                                        {office.address}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
+                                            <div className={`flex-shrink-0 opacity-0 group-hover:opacity-100 transition-all ${theme === 'dark' ? 'text-[#B07552]' : 'text-[#8A5A35]'
+                                                }`}>
+                                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                            </div>
+                                        </a>
                                     ))}
                                 </div>
                             </div>

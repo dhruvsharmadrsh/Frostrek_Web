@@ -4,6 +4,7 @@ export interface ProductStatistic {
     value: string;
     label: string;
     icon?: any;
+    breakdown?: { value: number; label: string; color?: string; }[];
 }
 
 export interface ProductProcessStep {
@@ -185,10 +186,37 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
         badge: 'Enterprise Grade',
         heroImage: '/enterprise_ai_suite.png',
         statistics: [
-            { value: '100%', label: 'Customizable', icon: Settings },
-            { value: '99.9%', label: 'Uptime SLA', icon: Server },
+            {
+                value: '100%',
+                label: 'Efficiency Gains',
+                icon: Settings,
+                breakdown: [
+                    { value: 65, label: 'Efficiency' },
+                    { value: 25, label: 'Growth' },
+                    { value: 10, label: 'Sustainability' }
+                ]
+            },
+            {
+                value: '99.9%',
+                label: 'Uptime SLA',
+                icon: Server,
+                breakdown: [
+                    { value: 90, label: 'Availability' },
+                    { value: 8, label: 'Redundancy' },
+                    { value: 2, label: 'Recovery' }
+                ]
+            },
             { value: '60%', label: 'Cost Reduction', icon: BarChart },
-            { value: '3x', label: 'Faster Deployment', icon: Zap },
+            {
+                value: '3x',
+                label: 'Faster Deployment',
+                icon: Zap,
+                breakdown: [
+                    { value: 50, label: 'Automation' },
+                    { value: 30, label: 'CI/CD Pipeline' },
+                    { value: 20, label: 'Testing' }
+                ]
+            },
         ],
         process: [
             { step: '01', title: 'Consult', description: 'We analyze your current infrastructure.' },

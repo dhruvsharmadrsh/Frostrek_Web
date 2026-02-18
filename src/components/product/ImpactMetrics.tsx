@@ -14,37 +14,53 @@ const METRIC_COLORS = [
 ];
 
 // Clean Filled Pie Chart Component
-const CircularProgress = ({ value, label, delay, theme, index = 0 }: { value: string, label: string, delay: number, theme: string, index?: number }) => {
-    const numValue = parseFloat(value.replace(/[^0-9.]/g, ''));
-    const isPercentage = value.includes('%');
-    const percentage = isPercentage ? numValue : 100;
-    const colorIndex = index % METRIC_COLORS.length;
-    const colors = METRIC_COLORS[colorIndex];
+const CircularProgress = ({ value, label, delay, theme, index = 0, breakdown }: { value: string, label: string, delay: number, theme: string, index?: number, breakdown?: { value: number; label: string; color?: string }[] }) => {
+    // Determine segments: either from breakdown or single value
+    let segments: { value: number; color: string; label?: string }[] = [];
 
-    // SVG dimensions
+    if (breakdown && breakdown.length > 0) {
+        segments = breakdown.map((item, i) => {
+            const color = METRIC_COLORS[(index + i) % METRIC_COLORS.length].fill;
+            return { value: item.value, color, label: item.label };
+        });
+    } else {
+        const numValue = parseFloat(value.replace(/[^0-9.]/g, ''));
+        const isPercentage = value.includes('%');
+        const percentage = isPercentage ? numValue : 100;
+        const colors = METRIC_COLORS[index % METRIC_COLORS.length];
+        segments = [{ value: percentage, color: colors.fill }];
+    }
+
     const size = 100;
     const center = size / 2;
     const radius = 40;
 
-    // Calculate pie slice
-    const angle = (percentage / 100) * 360;
-    const startAngle = -90;
-    const endAngle = startAngle + angle;
+    // Calculate paths
+    let accumulatedAngle = -90;
+    const paths = segments.map((segment) => {
+        const percentage = segment.value;
+        const angle = (percentage / 100) * 360;
+        const startAngle = accumulatedAngle;
+        const endAngle = startAngle + angle;
+        accumulatedAngle = endAngle;
 
-    const startRad = (startAngle * Math.PI) / 180;
-    const endRad = (endAngle * Math.PI) / 180;
+        const startRad = (startAngle * Math.PI) / 180;
+        const endRad = (endAngle * Math.PI) / 180;
 
-    const x1 = center + radius * Math.cos(startRad);
-    const y1 = center + radius * Math.sin(startRad);
-    const x2 = center + radius * Math.cos(endRad);
-    const y2 = center + radius * Math.sin(endRad);
+        const x1 = center + radius * Math.cos(startRad);
+        const y1 = center + radius * Math.sin(startRad);
+        const x2 = center + radius * Math.cos(endRad);
+        const y2 = center + radius * Math.sin(endRad);
 
-    const largeArc = angle > 180 ? 1 : 0;
+        const largeArc = angle > 180 ? 1 : 0;
 
-    // Pie slice path
-    const slicePath = percentage >= 100
-        ? `M ${center} ${center - radius} A ${radius} ${radius} 0 1 1 ${center - 0.001} ${center - radius} Z`
-        : `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+        // Correct path for 100% or close to it
+        const d = percentage >= 100
+            ? `M ${center} ${center - radius} A ${radius} ${radius} 0 1 1 ${center - 0.001} ${center - radius} Z`
+            : `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+
+        return { d, color: segment.color, label: segment.label };
+    });
 
     return (
         <div className="flex flex-col items-center justify-center h-full p-3">
@@ -58,27 +74,30 @@ const CircularProgress = ({ value, label, delay, theme, index = 0 }: { value: st
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay }}
                 >
-                    {/* Background circle (remaining %) */}
+                    {/* Background circle */}
                     <circle
                         cx={center}
                         cy={center}
                         r={radius}
-                        fill={theme === 'dark' ? colors.darkBg : colors.light}
+                        fill={theme === 'dark' ? 'rgba(255,255,255,0.05)' : '#f3f4f6'}
                         stroke={theme === 'dark' ? '#444' : '#E5E7EB'}
                         strokeWidth="0.5"
                     />
 
-                    {/* Filled slice (main %) */}
-                    <motion.path
-                        d={slicePath}
-                        fill={colors.fill}
-                        stroke={theme === 'dark' ? '#333' : '#fff'}
-                        strokeWidth="1"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: delay + 0.2 }}
-                    />
+                    {/* Slices */}
+                    {paths.map((path, i) => (
+                        <motion.path
+                            key={i}
+                            d={path.d}
+                            fill={path.color}
+                            stroke={theme === 'dark' ? '#333' : '#fff'}
+                            strokeWidth="1"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: delay + (i * 0.1) }}
+                        />
+                    ))}
                 </motion.svg>
             </div>
 
@@ -93,9 +112,19 @@ const CircularProgress = ({ value, label, delay, theme, index = 0 }: { value: st
                 <p className={`text-sm font-bold leading-tight ${theme === 'dark' ? 'text-dark-text' : 'text-gray-800'}`}>
                     {label}
                 </p>
-                <p className={`text-xs font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
-                    {value}
-                </p>
+                {breakdown ? (
+                    <div className="flex gap-2 justify-center mt-1">
+                        {segments.map((seg, i) => (
+                            <span key={i} className="text-[10px] px-1 rounded" style={{ backgroundColor: seg.color + '20', color: seg.color }}>
+                                {seg.value}%
+                            </span>
+                        ))}
+                    </div>
+                ) : (
+                    <p className={`text-xs font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
+                        {value}
+                    </p>
+                )}
             </motion.div>
         </div>
     );
@@ -201,7 +230,7 @@ const DashboardWidget = ({ stat, index, theme, activeView }: { stat: ProductStat
     } else {
         // Grid / Default logic
         Content = TrendChart;
-        if (isHighPercentage) Content = CircularProgress;
+        if (isHighPercentage || stat.breakdown) Content = CircularProgress;
         else if (isMultiplier) Content = BarChart;
     }
 
@@ -213,7 +242,7 @@ const DashboardWidget = ({ stat, index, theme, activeView }: { stat: ProductStat
                 <ArrowUpRight className={`w-3 h-3 ${theme === 'dark' ? 'text-dark-accent/50' : 'text-gray-300'}`} />
             </div>
             <div className="h-40">
-                <Content value={stat.value} label={stat.label} delay={index * 0.15} theme={theme} index={index} />
+                <Content value={stat.value} label={stat.label} delay={index * 0.15} theme={theme} index={index} breakdown={stat.breakdown} />
             </div>
         </div>
     );

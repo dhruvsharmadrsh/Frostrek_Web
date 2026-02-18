@@ -9,32 +9,32 @@ gsap.registerPlugin(ScrollTrigger);
 
 const TESTIMONIALS = [
     {
-        quote: "Frostrek has been a great partner for us across our technology and e-commerce work. The team is structured, easy to work with and focused on delivering quality results.",
+        quote: "Frostrek's AI agents transformed our customer support. We went from 4-hour response times to instant resolutions. Our customer satisfaction score jumped from 72% to 94% in just 3 months.",
+        author: "Vikram Patel",
+        role: "Co-Founder & CEO",
+        image: "/testi1.png",
+        company: "LegalEase"
+    },
+    {
+        quote: "The voice AI integration was seamless. Our sales team can now handle 10x more customer calls while maintaining that personal touch. It's like having 50 expert sales reps working 24/7.",
+        author: "Priya Malhotra",
+        role: "Founder & CTO",
+        image: "/testi2.png",
+        company: "SkillNest"
+    },
+    {
+        quote: "Implementing Frostrek's WhatsApp automation doubled our conversion rate overnight. The AI understands context so well, our customers don't even realize they're chatting with a bot.",
+        author: "Arjun Kapoor",
+        role: "Head of Growth",
+        image: "/testi5.png",
+        company: "QuickCart"
+    },
+    {
+        quote: "Frostrek has been a game-changer for our e-commerce operations. Their AI-powered solutions helped us scale efficiently while maintaining quality. Our order processing time reduced by 60%.",
         author: "Surendra Yadav",
-        role: "Founder, Crescent Etail",
-        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+        role: "Founder",
+        image: "/testi4.jpg",
         company: "Crescent Etail"
-    },
-    {
-        quote: "Through close collaboration and mentorship, I developed a clearer understanding of post-training methodologies and how AI models evolve. Exceptional learning experience.",
-        author: "Shradha G",
-        role: "Quality Lead, Frostrek LLP",
-        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
-        company: "Frostrek LLP"
-    },
-    {
-        quote: "The experience helped me understand how teams collaborate effectively in an industry setting, manage projects, and maintain quality standards throughout.",
-        author: "Ritika Jain",
-        role: "Team Lead, Frostrek LLP",
-        image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
-        company: "Frostrek LLP"
-    },
-    {
-        quote: "Your product helped us to learn about our customers, intimately. The AI-driven insights transformed how we approach customer relationships.",
-        author: "Arun Mehta",
-        role: "Director of Digital Marketing",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-        company: "TechNova Solutions"
     }
 ];
 
@@ -184,7 +184,8 @@ const TestimonialsSection = () => {
                                 <img
                                     src={current.image}
                                     alt={current.author}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover object-center"
+                                    style={{ objectPosition: 'center top' }}
                                     width={256}
                                     height={256}
                                     loading="lazy"
@@ -204,6 +205,7 @@ const TestimonialsSection = () => {
                             <div className="mb-6">
                                 <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-dark-accent' : 'text-[#8A5A35]'}`}>{current.author}</h3>
                                 <p className={`text-sm ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>{current.role}</p>
+                                <p className={`text-sm font-semibold mt-1 ${theme === 'dark' ? 'text-dark-accent/80' : 'text-[#B07552]'}`}>{current.company}</p>
                             </div>
 
                             {/* Quote */}
