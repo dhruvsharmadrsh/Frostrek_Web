@@ -26,7 +26,7 @@
         },
         {
             "parameters": {
-                "sendTo": "info@frostrek.com",
+                "sendTo": "contact@frostrek.com",
                 "subject": "📢 New Demo Scheduled",
                 "message": "=A new demo has been scheduled.\n\nName: {{ $('Webhook1').item.json.body.name }}\nEmail: {{ $('Webhook1').item.json.body.email }}\nDate: {{ $('Webhook1').item.json.body.date }}\nTime: {{ $('Webhook1').item.json.body.time }}\n\nMeet Link:\n{{$node[\"Google Calendar1\"].json[\"conferenceData\"][\"entryPoints\"][0][\"uri\"]}}",
                 "options": {}
@@ -74,7 +74,7 @@
                 "end": "={{$json.body.date}}T{{$json.body.endTime}}",
                 "additionalFields": {
                     "attendees": [
-                        "={{ $json.body.email }}, info@frostrek.com"
+                        "={{ $json.body.email }}, contact@frostrek.com"
                     ],
                     "conferenceDataUi": {
                         "conferenceDataValues": {

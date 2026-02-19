@@ -191,7 +191,7 @@ ${formData.projectDetails}
                                     {/* Email & WhatsApp in Row */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <a
-                                            href="mailto:info@frostrek.com"
+                                            href="mailto:contact@frostrek.com"
                                             className={`flex items-start gap-3 p-4 rounded-lg transition-all duration-300 group ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10' : 'bg-gray-50 hover:bg-gray-100'}`}
                                         >
                                             <div className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-white/10' : 'bg-white'}`}>
@@ -199,7 +199,7 @@ ${formData.projectDetails}
                                             </div>
                                             <div className="min-w-0 flex-1">
                                                 <h4 className={`font-semibold text-sm mb-0.5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Email Us</h4>
-                                                <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>info@frostrek.com</p>
+                                                <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>contact@frostrek.com</p>
                                             </div>
                                         </a>
                                         <a

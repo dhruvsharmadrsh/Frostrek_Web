@@ -990,7 +990,6 @@ const About = () => {
             image: '/CompanyOffice.webp',
             companyName: 'India Office',
             address: '4th Floor, Unit No. 455 JMD Empire, Sector 62, Gurgaon',
-            phone: '+91 124 123 4567',
             mapUrl: 'https://www.google.com/maps/search/?api=1&query=4th Floor, Unit No. 455 JMD Empire, Sector 62, Gurgaon'
         },
         {
@@ -1001,7 +1000,6 @@ const About = () => {
             image: '/701 Tillery St 12 3227, Austin, TX 78702, USA.jpg',
             companyName: 'USA Office',
             address: '701 Tillery Street Unit 12-3227, Austin, Texas 78702, United States',
-            phone: '+1 512 123 4567',
             mapUrl: 'https://www.google.com/maps/search/?api=1&query=701+Tillery+Street+Unit+12-3227+Austin+Texas+78702'
         },
         {
@@ -1012,7 +1010,6 @@ const About = () => {
             image: '/24-26-Arcadia-Ave-London-Primary-Photo-1-LargeHighDefinition.jpg',
             companyName: 'UK Office',
             address: '24-26 Arcadia Avenue, Fin009/8701, London, United Kingdom, N3 2JU',
-            phone: '+44 208 057 5675',
             mapUrl: 'https://www.google.com/maps/search/?api=1&query=24-26+Arcadia+Avenue+London+N3+2JU'
         },
     ], []);
@@ -1694,16 +1691,10 @@ const About = () => {
                                                     : 'bg-white/95 border border-gray-100'
                                             }`}
                                         >
-                                            <p className={`text-sm mb-3 text-center ${
+                                            <p className={`text-sm mb-4 text-center ${
                                                 theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-600'
                                             }`}>
                                                 {o.address}
-                                            </p>
-
-                                            <p className={`font-semibold mb-4 text-center ${
-                                                theme === 'dark' ? 'text-dark-text' : 'text-gray-900'
-                                            }`}>
-                                                {o.phone}
                                             </p>
 
                                             <div className="flex justify-center">
