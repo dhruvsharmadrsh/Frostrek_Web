@@ -64,7 +64,7 @@ const ScheduleDemo = () => {
                     {/* Right Column - Google Calendar Booking */}
                     <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-dark-accent/10">
                         <iframe
-                            src="https://calendar.app.google/AYzZy8gS8TTfkeEZ6"
+                            src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3AaSLmr8mKD_oQsoBKPqst1vFTGvGjdrdRL4gxMYiN2t1B8ldB9S3_D8xf6PCkZc0yxQjVVFG_?gv=true"
                             style={{ border: 0 }}
                             width="100%"
                             height="630"
