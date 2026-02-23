@@ -34,10 +34,10 @@ const ContactPage = () => {
             return false;
         }
 
-        if (!formData.company.trim()) {
-            setError("Company name is required");
-            return false;
-        }
+        // if (!formData.company.trim()) {
+        //     setError("Company name is required");
+        //     return false;
+        // }
 
         if (!formData.workEmail.trim()) {
             setError("Work email is required");
@@ -58,8 +58,8 @@ const ContactPage = () => {
 
         const wordCount = formData.projectDetails.trim().split(/\s+/).length;
 
-        if (wordCount < 20) {
-            setError("Project description must contain at least 20 words");
+        if (wordCount < 5) {
+            setError("Project description must contain at least 5 words");
             return false;
         }
 
@@ -255,16 +255,16 @@ ${formData.projectDetails}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className={`flex items-center justify-center gap-4 p-4 rounded-xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 hover:shadow-lg border-2 ${theme === 'dark'
-                                                    ? 'bg-white/5 border-transparent hover:bg-[#B07552]/20 hover:border-[#B07552]/40'
-                                                    : 'bg-gray-50 border-transparent hover:bg-[#B07552]/10 hover:border-[#B07552]/30'
+                                                ? 'bg-white/5 border-transparent hover:bg-[#B07552]/20 hover:border-[#B07552]/40'
+                                                : 'bg-gray-50 border-transparent hover:bg-[#B07552]/10 hover:border-[#B07552]/30'
                                                 }`}
                                         >
                                             <div className="flex items-center gap-3 flex-1">
                                                 <div className="flex-1 min-w-0 text-center">
                                                     <div className="flex items-center justify-center gap-2 mb-1">
                                                         <h4 className={`font-bold text-base transition-colors ${theme === 'dark'
-                                                                ? 'text-white group-hover:text-[#B07552]'
-                                                                : 'text-gray-900 group-hover:text-[#8A5A35]'
+                                                            ? 'text-white group-hover:text-[#B07552]'
+                                                            : 'text-gray-900 group-hover:text-[#8A5A35]'
                                                             }`}>
                                                             {office.title}
                                                         </h4>
@@ -276,8 +276,8 @@ ${formData.projectDetails}
                                                         )}
                                                     </div>
                                                     <p className={`text-sm transition-colors ${theme === 'dark'
-                                                            ? 'text-gray-400 group-hover:text-[#E6D0C6]'
-                                                            : 'text-gray-600 group-hover:text-[#8A5A35]'
+                                                        ? 'text-gray-400 group-hover:text-[#E6D0C6]'
+                                                        : 'text-gray-600 group-hover:text-[#8A5A35]'
                                                         }`}>
                                                         {office.address}
                                                     </p>
@@ -492,7 +492,8 @@ const InputGroup = ({
     value,
     onChange,
     placeholder,
-    theme
+    theme,
+    required = true
 }: any) => (
     <div className="space-y-2">
         <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -509,7 +510,7 @@ const InputGroup = ({
             name={name}
             value={value}
             onChange={onChange}
-            required
+            required={required}
             placeholder={placeholder}
             className={`w-full px-3 py-2 rounded-xl outline-none border transition-all duration-300 ${theme === 'dark'
                 ? 'bg-black/20 border-white/10 focus:border-[#B07552] text-white placeholder-gray-500'

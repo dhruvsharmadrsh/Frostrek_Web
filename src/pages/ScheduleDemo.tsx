@@ -1,9 +1,13 @@
-import { MapPin, Clock, Calendar as CalendarIcon } from 'lucide-react';
+import { useState } from 'react';
+import { MapPin, Clock, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 import CuteBackground from '../components/ui/CuteBackground';
 import { useTheme } from '../context/ThemeContext';
 
+const CALENDAR_URL = 'https://calendar.app.google/zm9hU7K2Gqo2Q5Hh6';
+
 const ScheduleDemo = () => {
     const { theme } = useTheme();
+    const [calendarLoaded, setCalendarLoaded] = useState(false);
 
     return (
         <div className={`min-h-screen pt-20 relative ${theme === 'dark' ? 'bg-dark-bg' : ''}`}>
@@ -62,15 +66,34 @@ const ScheduleDemo = () => {
                     </div>
 
                     {/* Right Column - Google Calendar Booking */}
-                    <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-dark-accent/10">
-                        <iframe
-                            src="https://calendar.app.google/AYzZy8gS8TTfkeEZ6"
-                            style={{ border: 0 }}
-                            width="100%"
-                            height="630"
-                            title="Schedule a Demo"
-                            className="w-full min-h-[500px] md:min-h-[630px]"
-                        ></iframe>
+                    <div className={`rounded-2xl shadow-xl p-6 lg:p-8 ${theme === 'dark' ? 'bg-dark-card' : 'bg-white'}`}>
+                        <div className="relative w-full min-h-[500px] md:min-h-[630px]">
+                            {/* Loading skeleton shown while iframe loads */}
+                            {!calendarLoaded && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-xl bg-gray-50 dark:bg-dark-accent/10">
+                                    <Loader2 className={`w-10 h-10 animate-spin ${theme === 'dark' ? 'text-dark-accent' : 'text-brand-green-600'}`} />
+                                    <p className={`text-sm font-medium ${theme === 'dark' ? 'text-dark-text-muted' : 'text-gray-500'}`}>
+                                        Loading calendar…
+                                    </p>
+                                </div>
+                            )}
+                            <iframe
+                                src={CALENDAR_URL}
+                                style={{
+                                    border: 0,
+                                    opacity: calendarLoaded ? 1 : 0,
+                                    transition: 'opacity 0.3s ease-in-out',
+                                    filter: theme === 'dark' ? 'invert(0.87) hue-rotate(180deg) brightness(0.95) contrast(0.8)' : 'none',
+                                    WebkitFilter: theme === 'dark' ? 'invert(0.87) hue-rotate(180deg) brightness(0.95) contrast(0.8)' : 'none',
+                                }}
+                                width="100%"
+                                height="630"
+                                title="Schedule a Demo"
+                                className="w-full min-h-[500px] md:min-h-[630px] rounded-xl"
+                                loading="eager"
+                                onLoad={() => setCalendarLoaded(true)}
+                            ></iframe>
+                        </div>
                     </div>
                 </div>
             </div>

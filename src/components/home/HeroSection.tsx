@@ -178,15 +178,15 @@ const HeroSection = () => {
                             <AnimatePresence>
                                 {showMessage && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                                        initial={{ opacity: 0, y: 10, scale: 0.9, x: "-50%" }}
+                                        animate={{ opacity: 1, y: 0, scale: 1, x: "-50%" }}
+                                        exit={{ opacity: 0, y: -10, scale: 0.9, x: "-50%" }}
                                         transition={{ duration: 0.4, ease: "easeOut" }}
-                                        className="absolute top-[-5%] left-1/2 -translate-x-1/2 z-50"
+                                        className="absolute top-[-5%] left-1/2 z-50"
                                         style={{ fontFamily: 'Quicksand, sans-serif' }}
                                     >
-                                        <div className={`relative backdrop-blur-md px-6 py-3 rounded-2xl shadow-[0_8px_32px_rgba(176,117,82,0.25)] border-2 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-gradient-to-br from-white to-[#FDF8F3] border-[#B07552]/30'}`}>
-                                            <span className={`font-semibold text-lg whitespace-nowrap transition-colors duration-300 ${theme === 'dark' ? 'text-dark-text' : 'text-[#5c3d2e]'}`}>
+                                        <div className={`relative backdrop-blur-md px-6 py-3 border lg:ml-20 lg:mt-10 mb-6 lg:mb-0 rounded-2xl shadow-[0_8px_32px_rgba(176,117,82,0.25)] border-2 transition-colors duration-300 ${theme === 'dark' ? 'bg-dark-card border-dark-accent/30' : 'bg-gradient-to-br from-white to-[#FDF8F3] border-[#B07552]/30'}`}>
+                                            <span className={`font-semibold text-lg whitespace-nowrap  transition-colors duration-300 ${theme === 'dark' ? 'text-dark-text' : 'text-[#5c3d2e]'}`}>
                                                 {ROBOT_MESSAGES[messageIndex]}
                                             </span>
                                             {/* Speech bubble arrow pointing down to robot */}

@@ -5,6 +5,25 @@ import { useTheme } from '../../context/ThemeContext';
 
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
 
+// --- ID Helpers ---
+function getOrCreateUserId(): string {
+    let userId = localStorage.getItem('user_id');
+    if (!userId) {
+        userId = 'UID-' + crypto.randomUUID();
+        localStorage.setItem('user_id', userId);
+    }
+    return userId;
+}
+
+function getOrCreateSessionId(): string {
+    let sessionId = sessionStorage.getItem('session_id');
+    if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        sessionStorage.setItem('session_id', sessionId);
+    }
+    return sessionId;
+}
+
 interface Message {
     type: 'user' | 'bot';
     content: string;
@@ -18,6 +37,11 @@ const ChatbotDemo: React.FC = () => {
         { type: 'bot', content: "Hello! 👋 I'm your AI assistant from Frostrek.\nHow can I help you innovate today?" }
     ]);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Persistent IDs
+    const [userId] = useState<string>(() => getOrCreateUserId());
+    const [sessionId] = useState<string>(() => getOrCreateSessionId());
+    const [conversationId] = useState<string>(() => crypto.randomUUID());
 
     // Audio Recording State
     const [isRecording, setIsRecording] = useState(false);
@@ -82,20 +106,41 @@ const ChatbotDemo: React.FC = () => {
         }
 
         try {
-            const formData = new FormData();
+            const messageId = crypto.randomUUID();
+            let response;
 
             if (textInput) {
-                formData.append('chatInput', textInput);
-                formData.append('Type', 'text');
+                // Text: application/json
+                const payload = {
+                    user_id: userId,
+                    session_id: sessionId,
+                    conversation_id: conversationId,
+                    message_id: messageId,
+                    message: textInput,
+                    type: 'text',
+                };
+                response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
             } else if (audioBlob) {
-                formData.append('voice', audioBlob, 'recording.webm');
-                formData.append('Type', 'voice');
+                // Voice: multipart/form-data
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'voice-message.webm');
+                formData.append('user_id', userId);
+                formData.append('session_id', sessionId);
+                formData.append('conversation_id', conversationId);
+                formData.append('message_id', messageId);
+                formData.append('message', '[Voice message]');
+                formData.append('type', 'voice');
+                response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    body: formData,
+                });
+            } else {
+                return;
             }
-
-            const response = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                body: formData,
-            });
 
             if (!response.ok) throw new Error('Network response was not ok');
 
@@ -116,9 +161,11 @@ const ChatbotDemo: React.FC = () => {
                 const data = await response.json();
 
                 let botText = "I received your message.";
-                if (data.output) botText = data.output;
+                if (data.reply) botText = data.reply;
+                else if (data.output) botText = data.output;
                 else if (data.text) botText = data.text;
                 else if (data.message) botText = data.message;
+                else if (Array.isArray(data) && data[0]?.reply) botText = data[0].reply;
                 else if (Array.isArray(data) && data[0]?.output) botText = data[0].output;
                 else if (typeof data === 'string') botText = data;
 

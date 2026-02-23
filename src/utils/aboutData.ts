@@ -223,7 +223,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         title: 'Inception',
         description: 'Frostrek founded with a vision to revolutionize enterprise AI adoption.',
         icon: Sparkles,
-        image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop',
+        image: '/inception.png',
         color: { border: 'rgb(176, 117, 82)', shadow: 'rgba(176, 117, 82, 0.2)', bg: 'bg-brand-green-50', text: 'text-brand-green-700', iconColor: 'text-brand-green-500' }
     },
     {
@@ -231,7 +231,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         title: 'First Deployment',
         description: 'Successfully deployed our first AI agent platform for a Fortune 500 partner.',
         icon: Building2,
-        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop',
+        image: '/firstDeployment.png',
         color: { border: 'rgb(212, 187, 117)', shadow: 'rgba(212, 187, 117, 0.2)', bg: 'bg-brand-yellow-50', text: 'text-brand-yellow-700', iconColor: 'text-brand-yellow-500' } // Gold
     },
     {
@@ -239,7 +239,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         title: 'Global Expansion',
         description: 'Opened offices in 3 new continents to serve our growing international client base.',
         icon: Globe,
-        image: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=600&h=400&fit=crop',
+        image: '/global.png',
         color: { border: 'rgb(138, 90, 53)', shadow: 'rgba(138, 90, 53, 0.2)', bg: 'bg-stone-100', text: 'text-stone-700', iconColor: 'text-stone-600' } // Darker Brown
     },
     {
@@ -247,7 +247,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         title: 'Platform Launch',
         description: 'Released Frostrek Agent V1, setting a new standard for autonomous enterprise agents.',
         icon: Zap,
-        image: 'https://images.unsplash.com/photo-1677442135136-760c813028c0?w=600&h=400&fit=crop',
+        image: '/frostyAbout.png',
         color: { border: 'rgb(196, 143, 113)', shadow: 'rgba(196, 143, 113, 0.2)', bg: 'bg-brand-green-50', text: 'text-brand-green-600', iconColor: 'text-brand-green-400' } // Light Bronze
     },
     {
@@ -255,7 +255,7 @@ export const TIMELINE_DATA: TimelineItem[] = [
         title: 'Market Leader',
         description: 'Recognized as a top AI innovator with over 1M+ active agents managed daily.',
         icon: Award,
-        image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop',
+        image: '/marketLeader.png',
         color: { border: 'rgb(212, 187, 117)', shadow: 'rgba(212, 187, 117, 0.2)', bg: 'bg-brand-yellow-50', text: 'text-brand-yellow-700', iconColor: 'text-brand-yellow-600' } // Gold Return
     },
 ];

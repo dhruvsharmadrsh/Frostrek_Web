@@ -25,7 +25,7 @@ const HeroRobot = () => {
     // Initialize audio on first interaction
     const startAudio = useCallback(() => {
         if (!audioRef.current) {
-            audioRef.current = new Audio('/Frosty3.mp3');
+            audioRef.current = new Audio('/frosty6.mp3');
             audioRef.current.loop = false; // Play once
             audioRef.current.volume = 0.7;
 
@@ -47,7 +47,7 @@ const HeroRobot = () => {
     // Removed stopAudio as we want it to play fully
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
+        <div ref={containerRef} className="w-full h-[90%] lg:w-[80%] lg:ml-[30%]">
             <Canvas
                 camera={{ position: [0, 0.5, 3.5], fov: 45 }}
                 dpr={[1, 1.5]}

@@ -5,6 +5,25 @@ import { X, Send, Sparkles, Mic, Square, Paperclip, Trash2, Minus } from 'lucide
 // Webhook URL
 const WEBHOOK_URL = 'https://n8n.frostrek.com/webhook/cac2fab9-d171-4d67-8587-9ac8d834f436';
 
+// --- ID Helpers ---
+function getOrCreateUserId(): string {
+    let userId = localStorage.getItem('user_id');
+    if (!userId) {
+        userId = 'UID-' + crypto.randomUUID();
+        localStorage.setItem('user_id', userId);
+    }
+    return userId;
+}
+
+function getOrCreateSessionId(): string {
+    let sessionId = sessionStorage.getItem('session_id');
+    if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        sessionStorage.setItem('session_id', sessionId);
+    }
+    return sessionId;
+}
+
 // Color Scheme - AI Copilot Theme
 const COLORS = {
     primary: '#A67C52', // Brown/Tan
@@ -24,17 +43,11 @@ const Chatbot: React.FC = () => {
     const [messages, setMessages] = useState<Array<{ type: 'user' | 'bot', content: string, image?: string }>>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [sessionId, setSessionId] = useState<string>('');
 
-    // Initialize Session ID
-    useEffect(() => {
-        let storedSessionId = localStorage.getItem('chatSessionId');
-        if (!storedSessionId) {
-            storedSessionId = crypto.randomUUID();
-            localStorage.setItem('chatSessionId', storedSessionId);
-        }
-        setSessionId(storedSessionId);
-    }, []);
+    // Persistent IDs
+    const [userId] = useState<string>(() => getOrCreateUserId());
+    const [sessionId] = useState<string>(() => getOrCreateSessionId());
+    const [conversationId, setConversationId] = useState<string>(() => crypto.randomUUID());
 
     // Audio Recording State
     const [isRecording, setIsRecording] = useState(false);
@@ -74,6 +87,7 @@ const Chatbot: React.FC = () => {
         setMessages([]);
         setMessage('');
         setSelectedFile(null);
+        setConversationId(crypto.randomUUID()); // New conversation
 
         setTimeout(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -164,40 +178,54 @@ const Chatbot: React.FC = () => {
 
         try {
             let response;
+            const messageId = crypto.randomUUID();
 
             if (audioBlob) {
-                // Audio: Send 'voice' key, Type: 'voice'
+                // Voice: multipart/form-data
                 const formData = new FormData();
-                formData.append('voice', audioBlob, 'recording.webm');
-                formData.append('Type', 'voice');
-                formData.append('sessionId', sessionId);
+                formData.append('audio', audioBlob, 'voice-message.webm');
+                formData.append('user_id', userId);
+                formData.append('session_id', sessionId);
+                formData.append('conversation_id', conversationId);
+                formData.append('message_id', messageId);
+                formData.append('message', '[Voice message]');
+                formData.append('type', 'voice');
 
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     body: formData,
                 });
             } else if (selectedFile) {
-                // Image: Send 'image' key, Type: 'text' (as per user requirement)
+                // Image: multipart/form-data
                 const formData = new FormData();
                 formData.append('image', selectedFile);
-                formData.append('Type', 'text');
-                formData.append('sessionId', sessionId);
+                formData.append('user_id', userId);
+                formData.append('session_id', sessionId);
+                formData.append('conversation_id', conversationId);
+                formData.append('message_id', messageId);
+                formData.append('message', textInput || '[Image]');
+                formData.append('type', 'image');
 
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     body: formData,
                 });
             } else {
-                // Use FormData for text-only messages to be consistent with n8n webhook
-                const formData = new FormData();
-                formData.append('chatInput', textInput || '');
-                formData.append('Type', 'text');
-                formData.append('sessionId', sessionId);
+                // Text: application/json
+                const payload = {
+                    user_id: userId,
+                    session_id: sessionId,
+                    conversation_id: conversationId,
+                    message_id: messageId,
+                    message: textInput || '',
+                    type: 'text',
+                };
 
-                console.log('Sending FormData payload:', { chatInput: textInput, Type: 'text', sessionId });
+                console.log('Sending JSON payload:', payload);
                 response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    body: formData,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
                 });
             }
 
@@ -296,6 +324,7 @@ const Chatbot: React.FC = () => {
                     if (firstItem) {
                         console.log('First array item keys:', Object.keys(firstItem));
                         botText =
+                            firstItem.reply ||
                             firstItem.output ||
                             firstItem.text ||
                             firstItem.message ||
@@ -307,6 +336,7 @@ const Chatbot: React.FC = () => {
                 } else {
                     // Handle object response
                     botText =
+                        data.reply ||
                         data.output ||
                         data.text ||
                         data.message ||
